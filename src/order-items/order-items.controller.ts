@@ -67,7 +67,7 @@ export class OrderItemsController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
-    @Patch(':id')
+    @Patch('update/:id')
     updateOrderItem(@Param('id') id: string, @Body() updateOrderItemDto: UpdateOrderItemDto) {
         const isValidId = mongoose.Types.ObjectId.isValid(id);
         if(!isValidId) throw new NotFoundException("order item not found");
@@ -76,8 +76,8 @@ export class OrderItemsController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
-    @Patch(':id')
-    deleteOrderitem(@Param('id') id: string) {
+    @Patch('delete/:id')
+    deleteOrderItem(@Param('id') id: string) {
         const isValidId = mongoose.Types.ObjectId.isValid(id);
         if(!isValidId) throw new NotFoundException("order item not found");
         return this.orderItemService.deleteOrderItem(id);

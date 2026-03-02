@@ -24,18 +24,21 @@ export class PaymentsController {
     ) {
         return this.paymentService.getPaymentByPage(page, limit);
     }
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)    
     @Get('search/:payment_type')
     searchByType(@Param('payment_type') payment_type: string) {
         return this.paymentService.searchByType(payment_type);
     }
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Get("total-payment/:payment_type")
     getTotalPaymentByType(@Param('payment_type') payment_type: string) {
         return this.paymentService.getTotalPaymentByType(payment_type);
     }
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin, Role.Customer)
     @Get(':id')
@@ -44,12 +47,14 @@ export class PaymentsController {
         if(!isValidId) throw new NotFoundException('Payment Not found');
         return this.paymentService.getPaymentById(id);
     }
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Post()
     createPayment(@Body() createPaymentDto:CreatePaymentDto) {
         return this.paymentService.createPayment(createPaymentDto);
     }
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Patch("update/:id")
@@ -58,6 +63,7 @@ export class PaymentsController {
         if(!isValidId) throw new NotFoundException('Payment Not found');
         return this.paymentService.updatePayment(id, updatePayementDto);
     }
+    
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Patch('delete/:id')

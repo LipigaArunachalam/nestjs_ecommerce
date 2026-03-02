@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateSellerDto } from './admin.dto';
 import { MailService } from 'src/mail/mail.service';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AdminService {
     constructor(@InjectModel(user.name) private UserModel: Model<user>, private mailService: MailService) { }
@@ -74,6 +74,9 @@ export class AdminService {
     async addSeller(seller: CreateSellerDto) {
         //const result= {user_id: seller.user_id, username:seller.username,email:seller.email, 
         // zip_code:seller.zip_code, city:seller.city, state: seller.state,role:"seller", is_deleted:false};
+        const pass = await bcrypt.hash( seller.password,10);
+        const password= seller.password;
+        seller.password=pass;
         const result = { ...seller, role: "seller", is_deleted: false };
         const data = await this.UserModel.create(result);
         if (!data) {
@@ -83,7 +86,7 @@ export class AdminService {
         await this.mailService.sendSellerCredentials(
             data.email,
             data.username,
-            data.password,
+            password,
         );
         return "successfuly added";
     }

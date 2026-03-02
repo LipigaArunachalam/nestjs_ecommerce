@@ -36,7 +36,7 @@ export class AuthService {
 
     async login(loginDto: VerifyUserDto) {
         const { email, password } = loginDto;
-        const user = await this.userModel.findOne({email });
+        const user = await this.userModel.findOne({email, is_deleted: false});
 
         if (!user) throw new UnauthorizedException('invalid email or password');
 
@@ -51,12 +51,14 @@ export class AuthService {
     }
 
     async logout(userId: string) {
-        await this.userModel.findByIdAndUpdate(userId, {
-            refreshToken: null, is_active: false, refresh_expires: null,
-        });
+        await this.userModel.findByIdAndUpdate(
+            {userId,is_deleted: false},
+            {refreshToken: null, is_active: false, refresh_expires: null,}
+        );
     }
 
     async refreshTokens(email: string, refreshToken: string) {
+        console.log(email, refreshToken);
         const user = await this.userModel.findOne({ email });
         if (!user || !user.refresh_token) {
             throw new UnauthorizedException('Access denied');
@@ -70,7 +72,7 @@ export class AuthService {
             throw new UnauthorizedException('Access denied');
         }
         const tokens = await this.jwtService.signAsync( { role: user.role, email: user.email },
-                { secret: this.configService.get('JWT_SECRET'), expiresIn: '3m' },);
+                { secret: this.configService.get('JWT_SECRET'), expiresIn: '15m' },);
         //await this.userModel.findByIdAndUpdate(user._id, { refresh_token: refreshToken });
         
         return tokens;
@@ -80,7 +82,7 @@ export class AuthService {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(
                 { role, email },
-                { secret: this.configService.get('JWT_SECRET'), expiresIn: '3m' },
+                { secret: this.configService.get('JWT_SECRET'), expiresIn: '15m' },
             ),
             this.jwtService.signAsync(
                 { role, email },
@@ -92,7 +94,7 @@ export class AuthService {
     }
 
     async forgotPassword(email: string) {
-        const user = await this.userModel.findOne({ email });
+        const user = await this.userModel.findOne({ email, is_deleted: false });
         if (!user) {
             return { message: 'If the email exists, reset link sent' };
         }
@@ -109,7 +111,7 @@ export class AuthService {
     }
 
     async resetPassword(email: string,token: string,newPassword: string) {
-        const user = await this.userModel.findOne({ email }).select('+passResetToken');
+        const user = await this.userModel.findOne({ email, is_deleted: false }).select('+passResetToken');
         if (!user || !user.passResetToken || !user.passResetExpires || user.passResetExpires < new Date()) {
             throw new UnauthorizedException('Invalid or expired token');
         }
@@ -118,7 +120,7 @@ export class AuthService {
             throw new UnauthorizedException('Invalid or expired token');
         }
         const hashedPassword = await bcrypt.hash(newPassword, 10);
-        await this.userModel.findByIdAndUpdate(user._id, {password: hashedPassword, passResetToken: null,passResetExpires: null,});
+        await this.userModel.findByIdAndUpdate({_id: user._id, is_deleted: false}, {password: hashedPassword, passResetToken: null,passResetExpires: null,});
         return { message: 'Password reset successful' };
     }
 }

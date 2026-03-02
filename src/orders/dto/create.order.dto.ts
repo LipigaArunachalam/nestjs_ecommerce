@@ -18,6 +18,5 @@ export class CreateOrderDto {
         order_delivered_customer_date: string; 
         @IsString()
         order_estimated_delivery_date: string; 
-        @IsBoolean()
-        is_deleted: boolean;
+       
 }
