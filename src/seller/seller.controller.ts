@@ -5,8 +5,15 @@ import{ CreateProductDto, UpdateProductDto } from './seller.dto';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 
+<<<<<<< HEAD
 @Controller('seller')
 @UseGuards(JwtAuthGuard)
+=======
+
+@Controller('seller')
+@UseGuards(JwtAuthGuard)
+
+>>>>>>> 9cdf79e4e734ab5984714871da760c95dd88473b
 export class SellerController {
     constructor(private sellerService : SellerService){}
 

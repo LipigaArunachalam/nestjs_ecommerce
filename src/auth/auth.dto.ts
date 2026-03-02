@@ -9,7 +9,7 @@ export class CreateUserDto{
     @IsString()
     password : string;
     @IsString()
-    role : string;
+    role ?: string;
     @IsNumber()
     zip_code : number;
     @IsString()

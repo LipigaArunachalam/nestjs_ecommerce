@@ -19,9 +19,9 @@ export class AuthService {
         private mailService: MailService) {}
 
     async signUp(signupDto: CreateUserDto) {
-        const { username, email, password, role } = signupDto;
+        const { username, email, password } = signupDto;
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await this.userModel.create({username,email,password: hashedPassword,role});
+        const user = await this.userModel.create({username,email,password: hashedPassword,role:"user"});
         await user.save();
         await this.userModel.findOneAndUpdate({_id: user._id}, {$set:{user_id: user._id.toString()}});
         const { accessToken, refreshToken } = await this.getTokens(user.role, user.email);
@@ -106,14 +106,6 @@ export class AuthService {
         const resetLink = `http://localhost:3000/reset-password?token=${resetToken}&email=${email}`;
         await this.mailService.sendPasswordReset(email, resetLink);
         return { message: 'If the email exists, reset link sent' ,token: resetToken};
-    }
-
-    async validateUser(email: string, password: string) {
-        const user = await this.userModel.findOne({ email });
-        if (!user) return null;
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) return null;
-        return user;
     }
 
     async resetPassword(email: string,token: string,newPassword: string) {
