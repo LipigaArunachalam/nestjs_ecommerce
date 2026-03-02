@@ -7,7 +7,6 @@ import { JwtAuthGuard } from 'src/auth/auth.guard';
 
 
 @Controller('admin')
-@UseGuards(JwtAuthGuard)
 
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}

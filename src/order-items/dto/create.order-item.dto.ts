@@ -15,6 +15,5 @@ export class CreateOrderItemDto {
         price: number;
         @IsNumber()
         freight_value: number;
-        @IsBoolean()
-        is_deleted: boolean;
+       
 }

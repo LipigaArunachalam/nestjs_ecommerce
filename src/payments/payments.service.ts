@@ -61,7 +61,6 @@ export class PaymentsService {
                 }
                 },
                 {
-                // 2. Sum the values for that specific type
                 $group: {
                     _id: "$payment_type",
                     totalPayment: { $sum: "$payment_value" }
@@ -73,7 +72,7 @@ export class PaymentsService {
 
     async createPayment(createPaymentDto:CreatePaymentDto) {
         const newPayment = await new this.paymentModel(createPaymentDto);
-        return newPayment;
+        return newPayment.save();
     }
 
     async updatePayment(id: string, updatePaymentdto:UpdatePaymentDto) {

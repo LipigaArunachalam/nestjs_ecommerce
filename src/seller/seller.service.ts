@@ -6,11 +6,8 @@ import {Product} from './../schema/product.schema';
 
 @Injectable()
 export class SellerService {
-<<<<<<< HEAD
-     constructor(@InjectModel(Product.name) private ProductModel: Model<Product>) {}
-=======
+
     constructor(@InjectModel(Product.name) private ProductModel: Model<Product>) {}
->>>>>>> 9cdf79e4e734ab5984714871da760c95dd88473b
     async getAllProduct(sid:string){
        const data = await this.ProductModel.find({is_deleted:false, seller_id:sid});
        return data;

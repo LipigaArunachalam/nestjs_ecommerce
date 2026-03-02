@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, IsString } from "class-validator";
+import { IsNumber, IsString } from "class-validator";
 
 export class CreatePaymentDto {
         @IsString()
@@ -11,6 +11,4 @@ export class CreatePaymentDto {
         payment_installments: number;
         @IsNumber()
         payment_value: number;
-        @IsBoolean()
-        is_deleted: boolean;
 }

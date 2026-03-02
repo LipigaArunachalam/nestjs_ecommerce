@@ -1,8 +1,13 @@
-import { Controller, Param, Body, Get, ValidationPipe,Post } from '@nestjs/common';
+import { Controller, Param, Body, Get, ValidationPipe,Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-
+import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { Roles } from 'src/auth/role.decorator';
+import { RolesGuard } from 'src/auth/role.guard';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('user')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Customer) 
 export class UserController {
 
     constructor(private userService : UserService){}
