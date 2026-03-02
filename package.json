@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
+  "name": "ecommerce-app",
+=======
   "name": "db",
+>>>>>>> 9cdf79e4e734ab5984714871da760c95dd88473b
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -20,7 +24,11 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+<<<<<<< HEAD
+    "@nestjs/common": "^11.0.1",
+=======
     "@nestjs/common": "^11.1.14",
+>>>>>>> 9cdf79e4e734ab5984714871da760c95dd88473b
     "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.0.1",
     "@nestjs/jwt": "^11.0.2",
@@ -31,6 +39,17 @@
     "@thallesp/nestjs-better-auth": "^2.4.0",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
+<<<<<<< HEAD
+    "class-validator": "^0.14.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.3.1",
+    "mongodb": "^7.1.0",
+    "mongoose": "^9.2.2",
+    "nodemailer": "^8.0.1",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+=======
     "class-validator": "^0.14.4",
     "cookie-parser": "^1.4.7",
     "mapped-types": "^0.0.1",
@@ -38,6 +57,7 @@
     "nodemailer": "^8.0.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
+>>>>>>> 9cdf79e4e734ab5984714871da760c95dd88473b
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
@@ -47,6 +67,11 @@
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
+<<<<<<< HEAD
+    "@types/express": "^5.0.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.10.7",
+=======
     "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.0",
@@ -54,6 +79,7 @@
     "@types/node": "^22.10.7",
     "@types/nodemailer": "^7.0.11",
     "@types/passport-jwt": "^4.0.1",
+>>>>>>> 9cdf79e4e734ab5984714871da760c95dd88473b
     "@types/supertest": "^6.0.2",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
