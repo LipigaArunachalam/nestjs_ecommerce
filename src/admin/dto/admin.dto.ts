@@ -1,62 +1,30 @@
-// import {IsString, IsNumber ,IsNotEmpty, IsBoolean} from "class-validator";
-
-// export class CreateSellerDto{
-//     @IsNotEmpty()
-//     @IsString()
-//     user_id : string;
-
-//     @IsNotEmpty()
-//     @IsString()
-//     password: string;
-
-//     @IsNumber()
-//     zip_code: number;
-
-//     @IsString()
-//     city: string;
-
-//     @IsString()
-//     state: string;
-
-//     @IsString()
-//     username: string;
-
-//     @IsString()
-//     email: string;
-
-// }
-
 import { IsString, IsNumber, IsNotEmpty, IsEmail } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateSellerDto {
-//   @ApiProperty({ example: "8bd0f31cf0a614c658f6763bd02dea69" })
-//   @IsNotEmpty()
-//   @IsString()
-//   user_id: string;
 
-  @ApiProperty({ example: "vcollofb" })
+  @ApiProperty({ example: "rohith" })
   @IsNotEmpty()
   @IsString()
   password: string;
 
-  @ApiProperty({ example: 1222 })
+  @ApiProperty({ example: 2732 })
   @IsNumber()
   zip_code: number;
 
-  @ApiProperty({ example: "sao paulo" })
+  @ApiProperty({ example: "erode" })
   @IsString()
   city: string;
 
-  @ApiProperty({ example: "SP" })
+  @ApiProperty({ example: "TN" })
   @IsString()
   state: string;
 
-  @ApiProperty({ example: "vcollofb" })
+  @ApiProperty({ example: "rohith" })
   @IsString()
   username: string;
 
-  @ApiProperty({ example: "vcollofb@gmail.com" })
+  @ApiProperty({ example: "rohith@gmail.com" })
   @IsEmail({}, { message: 'Invalid email format' })
   email: string;
 }
