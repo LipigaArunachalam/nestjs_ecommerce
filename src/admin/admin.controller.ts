@@ -7,11 +7,6 @@ import { Roles } from "src/utility/decorators/role.decorator";
 import { Role } from "src/utility/enum/role.enum";
 import { ApiTags, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiBearerAuth, } from "@nestjs/swagger";
 
-
-
-
-
-@Controller('admin')
 @ApiTags("Admin")
 @Controller("admin")
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -20,7 +15,7 @@ export class AdminController {
     constructor(private readonly adminService: AdminService) { }
 
 
-    @Get("all-seller")
+    @Get('sellers')
     @ApiOperation({ summary: "Get all sellers" })
     @ApiResponse({
         status: 200,
@@ -31,7 +26,7 @@ export class AdminController {
     }
 
 
-    @Patch("del-seller/:id")
+    @Patch("sellers/delete/:id")
     @ApiOperation({ summary: "Soft delete a seller" })
     @ApiParam({
         name: "id",
@@ -47,7 +42,7 @@ export class AdminController {
     }
 
 
-    @Post("add-seller")
+    @Post("sellers")
     @ApiOperation({ summary: "Create a new seller" })
     @ApiResponse({
         status: 201,
@@ -58,7 +53,7 @@ export class AdminController {
     }
 
 
-    @Get("all-customer")
+    @Get("customers")
     @ApiOperation({ summary: "Get all customers with pagination" })
     @ApiQuery({
         name: "limit",
@@ -83,7 +78,7 @@ export class AdminController {
 
 
 
-    @Get("count")
+    @Get("cities")
     @ApiOperation({ summary: "Get user count grouped by city" })
     @ApiResponse({
         status: 200,
@@ -94,9 +89,9 @@ export class AdminController {
     }
 
 
-    @Get("search/:city")
+    @Get("customers")
     @ApiOperation({ summary: "Search users by city" })
-    @ApiParam({
+    @ApiQuery({
         name: "city",
         example: "sao paulo",
         description: "City name",
@@ -105,7 +100,7 @@ export class AdminController {
         status: 200,
         description: "Users fetched successfully",
     })
-    searchUser(@Param("city") city: string): Promise<any[]> {
+    searchUser(@Query("city") city: string): Promise<any[]> {
         return this.adminService.searchUser(city);
     }
 }

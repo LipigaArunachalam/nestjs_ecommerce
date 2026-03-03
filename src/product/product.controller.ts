@@ -1,20 +1,24 @@
 import {Controller,Get,Post,Body,Param,ValidationPipe,Query,Patch} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from './../schema/product.schema';
-import { CreateProductDto, UpdateProductDto } from './dto/product.dto';
+import { CreateProductDto, UpdateProductDto } from '../seller/dto/seller.dto';
 import {ApiTags,ApiOperation,ApiQuery,ApiParam,ApiResponse,ApiBearerAuth,} from '@nestjs/swagger';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
+import { Role } from 'src/utility/enum/role.enum';
+import { Roles } from 'src/utility/decorators/role.decorator';
+import { RolesGuard } from 'src/utility/guards/role.guard';
 
-@ApiTags('Product')
-@Controller('product')
+@ApiTags('Products')
+@Controller('products')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(Role.Admin, Role.Seller)
 export class ProductController {
   constructor(private productService: ProductService) {}
 
 
-  @Get('all-product')
+  @Get()
   @ApiOperation({ summary: 'Get all products' })
   @ApiResponse({
     status: 200,
@@ -27,7 +31,7 @@ export class ProductController {
   }
 
 
-  @Post('add-product')
+  @Post()
   @ApiOperation({ summary: 'Create a new product' })
   @ApiResponse({
     status: 201,
@@ -40,7 +44,7 @@ export class ProductController {
   }
 
 
-  @Patch('del-product')
+  @Patch('delete')
   @ApiOperation({ summary: 'Soft delete a product' })
   @ApiQuery({
     name: 'product_id',
@@ -68,7 +72,7 @@ export class ProductController {
   }
 
  
-  @Patch('upd')
+  @Patch()
   @ApiOperation({ summary: 'Update product details' })
   @ApiQuery({
     name: 'product_id',

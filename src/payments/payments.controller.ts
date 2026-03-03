@@ -9,7 +9,7 @@ import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
 import { Roles } from 'src/utility/decorators/role.decorator';
 import { Role } from 'src/utility/enum/role.enum';
 
-@ApiTags('payments')
+@ApiTags('Payments')
 @ApiBearerAuth()
 @Controller('payments')
 export class PaymentsController {
@@ -44,7 +44,7 @@ export class PaymentsController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
-    @Get("total-payment/:payment_type")
+    @Get("total/:payment_type")
     @ApiOperation({ summary: 'Get total value of payments by type' })
     @ApiParam({ name: 'payment_type', description: 'Payment type to aggregate' })
     @ApiResponse({ status: 200, description: 'Total payment calculated' })
@@ -76,19 +76,6 @@ export class PaymentsController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
-    @Patch("update/:id")
-    @ApiOperation({ summary: 'Update an existing payment' })
-    @ApiParam({ name: 'id', description: 'Payment identifier' })
-    @ApiResponse({ status: 200, description: 'Payment updated successfully' })
-    @ApiResponse({ status: 404, description: 'Payment not found' })
-    updatePayment(@Param('id') id: string, updatePayementDto:UpdatePaymentDto) {
-        const isValidId = mongoose.Types.ObjectId.isValid(id);
-        if(!isValidId) throw new NotFoundException('Payment Not found');
-        return this.paymentService.updatePayment(id, updatePayementDto);
-    }
-    
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(Role.Admin)
     @Patch('delete/:id')
     @ApiOperation({ summary: 'Soft delete a payment' })
     @ApiParam({ name: 'id', description: 'Payment identifier' })
@@ -99,4 +86,18 @@ export class PaymentsController {
         if(!isValidId) throw new NotFoundException('Payment Not found');
         return this.paymentService.deletePayment(id);
     }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
+    @Patch(":id")
+    @ApiOperation({ summary: 'Update an existing payment' })
+    @ApiParam({ name: 'id', description: 'Payment identifier' })
+    @ApiResponse({ status: 200, description: 'Payment updated successfully' })
+    @ApiResponse({ status: 404, description: 'Payment not found' })
+    updatePayment(@Param('id') id: string, updatePayementDto:UpdatePaymentDto) {
+        const isValidId = mongoose.Types.ObjectId.isValid(id);
+        if(!isValidId) throw new NotFoundException('Payment Not found');
+        return this.paymentService.updatePayment(id, updatePayementDto);
+    }
+    
 }

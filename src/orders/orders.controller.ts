@@ -7,10 +7,11 @@ import { RolesGuard } from './../utility/guards/role.guard';
 import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
 import { Roles } from 'src/utility/decorators/role.decorator';
 import { Role } from 'src/utility/enum/role.enum';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 
 
-@ApiTags('orders')
+@ApiTags('Orders')
 @ApiBearerAuth()
 @Controller('orders')
 export class OrdersController {
@@ -68,19 +69,6 @@ export class OrdersController {
     
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
-    @Patch('update/:id')
-    @ApiOperation({ summary: 'Update an existing order' })
-    @ApiParam({ name: 'id', description: 'Order identifier' })
-    @ApiResponse({ status: 200, description: 'Order updated successfully' })
-    @ApiResponse({ status: 404, description: 'Order not found' })
-    updateOrder(@Param('id') id: string,@Body() updateOrderDto: UpdateOrderDto) {
-        const isValidId = mongoose.Types.ObjectId.isValid(id);
-        if(!isValidId) throw new NotFoundException('Order Not found');
-        return this.orderService.updateOrder(id, updateOrderDto);
-    }
-
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(Role.Admin)
     @Patch('delete/:id')
     @ApiOperation({ summary: 'Soft delete an order' })
     @ApiParam({ name: 'id', description: 'Order identifier' })
@@ -92,5 +80,17 @@ export class OrdersController {
         return this.orderService.deleteOrder(id);
     }
 
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
+    @Patch(':id')
+    @ApiOperation({ summary: 'Update an existing order' })
+    @ApiParam({ name: 'id', description: 'Order identifier' })
+    @ApiResponse({ status: 200, description: 'Order updated successfully' })
+    @ApiResponse({ status: 404, description: 'Order not found' })
+    updateOrder(@Param('id') id: string,@Body() updateOrderDto: UpdateOrderDto) {
+        const isValidId = mongoose.Types.ObjectId.isValid(id);
+        if(!isValidId) throw new NotFoundException('Order Not found');
+        return this.orderService.updateOrder(id, updateOrderDto);
+    }
     
 }

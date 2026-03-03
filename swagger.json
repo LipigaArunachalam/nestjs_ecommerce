@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/": {
+    "/api": {
       "get": {
         "operationId": "AppController_getHello",
         "parameters": [],
@@ -15,7 +15,7 @@
         ]
       }
     },
-    "/product/all-product": {
+    "/api/products": {
       "get": {
         "operationId": "ProductController_getAllProduct",
         "parameters": [],
@@ -26,11 +26,9 @@
         },
         "summary": "Get all products",
         "tags": [
-          "Product"
+          "Products"
         ]
-      }
-    },
-    "/product/add-product": {
+      },
       "post": {
         "operationId": "ProductController_createProduct",
         "parameters": [],
@@ -51,47 +49,9 @@
         },
         "summary": "Create a new product",
         "tags": [
-          "Product"
+          "Products"
         ]
-      }
-    },
-    "/product/del-product": {
-      "patch": {
-        "operationId": "ProductController_deleteProduct",
-        "parameters": [
-          {
-            "name": "product_id",
-            "required": false,
-            "in": "query",
-            "description": "Product ID",
-            "schema": {
-              "example": "84e1b9c6ba2ed178bd217097b41f1251",
-              "type": "string"
-            }
-          },
-          {
-            "name": "product_category_name",
-            "required": false,
-            "in": "query",
-            "description": "Product category name",
-            "schema": {
-              "example": "electronics",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Product deleted successfully"
-          }
-        },
-        "summary": "Soft delete a product",
-        "tags": [
-          "Product"
-        ]
-      }
-    },
-    "/product/upd": {
+      },
       "patch": {
         "operationId": "ProductController_updateProduct",
         "parameters": [
@@ -123,11 +83,47 @@
         },
         "summary": "Update product details",
         "tags": [
-          "Product"
+          "Products"
         ]
       }
     },
-    "/product/{name}": {
+    "/api/products/delete": {
+      "patch": {
+        "operationId": "ProductController_deleteProduct",
+        "parameters": [
+          {
+            "name": "product_id",
+            "required": false,
+            "in": "query",
+            "description": "Product ID",
+            "schema": {
+              "example": "84e1b9c6ba2ed178bd217097b41f1251",
+              "type": "string"
+            }
+          },
+          {
+            "name": "product_category_name",
+            "required": false,
+            "in": "query",
+            "description": "Product category name",
+            "schema": {
+              "example": "electronics",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product deleted successfully"
+          }
+        },
+        "summary": "Soft delete a product",
+        "tags": [
+          "Products"
+        ]
+      }
+    },
+    "/api/products/{name}": {
       "get": {
         "operationId": "ProductController_getSearch",
         "parameters": [
@@ -149,11 +145,11 @@
         },
         "summary": "Search products by name",
         "tags": [
-          "Product"
+          "Products"
         ]
       }
     },
-    "/seller/all-product/{sid}": {
+    "/api/seller/all-product/{sid}": {
       "get": {
         "operationId": "SellerController_getAllProduct",
         "parameters": [
@@ -184,7 +180,7 @@
         ]
       }
     },
-    "/seller/add-product/{sid}": {
+    "/api/seller/add-product/{sid}": {
       "post": {
         "operationId": "SellerController_createProduct",
         "parameters": [
@@ -225,7 +221,7 @@
         ]
       }
     },
-    "/seller/del-product": {
+    "/api/seller/del-product": {
       "patch": {
         "operationId": "SellerController_deleteProduct",
         "parameters": [
@@ -266,7 +262,7 @@
         ]
       }
     },
-    "/seller/upd": {
+    "/api/seller/upd": {
       "patch": {
         "operationId": "SellerController_updateProduct",
         "parameters": [
@@ -307,7 +303,7 @@
         ]
       }
     },
-    "/seller/{name}": {
+    "/api/seller/{name}": {
       "get": {
         "operationId": "SellerController_getSearch",
         "parameters": [
@@ -338,7 +334,7 @@
         ]
       }
     },
-    "/admin/all-seller": {
+    "/api/admin/sellers": {
       "get": {
         "operationId": "AdminController_getAllSeller",
         "parameters": [],
@@ -351,9 +347,32 @@
         "tags": [
           "Admin"
         ]
+      },
+      "post": {
+        "operationId": "AdminController_addSeller",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSellerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Seller created successfully"
+          }
+        },
+        "summary": "Create a new seller",
+        "tags": [
+          "Admin"
+        ]
       }
     },
-    "/admin/del-seller/{id}": {
+    "/api/admin/sellers/delete/{id}": {
       "patch": {
         "operationId": "AdminController_deleteSeller",
         "parameters": [
@@ -379,90 +398,14 @@
         ]
       }
     },
-    "/admin/add-seller": {
-      "post": {
-        "operationId": "AdminController_addSeller",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateSellerDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Seller created successfully"
-          }
-        },
-        "summary": "Create a new seller",
-        "tags": [
-          "Admin"
-        ]
-      }
-    },
-    "/admin/all-customer": {
-      "get": {
-        "operationId": "AdminController_gellAllCustomer",
-        "parameters": [
-          {
-            "name": "limit",
-            "required": true,
-            "in": "query",
-            "description": "Number of records to fetch",
-            "schema": {
-              "example": 10,
-              "type": "number"
-            }
-          },
-          {
-            "name": "offset",
-            "required": true,
-            "in": "query",
-            "description": "Number of records to skip",
-            "schema": {
-              "example": 0,
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Customers fetched successfully"
-          }
-        },
-        "summary": "Get all customers with pagination",
-        "tags": [
-          "Admin"
-        ]
-      }
-    },
-    "/admin/count": {
-      "get": {
-        "operationId": "AdminController_getCount",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "City-wise user count fetched"
-          }
-        },
-        "summary": "Get user count grouped by city",
-        "tags": [
-          "Admin"
-        ]
-      }
-    },
-    "/admin/search/{city}": {
+    "/api/admin/customers": {
       "get": {
         "operationId": "AdminController_searchUser",
         "parameters": [
           {
             "name": "city",
             "required": true,
-            "in": "path",
+            "in": "query",
             "description": "City name",
             "schema": {
               "example": "sao paulo",
@@ -481,7 +424,226 @@
         ]
       }
     },
-    "/auth/signup": {
+    "/api/admin/cities": {
+      "get": {
+        "operationId": "AdminController_getCount",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "City-wise user count fetched"
+          }
+        },
+        "summary": "Get user count grouped by city",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/orders": {
+      "get": {
+        "operationId": "OrdersController_getOrderByPage",
+        "parameters": [
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated orders returned"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retrieve orders with pagination",
+        "tags": [
+          "Orders"
+        ]
+      },
+      "post": {
+        "operationId": "OrdersController_createOrder",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new order",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/api/orders/order-status/{order_status}": {
+      "get": {
+        "operationId": "OrdersController_getOrderRevenueByStatus",
+        "parameters": [
+          {
+            "name": "order_status",
+            "required": true,
+            "in": "path",
+            "description": "Status to filter orders",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Revenue calculated"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get order revenue filtered by status",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/api/orders/{id}": {
+      "get": {
+        "operationId": "OrdersController_getOrdersById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Order identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order returned"
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retrieve a single order by ID",
+        "tags": [
+          "Orders"
+        ]
+      },
+      "patch": {
+        "operationId": "OrdersController_updateOrder",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Order identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order updated successfully"
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update an existing order",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/api/orders/delete/{id}": {
+      "patch": {
+        "operationId": "OrdersController_deleteOrder",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Order identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order deleted successfully"
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Soft delete an order",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/api/auth/signup": {
       "post": {
         "operationId": "AuthController_signUp",
         "parameters": [],
@@ -506,7 +668,7 @@
         ]
       }
     },
-    "/auth/login": {
+    "/api/auth/login": {
       "post": {
         "operationId": "AuthController_signin",
         "parameters": [],
@@ -531,7 +693,7 @@
         ]
       }
     },
-    "/auth/logout": {
+    "/api/auth/logout": {
       "post": {
         "operationId": "AuthController_logout",
         "parameters": [],
@@ -556,7 +718,7 @@
         ]
       }
     },
-    "/auth/refresh": {
+    "/api/auth/refresh": {
       "post": {
         "operationId": "AuthController_refresh",
         "parameters": [],
@@ -581,7 +743,7 @@
         ]
       }
     },
-    "/auth/forgot-password": {
+    "/api/auth/forgot-password": {
       "post": {
         "operationId": "AuthController_forgot",
         "parameters": [],
@@ -606,7 +768,7 @@
         ]
       }
     },
-    "/auth/reset-password": {
+    "/api/auth/reset-password": {
       "post": {
         "operationId": "AuthController_reset",
         "parameters": [],
@@ -631,7 +793,7 @@
         ]
       }
     },
-    "/user/all-product/{uid}": {
+    "/api/user/all-product/{uid}": {
       "get": {
         "operationId": "UserController_getAllProduct",
         "parameters": [
@@ -657,7 +819,7 @@
         ]
       }
     },
-    "/user/details/{uid}": {
+    "/api/user/details/{uid}": {
       "get": {
         "operationId": "UserController_getDetails",
         "parameters": [
@@ -683,7 +845,7 @@
         ]
       }
     },
-    "/order-items": {
+    "/api/order-items": {
       "get": {
         "operationId": "OrderItemsController_getOrderItem",
         "parameters": [
@@ -691,6 +853,7 @@
             "name": "page",
             "required": true,
             "in": "query",
+            "description": "Page number",
             "schema": {
               "type": "number"
             }
@@ -699,6 +862,7 @@
             "name": "limit",
             "required": true,
             "in": "query",
+            "description": "Items per page",
             "schema": {
               "type": "number"
             }
@@ -706,11 +870,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Paginated list of order items returned"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retrieve order items with pagination",
         "tags": [
-          "OrderItems"
+          "Order Items"
         ]
       },
       "post": {
@@ -728,15 +898,21 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "Order item created successfully"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new order item",
         "tags": [
-          "OrderItems"
+          "Order Items"
         ]
       }
     },
-    "/order-items/seller-cost/{seller_id}": {
+    "/api/order-items/seller-cost/{seller_id}": {
       "get": {
         "operationId": "OrderItemsController_getTotalPriceBySellerId",
         "parameters": [
@@ -744,6 +920,7 @@
             "name": "seller_id",
             "required": true,
             "in": "path",
+            "description": "Seller identifier",
             "schema": {
               "type": "string"
             }
@@ -751,15 +928,21 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Total price calculated"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get total price of order items by seller ID",
         "tags": [
-          "OrderItems"
+          "Order Items"
         ]
       }
     },
-    "/order-items/product-cost/{product_id}": {
+    "/api/order-items/product-cost/{product_id}": {
       "get": {
         "operationId": "OrderItemsController_getTotalPriceByProductId",
         "parameters": [
@@ -767,6 +950,7 @@
             "name": "product_id",
             "required": true,
             "in": "path",
+            "description": "Product identifier",
             "schema": {
               "type": "string"
             }
@@ -774,15 +958,21 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Total price calculated"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get total price of order items by product ID",
         "tags": [
-          "OrderItems"
+          "Order Items"
         ]
       }
     },
-    "/order-items/expense-by-seller/{seller_id}": {
+    "/api/order-items/expense-by-seller/{seller_id}": {
       "get": {
         "operationId": "OrderItemsController_getExpenseBySellerId",
         "parameters": [
@@ -790,6 +980,7 @@
             "name": "seller_id",
             "required": true,
             "in": "path",
+            "description": "Seller identifier",
             "schema": {
               "type": "string"
             }
@@ -797,15 +988,21 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Total expense calculated"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get total freight expense by seller ID",
         "tags": [
-          "OrderItems"
+          "Order Items"
         ]
       }
     },
-    "/order-items/{id}": {
+    "/api/order-items/{id}": {
       "get": {
         "operationId": "OrderItemsController_getOrderItemById",
         "parameters": [
@@ -813,6 +1010,7 @@
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "Order item identifier",
             "schema": {
               "type": "string"
             }
@@ -820,20 +1018,73 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Order item returned"
+          },
+          "404": {
+            "description": "Order item not found"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get a single order item by its ID",
         "tags": [
-          "OrderItems"
+          "Order Items"
         ]
       },
       "patch": {
-        "operationId": "OrderItemsController_deleteOrderitem",
+        "operationId": "OrderItemsController_updateOrderItem",
         "parameters": [
           {
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "Order item identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrderItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order item updated successfully"
+          },
+          "404": {
+            "description": "Order item not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update an existing order item",
+        "tags": [
+          "Order Items"
+        ]
+      }
+    },
+    "/api/order-items/delete/{id}": {
+      "patch": {
+        "operationId": "OrderItemsController_deleteOrderItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Order item identifier",
             "schema": {
               "type": "string"
             }
@@ -841,15 +1092,24 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Order item deleted successfully"
+          },
+          "404": {
+            "description": "Order item not found"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Soft delete an order item",
         "tags": [
-          "OrderItems"
+          "Order Items"
         ]
       }
     },
-    "/payments": {
+    "/api/payments": {
       "get": {
         "operationId": "PaymentsController_getPaymentByPage",
         "parameters": [
@@ -857,6 +1117,7 @@
             "name": "page",
             "required": true,
             "in": "query",
+            "description": "Page number",
             "schema": {
               "type": "number"
             }
@@ -865,6 +1126,7 @@
             "name": "limit",
             "required": true,
             "in": "query",
+            "description": "Items per page",
             "schema": {
               "type": "number"
             }
@@ -872,9 +1134,15 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Paginated payments returned"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retrieve payments with pagination",
         "tags": [
           "Payments"
         ]
@@ -894,15 +1162,21 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "Payment created successfully"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new payment",
         "tags": [
           "Payments"
         ]
       }
     },
-    "/payments/search/{payment_type}": {
+    "/api/payments/search/{payment_type}": {
       "get": {
         "operationId": "PaymentsController_searchByType",
         "parameters": [
@@ -910,6 +1184,7 @@
             "name": "payment_type",
             "required": true,
             "in": "path",
+            "description": "Type of payment to filter",
             "schema": {
               "type": "string"
             }
@@ -917,15 +1192,21 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "List of payments matching type"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Search payments by type",
         "tags": [
           "Payments"
         ]
       }
     },
-    "/payments/total-payment/{payment_type}": {
+    "/api/payments/total/{payment_type}": {
       "get": {
         "operationId": "PaymentsController_getTotalPaymentByType",
         "parameters": [
@@ -933,6 +1214,7 @@
             "name": "payment_type",
             "required": true,
             "in": "path",
+            "description": "Payment type to aggregate",
             "schema": {
               "type": "string"
             }
@@ -940,15 +1222,21 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Total payment calculated"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get total value of payments by type",
         "tags": [
           "Payments"
         ]
       }
     },
-    "/payments/{id}": {
+    "/api/payments/{id}": {
       "get": {
         "operationId": "PaymentsController_getPaymentById",
         "parameters": [
@@ -956,6 +1244,7 @@
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "Payment identifier",
             "schema": {
               "type": "string"
             }
@@ -963,15 +1252,22 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Payment returned"
+          },
+          "404": {
+            "description": "Payment not found"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retrieve a single payment by ID",
         "tags": [
           "Payments"
         ]
-      }
-    },
-    "/payments/update/{id}": {
+      },
       "patch": {
         "operationId": "PaymentsController_updatePayment",
         "parameters": [
@@ -979,6 +1275,7 @@
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "Payment identifier",
             "schema": {
               "type": "string"
             }
@@ -986,15 +1283,24 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Payment updated successfully"
+          },
+          "404": {
+            "description": "Payment not found"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update an existing payment",
         "tags": [
           "Payments"
         ]
       }
     },
-    "/payments/delete/{id}": {
+    "/api/payments/delete/{id}": {
       "patch": {
         "operationId": "PaymentsController_DeletePayment",
         "parameters": [
@@ -1002,6 +1308,7 @@
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "Payment identifier",
             "schema": {
               "type": "string"
             }
@@ -1009,9 +1316,18 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Payment deleted successfully"
+          },
+          "404": {
+            "description": "Payment not found"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Soft delete a payment",
         "tags": [
           "Payments"
         ]
@@ -1115,27 +1431,27 @@
         "properties": {
           "password": {
             "type": "string",
-            "example": "vcollofb"
+            "example": "rohith"
           },
           "zip_code": {
             "type": "number",
-            "example": 1222
+            "example": 2732
           },
           "city": {
             "type": "string",
-            "example": "sao paulo"
+            "example": "erode"
           },
           "state": {
             "type": "string",
-            "example": "SP"
+            "example": "TN"
           },
           "username": {
             "type": "string",
-            "example": "vcollofb"
+            "example": "rohith"
           },
           "email": {
             "type": "string",
-            "example": "vcollofb@gmail.com"
+            "example": "rohith@gmail.com"
           }
         },
         "required": [
@@ -1146,6 +1462,65 @@
           "username",
           "email"
         ]
+      },
+      "CreateOrderDto": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "Unique order identifier",
+            "example": "ORD123456"
+          },
+          "customer_id": {
+            "type": "string",
+            "description": "Customer identifier",
+            "example": "CUS987654"
+          },
+          "order_status": {
+            "type": "string",
+            "description": "Status of the order",
+            "example": "delivered"
+          },
+          "order_purchase_timestamp": {
+            "type": "string",
+            "description": "Timestamp when purchase was made",
+            "example": "2025-01-01T10:00:00Z"
+          },
+          "order_approved_at": {
+            "type": "string",
+            "description": "Timestamp when order was approved",
+            "example": "2025-01-02T12:00:00Z"
+          },
+          "order_delivered_carrier_date": {
+            "type": "string",
+            "description": "Carrier delivery date",
+            "example": "2025-01-05T15:00:00Z"
+          },
+          "order_delivered_customer_date": {
+            "type": "string",
+            "description": "Customer delivery date",
+            "example": "2025-01-06T18:00:00Z"
+          },
+          "order_estimated_delivery_date": {
+            "type": "string",
+            "description": "Estimated delivery date",
+            "example": "2025-01-07T20:00:00Z"
+          }
+        },
+        "required": [
+          "order_id",
+          "customer_id",
+          "order_status",
+          "order_purchase_timestamp",
+          "order_approved_at",
+          "order_delivered_carrier_date",
+          "order_delivered_customer_date",
+          "order_estimated_delivery_date"
+        ]
+      },
+      "UpdateOrderDto": {
+        "type": "object",
+        "properties": {}
       },
       "CreateUserDto": {
         "type": "object",
@@ -1271,7 +1646,52 @@
       },
       "CreateOrderItemDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "Reference ID of the order",
+            "example": "605c3b5e8e3a9a0f9c2d4e12"
+          },
+          "order_item_id": {
+            "type": "number",
+            "description": "Sequential number of the item in the order",
+            "example": 1
+          },
+          "product_id": {
+            "type": "string",
+            "description": "ID of the product",
+            "example": "607d1a3b9c1a8b2f4e5d6c7a"
+          },
+          "seller_id": {
+            "type": "string",
+            "description": "ID of the seller",
+            "example": "607d1a3b9c1a8b2f4e5d6c7b"
+          },
+          "shipping_limit_date": {
+            "type": "string",
+            "description": "Shipping limit date in ISO format",
+            "example": "2025-12-31T23:59:59Z"
+          },
+          "price": {
+            "type": "number",
+            "description": "Price of the individual item",
+            "example": 99.99
+          },
+          "freight_value": {
+            "type": "number",
+            "description": "Freight value for the item",
+            "example": 5.5
+          }
+        },
+        "required": [
+          "order_id",
+          "order_item_id",
+          "product_id",
+          "seller_id",
+          "shipping_limit_date",
+          "price",
+          "freight_value"
+        ]
       },
       "UpdateOrderItemDto": {
         "type": "object",
@@ -1279,7 +1699,40 @@
       },
       "CreatePaymentDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "Associated order ID",
+            "example": "ORD123456"
+          },
+          "payment_sequential": {
+            "type": "number",
+            "description": "Sequential number of the payment",
+            "example": 1
+          },
+          "payment_type": {
+            "type": "string",
+            "description": "Type of payment (e.g., credit_card)",
+            "example": "credit_card"
+          },
+          "payment_installments": {
+            "type": "number",
+            "description": "Number of installments",
+            "example": 3
+          },
+          "payment_value": {
+            "type": "number",
+            "description": "Total payment value",
+            "example": 150.75
+          }
+        },
+        "required": [
+          "order_id",
+          "payment_sequential",
+          "payment_type",
+          "payment_installments",
+          "payment_value"
+        ]
       }
     }
   }
