@@ -1,7 +1,7 @@
 import { Controller,Body,Get, Param,Query, Patch ,Post} from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { ParseIntPipe } from '@nestjs/common';
-import { CreateSellerDto } from './dto/admin.dto';
+import { CreateSellerDto } from './admin.dto';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
 

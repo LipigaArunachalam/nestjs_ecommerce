@@ -1,7 +1,7 @@
 import { Controller, Get, Patch, Param,Body,ValidationPipe,Query , Post} from '@nestjs/common';
 import { SellerService } from './seller.service';
 import{ Product } from 'src/schema/product.schema';
-import{ CreateProductDto, UpdateProductDto } from './dto/seller.dto';
+import{ CreateProductDto, UpdateProductDto } from './seller.dto';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
 
