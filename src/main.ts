@@ -19,6 +19,9 @@ async function bootstrap() {
   );
   
 
+  
+  app.setGlobalPrefix('api');
+  
   const config = new DocumentBuilder()
     .setTitle('Ecommerce API')
     .setDescription('API documentation')
@@ -30,8 +33,7 @@ async function bootstrap() {
 
   writeFileSync('./swagger.json', JSON.stringify(document, null, 2));
 
-  SwaggerModule.setup('/', app, document);
-
+  SwaggerModule.setup('my-api', app, document);
 
   await app.listen(process.env.PORT ?? 3000);
 

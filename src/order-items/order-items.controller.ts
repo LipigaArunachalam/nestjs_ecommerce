@@ -9,7 +9,7 @@ import { Role } from 'src/utility/enum/role.enum';
 import { Roles } from 'src/utility/decorators/role.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 
-@ApiTags('order-items')
+@ApiTags('Order Items')
 @ApiBearerAuth()
 @Controller('order-items')
 export class OrderItemsController {
@@ -87,19 +87,7 @@ export class OrderItemsController {
         return this.orderItemService.createOrderItem(createOrderItemDto);
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(Role.Admin)
-    @Patch('update/:id')
-    @ApiOperation({ summary: 'Update an existing order item' })
-    @ApiParam({ name: 'id', description: 'Order item identifier' })
-    @ApiResponse({ status: 200, description: 'Order item updated successfully' })
-    @ApiResponse({ status: 404, description: 'Order item not found' })
-    updateOrderItem(@Param('id') id: string, @Body() updateOrderItemDto: UpdateOrderItemDto) {
-        const isValidId = mongoose.Types.ObjectId.isValid(id);
-        if(!isValidId) throw new NotFoundException("order item not found");
-        return this.orderItemService.updateOrderItem(id, updateOrderItemDto);
-    }
-
+   
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Patch('delete/:id')
@@ -112,5 +100,19 @@ export class OrderItemsController {
         if(!isValidId) throw new NotFoundException("order item not found");
         return this.orderItemService.deleteOrderItem(id);
     }
+
+     @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
+    @Patch(':id')
+    @ApiOperation({ summary: 'Update an existing order item' })
+    @ApiParam({ name: 'id', description: 'Order item identifier' })
+    @ApiResponse({ status: 200, description: 'Order item updated successfully' })
+    @ApiResponse({ status: 404, description: 'Order item not found' })
+    updateOrderItem(@Param('id') id: string, @Body() updateOrderItemDto: UpdateOrderItemDto) {
+        const isValidId = mongoose.Types.ObjectId.isValid(id);
+        if(!isValidId) throw new NotFoundException("order item not found");
+        return this.orderItemService.updateOrderItem(id, updateOrderItemDto);
+    }
+
 
 }
