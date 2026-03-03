@@ -1,13 +1,16 @@
 import {Controller,Get,Post,Body,Param,ValidationPipe,Query,Patch} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from './../schema/product.schema';
-import { CreateProductDto, UpdateProductDto } from './dto/product.dto';
+import { CreateProductDto, UpdateProductDto } from './../seller/dto/seller.dto';
 import {ApiTags,ApiOperation,ApiQuery,ApiParam,ApiResponse,ApiBearerAuth,} from '@nestjs/swagger';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/utility/guards/role.guard';
+import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
+import { Roles } from 'src/utility/decorators/role.decorator';
+import { Role } from 'src/utility/enum/role.enum';
 
-@ApiTags('Product')
-@Controller('product')
+@ApiTags('Products')
+@Controller('products')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(Role.Admin, Role.Seller)
 export class ProductController {

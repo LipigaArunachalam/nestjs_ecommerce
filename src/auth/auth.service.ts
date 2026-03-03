@@ -28,7 +28,7 @@ export class AuthService {
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const userId = crypto.randomBytes(16).toString('hex');
-        const user = await this.userModel.create({ ...signupDto, password: hashedPassword, role: "user",user_id:userId});
+        const user = await this.userModel.create({ ...signupDto, password: hashedPassword, role: "customer",user_id:userId});
         await user.save();
        // await this.userModel.findOneAndUpdate({ _id: user._id }, { $set: { user_id: user._id.toString() } });
         const { accessToken, refreshToken } = await this.getTokens(user.role, user.email);

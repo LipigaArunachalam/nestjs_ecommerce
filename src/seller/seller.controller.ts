@@ -5,20 +5,20 @@ import { CreateProductDto, UpdateProductDto } from "./dto/seller.dto";
 import { JwtAuthGuard } from "src/utility/guards/auth.guard";
 import { ApiTags, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiBearerAuth, ApiBody, } from "@nestjs/swagger";
 
-@ApiTags("Seller")
+@ApiTags("Sellers")
 @ApiBearerAuth()
-@Controller("seller")
+@Controller("sellers")
 @UseGuards(JwtAuthGuard)
 
 export class SellerController {
     constructor(private sellerService: SellerService) { }
 
 
-    @Get("all-product/:sid")
+    @Get(":sid/products")
     @ApiOperation({ summary: "Get all products of a seller" })
     @ApiParam({
         name: "sid",
-        example: "SELL123",
+        example: "fc4751cfe3b279c419615b9b00c1abb4",
         description: "Seller ID",
     })
     @ApiResponse({
@@ -32,7 +32,7 @@ export class SellerController {
 
 
 
-    @Post("add-product/:sid")
+    @Post(":sid/products")
     @ApiOperation({ summary: "Add product for seller" })
     @ApiParam({
         name: "sid",
@@ -55,41 +55,44 @@ export class SellerController {
 
 
 
-    @Patch("del-product")
+    @Patch(":sid/products/delete")
     @ApiOperation({ summary: "Soft delete seller product" })
-    @ApiQuery({
-        name: "product_id",
-        required: false,
+    @ApiParam({
+        name: "sid",
         example: "acef497c1130f71ccfe63aaa1c9a607d",
-        description: "Product ID",
+        description: "seller ID",
     })
-    @ApiQuery({
-        name: "product_category_name",
-        required: false,
+    @ApiParam({
+        name: "pid",
         example: "beleza_saude",
-        description: "Product category",
+        description: "Product ID",
     })
     @ApiResponse({
         status: 200,
         description: "Product deleted successfully",
     })
     deleteProduct(
-        @Query("product_id") pid?: string,
-        @Query("product_category_name") pname?: string,
+        @Param("sid") sid: string,
+        @Query("pid") pid?: string,
+        @Query('product_name') pname?:string,
     ): Promise<string> {
-        return this.sellerService.deleteProduct(pid, pname);
+        return this.sellerService.deleteProduct(sid, pid,pname);
     }
 
 
 
 
-    @Patch("upd")
+    @Patch(":sid/products/:pid")
     @ApiOperation({ summary: "Update seller product" })
-    @ApiQuery({
-        name: "product_id",
-        required: false,
+    @ApiParam({
+        name: "sid",
         example: "05a360982be454c7e715c0fec4f67243",
-        description: "Product ID to update",
+        description: "seller ID",
+    })
+    @ApiParam({
+        name: "pid",
+        example: "05a360982be454c7e715c0fec4f67243",
+        description: "Product ID",
     })
     @ApiBody({ type: UpdateProductDto })
     @ApiResponse({
@@ -97,17 +100,22 @@ export class SellerController {
         description: "Product updated successfully",
     })
     updateProduct(
-        @Query("product_id") pid?: string,
-        @Body(ValidationPipe) upd?: UpdateProductDto,
+        @Param("sid") sid: string,
+        @Param("pid") pid: string,
+        @Body(ValidationPipe) upd: UpdateProductDto,
     ): Promise<string> {
-        return this.sellerService.updateProduct(pid, upd);
+        return this.sellerService.updateProduct(sid, pid,upd);
     }
 
 
 
-    
-    @Get(":name")
+    @Get(":sid/prodcts/:name")
     @ApiOperation({ summary: "Search products by name" })
+    @ApiParam({
+        name: "sid",
+        example: "94144541854e298c2d976cb893b81343",
+        description: "Seller ID",
+    })
     @ApiParam({
         name: "name",
         example: "iphone",
@@ -117,7 +125,7 @@ export class SellerController {
         status: 200,
         description: "Search results fetched successfully",
     })
-    getSearch(@Param("name") name: string): Promise<Product[]> {
-        return this.sellerService.getSearch(name);
+    getSearch(@Param("sid") sid: string, @Param("name") name: string,): Promise<Product[]> {
+        return this.sellerService.getSearch(sid,name);
     }
 }

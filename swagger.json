@@ -15,7 +15,7 @@
         ]
       }
     },
-    "/product/all-product": {
+    "/products/all-product": {
       "get": {
         "operationId": "ProductController_getAllProduct",
         "parameters": [],
@@ -26,11 +26,11 @@
         },
         "summary": "Get all products",
         "tags": [
-          "Product"
+          "Products"
         ]
       }
     },
-    "/product/add-product": {
+    "/products/add-product": {
       "post": {
         "operationId": "ProductController_createProduct",
         "parameters": [],
@@ -51,11 +51,11 @@
         },
         "summary": "Create a new product",
         "tags": [
-          "Product"
+          "Products"
         ]
       }
     },
-    "/product/del-product": {
+    "/products/del-product": {
       "patch": {
         "operationId": "ProductController_deleteProduct",
         "parameters": [
@@ -87,11 +87,11 @@
         },
         "summary": "Soft delete a product",
         "tags": [
-          "Product"
+          "Products"
         ]
       }
     },
-    "/product/upd": {
+    "/products/upd": {
       "patch": {
         "operationId": "ProductController_updateProduct",
         "parameters": [
@@ -123,11 +123,11 @@
         },
         "summary": "Update product details",
         "tags": [
-          "Product"
+          "Products"
         ]
       }
     },
-    "/product/{name}": {
+    "/products/{name}": {
       "get": {
         "operationId": "ProductController_getSearch",
         "parameters": [
@@ -149,11 +149,11 @@
         },
         "summary": "Search products by name",
         "tags": [
-          "Product"
+          "Products"
         ]
       }
     },
-    "/seller/all-product/{sid}": {
+    "/sellers/{sid}/products": {
       "get": {
         "operationId": "SellerController_getAllProduct",
         "parameters": [
@@ -163,7 +163,7 @@
             "in": "path",
             "description": "Seller ID",
             "schema": {
-              "example": "SELL123",
+              "example": "fc4751cfe3b279c419615b9b00c1abb4",
               "type": "string"
             }
           }
@@ -180,11 +180,9 @@
         ],
         "summary": "Get all products of a seller",
         "tags": [
-          "Seller"
+          "Sellers"
         ]
-      }
-    },
-    "/seller/add-product/{sid}": {
+      },
       "post": {
         "operationId": "SellerController_createProduct",
         "parameters": [
@@ -221,31 +219,39 @@
         ],
         "summary": "Add product for seller",
         "tags": [
-          "Seller"
+          "Sellers"
         ]
       }
     },
-    "/seller/del-product": {
+    "/sellers/{sid}/products/delete": {
       "patch": {
         "operationId": "SellerController_deleteProduct",
         "parameters": [
           {
-            "name": "product_id",
-            "required": false,
-            "in": "query",
-            "description": "Product ID",
+            "name": "sid",
+            "required": true,
+            "in": "path",
+            "description": "seller ID",
             "schema": {
               "example": "acef497c1130f71ccfe63aaa1c9a607d",
               "type": "string"
             }
           },
           {
-            "name": "product_category_name",
-            "required": false,
-            "in": "query",
-            "description": "Product category",
+            "name": "pid",
+            "required": true,
+            "in": "path",
+            "description": "Product ID",
             "schema": {
               "example": "beleza_saude",
+              "type": "string"
+            }
+          },
+          {
+            "name": "product_name",
+            "required": true,
+            "in": "query",
+            "schema": {
               "type": "string"
             }
           }
@@ -262,19 +268,29 @@
         ],
         "summary": "Soft delete seller product",
         "tags": [
-          "Seller"
+          "Sellers"
         ]
       }
     },
-    "/seller/upd": {
+    "/sellers/{sid}/products/{pid}": {
       "patch": {
         "operationId": "SellerController_updateProduct",
         "parameters": [
           {
-            "name": "product_id",
-            "required": false,
-            "in": "query",
-            "description": "Product ID to update",
+            "name": "sid",
+            "required": true,
+            "in": "path",
+            "description": "seller ID",
+            "schema": {
+              "example": "05a360982be454c7e715c0fec4f67243",
+              "type": "string"
+            }
+          },
+          {
+            "name": "pid",
+            "required": true,
+            "in": "path",
+            "description": "Product ID",
             "schema": {
               "example": "05a360982be454c7e715c0fec4f67243",
               "type": "string"
@@ -303,14 +319,24 @@
         ],
         "summary": "Update seller product",
         "tags": [
-          "Seller"
+          "Sellers"
         ]
       }
     },
-    "/seller/{name}": {
+    "/sellers/{sid}/prodcts/{name}": {
       "get": {
         "operationId": "SellerController_getSearch",
         "parameters": [
+          {
+            "name": "sid",
+            "required": true,
+            "in": "path",
+            "description": "Seller ID",
+            "schema": {
+              "example": "94144541854e298c2d976cb893b81343",
+              "type": "string"
+            }
+          },
           {
             "name": "name",
             "required": true,
@@ -334,7 +360,7 @@
         ],
         "summary": "Search products by name",
         "tags": [
-          "Seller"
+          "Sellers"
         ]
       }
     },
@@ -631,7 +657,7 @@
         ]
       }
     },
-    "/user/all-product/{uid}": {
+    "/users/all-product/{uid}": {
       "get": {
         "operationId": "UserController_getAllProduct",
         "parameters": [
@@ -641,7 +667,7 @@
             "in": "path",
             "description": "Customer ID",
             "schema": {
-              "example": "69a652005b0209eb227b41aa",
+              "example": "d3e7d37c0df9aef383f3f2a15b0dddfb",
               "type": "string"
             }
           }
@@ -653,11 +679,11 @@
         },
         "summary": "Get all products of a customer",
         "tags": [
-          "User"
+          "Users"
         ]
       }
     },
-    "/user/details/{uid}": {
+    "/users/details/{uid}": {
       "get": {
         "operationId": "UserController_getDetails",
         "parameters": [
@@ -667,7 +693,7 @@
             "in": "path",
             "description": "User ID",
             "schema": {
-              "example": "69a652005b0209eb227b41aa",
+              "example": "4f21938f7b925dd621343fc205395145",
               "type": "string"
             }
           }
@@ -679,7 +705,7 @@
         },
         "summary": "Get user profile details",
         "tags": [
-          "User"
+          "Users"
         ]
       }
     },
@@ -691,6 +717,7 @@
             "name": "page",
             "required": true,
             "in": "query",
+            "description": "Page number",
             "schema": {
               "type": "number"
             }
@@ -699,6 +726,7 @@
             "name": "limit",
             "required": true,
             "in": "query",
+            "description": "Items per page",
             "schema": {
               "type": "number"
             }
@@ -706,11 +734,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Paginated list of order items returned"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retrieve order items with pagination",
         "tags": [
-          "OrderItems"
+          "order-items"
         ]
       },
       "post": {
@@ -728,11 +762,17 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "Order item created successfully"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new order item",
         "tags": [
-          "OrderItems"
+          "order-items"
         ]
       }
     },
@@ -744,6 +784,7 @@
             "name": "seller_id",
             "required": true,
             "in": "path",
+            "description": "Seller identifier",
             "schema": {
               "type": "string"
             }
@@ -751,11 +792,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Total price calculated"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get total price of order items by seller ID",
         "tags": [
-          "OrderItems"
+          "order-items"
         ]
       }
     },
@@ -767,6 +814,7 @@
             "name": "product_id",
             "required": true,
             "in": "path",
+            "description": "Product identifier",
             "schema": {
               "type": "string"
             }
@@ -774,11 +822,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Total price calculated"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get total price of order items by product ID",
         "tags": [
-          "OrderItems"
+          "order-items"
         ]
       }
     },
@@ -790,6 +844,7 @@
             "name": "seller_id",
             "required": true,
             "in": "path",
+            "description": "Seller identifier",
             "schema": {
               "type": "string"
             }
@@ -797,11 +852,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Total expense calculated"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get total freight expense by seller ID",
         "tags": [
-          "OrderItems"
+          "order-items"
         ]
       }
     },
@@ -813,6 +874,7 @@
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "Order item identifier",
             "schema": {
               "type": "string"
             }
@@ -820,20 +882,75 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Order item returned"
+          },
+          "404": {
+            "description": "Order item not found"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get a single order item by its ID",
         "tags": [
-          "OrderItems"
+          "order-items"
         ]
-      },
+      }
+    },
+    "/order-items/update/{id}": {
       "patch": {
-        "operationId": "OrderItemsController_deleteOrderitem",
+        "operationId": "OrderItemsController_updateOrderItem",
         "parameters": [
           {
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "Order item identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrderItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order item updated successfully"
+          },
+          "404": {
+            "description": "Order item not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update an existing order item",
+        "tags": [
+          "order-items"
+        ]
+      }
+    },
+    "/order-items/delete/{id}": {
+      "patch": {
+        "operationId": "OrderItemsController_deleteOrderItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Order item identifier",
             "schema": {
               "type": "string"
             }
@@ -841,11 +958,20 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Order item deleted successfully"
+          },
+          "404": {
+            "description": "Order item not found"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Soft delete an order item",
         "tags": [
-          "OrderItems"
+          "order-items"
         ]
       }
     },
@@ -857,6 +983,7 @@
             "name": "page",
             "required": true,
             "in": "query",
+            "description": "Page number",
             "schema": {
               "type": "number"
             }
@@ -865,6 +992,7 @@
             "name": "limit",
             "required": true,
             "in": "query",
+            "description": "Items per page",
             "schema": {
               "type": "number"
             }
@@ -872,11 +1000,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Paginated payments returned"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retrieve payments with pagination",
         "tags": [
-          "Payments"
+          "payments"
         ]
       },
       "post": {
@@ -894,11 +1028,17 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "Payment created successfully"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new payment",
         "tags": [
-          "Payments"
+          "payments"
         ]
       }
     },
@@ -910,6 +1050,7 @@
             "name": "payment_type",
             "required": true,
             "in": "path",
+            "description": "Type of payment to filter",
             "schema": {
               "type": "string"
             }
@@ -917,11 +1058,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "List of payments matching type"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Search payments by type",
         "tags": [
-          "Payments"
+          "payments"
         ]
       }
     },
@@ -933,6 +1080,7 @@
             "name": "payment_type",
             "required": true,
             "in": "path",
+            "description": "Payment type to aggregate",
             "schema": {
               "type": "string"
             }
@@ -940,11 +1088,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Total payment calculated"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get total value of payments by type",
         "tags": [
-          "Payments"
+          "payments"
         ]
       }
     },
@@ -956,6 +1110,7 @@
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "Payment identifier",
             "schema": {
               "type": "string"
             }
@@ -963,11 +1118,20 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Payment returned"
+          },
+          "404": {
+            "description": "Payment not found"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retrieve a single payment by ID",
         "tags": [
-          "Payments"
+          "payments"
         ]
       }
     },
@@ -979,6 +1143,7 @@
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "Payment identifier",
             "schema": {
               "type": "string"
             }
@@ -986,11 +1151,20 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Payment updated successfully"
+          },
+          "404": {
+            "description": "Payment not found"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update an existing payment",
         "tags": [
-          "Payments"
+          "payments"
         ]
       }
     },
@@ -1002,6 +1176,7 @@
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "Payment identifier",
             "schema": {
               "type": "string"
             }
@@ -1009,11 +1184,20 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Payment deleted successfully"
+          },
+          "404": {
+            "description": "Payment not found"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Soft delete a payment",
         "tags": [
-          "Payments"
+          "payments"
         ]
       }
     }
@@ -1115,27 +1299,27 @@
         "properties": {
           "password": {
             "type": "string",
-            "example": "vcollofb"
+            "example": "rohith"
           },
           "zip_code": {
             "type": "number",
-            "example": 1222
+            "example": 2732
           },
           "city": {
             "type": "string",
-            "example": "sao paulo"
+            "example": "erode"
           },
           "state": {
             "type": "string",
-            "example": "SP"
+            "example": "TN"
           },
           "username": {
             "type": "string",
-            "example": "vcollofb"
+            "example": "rohith"
           },
           "email": {
             "type": "string",
-            "example": "vcollofb@gmail.com"
+            "example": "rohith@gmail.com"
           }
         },
         "required": [
@@ -1271,7 +1455,52 @@
       },
       "CreateOrderItemDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "Reference ID of the order",
+            "example": "605c3b5e8e3a9a0f9c2d4e12"
+          },
+          "order_item_id": {
+            "type": "number",
+            "description": "Sequential number of the item in the order",
+            "example": 1
+          },
+          "product_id": {
+            "type": "string",
+            "description": "ID of the product",
+            "example": "607d1a3b9c1a8b2f4e5d6c7a"
+          },
+          "seller_id": {
+            "type": "string",
+            "description": "ID of the seller",
+            "example": "607d1a3b9c1a8b2f4e5d6c7b"
+          },
+          "shipping_limit_date": {
+            "type": "string",
+            "description": "Shipping limit date in ISO format",
+            "example": "2025-12-31T23:59:59Z"
+          },
+          "price": {
+            "type": "number",
+            "description": "Price of the individual item",
+            "example": 99.99
+          },
+          "freight_value": {
+            "type": "number",
+            "description": "Freight value for the item",
+            "example": 5.5
+          }
+        },
+        "required": [
+          "order_id",
+          "order_item_id",
+          "product_id",
+          "seller_id",
+          "shipping_limit_date",
+          "price",
+          "freight_value"
+        ]
       },
       "UpdateOrderItemDto": {
         "type": "object",
@@ -1279,7 +1508,40 @@
       },
       "CreatePaymentDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "Associated order ID",
+            "example": "ORD123456"
+          },
+          "payment_sequential": {
+            "type": "number",
+            "description": "Sequential number of the payment",
+            "example": 1
+          },
+          "payment_type": {
+            "type": "string",
+            "description": "Type of payment (e.g., credit_card)",
+            "example": "credit_card"
+          },
+          "payment_installments": {
+            "type": "number",
+            "description": "Number of installments",
+            "example": 3
+          },
+          "payment_value": {
+            "type": "number",
+            "description": "Total payment value",
+            "example": 150.75
+          }
+        },
+        "required": [
+          "order_id",
+          "payment_sequential",
+          "payment_type",
+          "payment_installments",
+          "payment_value"
+        ]
       }
     }
   }

@@ -18,14 +18,14 @@ export class SellerService {
       return "product added";
     }
 
-    async getSearch(name: string){
-       const data = await this.ProductModel.find({product_category_name: {$regex : name, $options : "i"} , is_deleted:false});
+    async getSearch(sid:string,name: string){
+       const data = await this.ProductModel.find({product_category_name: {$regex : name, $options : "i"} , is_deleted:false, seller_id:sid});
        return data;
     }
 
-    async deleteProduct(pid?: string, pname?: string){
+    async deleteProduct( sid: string,pid?: string,pname?:string){
       if(pid){
-        const data = await this.ProductModel.updateOne({product_id : pid}, {$set:{is_deleted: true}});
+        const data = await this.ProductModel.updateOne({product_id : pid,seller_id:sid}, {$set:{is_deleted: true}});
         console.log(data);
         if (data.matchedCount === 0) return "No product found with that ID";
         return "deleted successfully";
@@ -36,11 +36,11 @@ export class SellerService {
         return "deleted successfully";
     }
 
-    async updateProduct(pid?: string, upd? : UpdateProductDto){
+    async updateProduct(sid: string,pid: string, upd : UpdateProductDto){
       if(!pid){
          return "nothing to update";
       }
-      const data = await this.ProductModel.findOneAndUpdate({product_id:pid}, upd, {returnDocument:"after"})
+      const data = await this.ProductModel.findOneAndUpdate({product_id:pid,seller_id:sid}, upd, {returnDocument:"after"})
       return "success";
     }
 }

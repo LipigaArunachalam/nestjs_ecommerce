@@ -7,7 +7,7 @@ import { RolesGuard } from './../utility/guards/role.guard';
 import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
 import { Roles } from 'src/utility/decorators/role.decorator';
 import { Role } from 'src/utility/enum/role.enum';
-
+import {ApiTags,ApiOperation,ApiQuery,ApiParam,ApiResponse,ApiBearerAuth,} from '@nestjs/swagger';
 
 
 @ApiTags('orders')
