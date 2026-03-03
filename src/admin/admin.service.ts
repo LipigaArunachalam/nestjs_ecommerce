@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { user } from './../schema/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateSellerDto } from './admin.dto';
+import { CreateSellerDto } from './dto/admin.dto';
 import { MailService } from 'src/mail/mail.service';
 import * as bcrypt from 'bcrypt';
 @Injectable()
