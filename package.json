@@ -1,6 +1,6 @@
 {
+  "name": "ecommerce-app",
 
-  "name": "db",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -21,7 +21,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/common": "^11.1.14",
+
+    "@nestjs/common": "^11.0.1",
+
     "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.0.1",
     "@nestjs/jwt": "^11.0.2",
@@ -29,16 +31,20 @@
     "@nestjs/mongoose": "^11.0.4",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.2.6",
     "@thallesp/nestjs-better-auth": "^2.4.0",
     "bcrypt": "^6.0.0",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.4",
+
+    "class-validator": "^0.14.3",
     "cookie-parser": "^1.4.7",
-    "mapped-types": "^0.0.1",
-    "mongoose": "^9.2.1",
+    "dotenv": "^17.3.1",
+    "mongodb": "^7.1.0",
+    "mongoose": "^9.2.2",
     "nodemailer": "^8.0.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
