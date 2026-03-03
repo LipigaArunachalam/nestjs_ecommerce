@@ -149,7 +149,7 @@
         ]
       }
     },
-    "/api/seller/all-product/{sid}": {
+    "/sellers/{sid}/products": {
       "get": {
         "operationId": "SellerController_getAllProduct",
         "parameters": [
@@ -159,7 +159,7 @@
             "in": "path",
             "description": "Seller ID",
             "schema": {
-              "example": "SELL123",
+              "example": "fc4751cfe3b279c419615b9b00c1abb4",
               "type": "string"
             }
           }
@@ -176,11 +176,9 @@
         ],
         "summary": "Get all products of a seller",
         "tags": [
-          "Seller"
+          "Sellers"
         ]
-      }
-    },
-    "/api/seller/add-product/{sid}": {
+      },
       "post": {
         "operationId": "SellerController_createProduct",
         "parameters": [
@@ -217,31 +215,39 @@
         ],
         "summary": "Add product for seller",
         "tags": [
-          "Seller"
+          "Sellers"
         ]
       }
     },
-    "/api/seller/del-product": {
+    "/sellers/{sid}/products/delete": {
       "patch": {
         "operationId": "SellerController_deleteProduct",
         "parameters": [
           {
-            "name": "product_id",
-            "required": false,
-            "in": "query",
-            "description": "Product ID",
+            "name": "sid",
+            "required": true,
+            "in": "path",
+            "description": "seller ID",
             "schema": {
               "example": "acef497c1130f71ccfe63aaa1c9a607d",
               "type": "string"
             }
           },
           {
-            "name": "product_category_name",
-            "required": false,
-            "in": "query",
-            "description": "Product category",
+            "name": "pid",
+            "required": true,
+            "in": "path",
+            "description": "Product ID",
             "schema": {
               "example": "beleza_saude",
+              "type": "string"
+            }
+          },
+          {
+            "name": "product_name",
+            "required": true,
+            "in": "query",
+            "schema": {
               "type": "string"
             }
           }
@@ -258,19 +264,29 @@
         ],
         "summary": "Soft delete seller product",
         "tags": [
-          "Seller"
+          "Sellers"
         ]
       }
     },
-    "/api/seller/upd": {
+    "/sellers/{sid}/products/{pid}": {
       "patch": {
         "operationId": "SellerController_updateProduct",
         "parameters": [
           {
-            "name": "product_id",
-            "required": false,
-            "in": "query",
-            "description": "Product ID to update",
+            "name": "sid",
+            "required": true,
+            "in": "path",
+            "description": "seller ID",
+            "schema": {
+              "example": "05a360982be454c7e715c0fec4f67243",
+              "type": "string"
+            }
+          },
+          {
+            "name": "pid",
+            "required": true,
+            "in": "path",
+            "description": "Product ID",
             "schema": {
               "example": "05a360982be454c7e715c0fec4f67243",
               "type": "string"
@@ -299,14 +315,24 @@
         ],
         "summary": "Update seller product",
         "tags": [
-          "Seller"
+          "Sellers"
         ]
       }
     },
-    "/api/seller/{name}": {
+    "/sellers/{sid}/prodcts/{name}": {
       "get": {
         "operationId": "SellerController_getSearch",
         "parameters": [
+          {
+            "name": "sid",
+            "required": true,
+            "in": "path",
+            "description": "Seller ID",
+            "schema": {
+              "example": "94144541854e298c2d976cb893b81343",
+              "type": "string"
+            }
+          },
           {
             "name": "name",
             "required": true,
@@ -330,7 +356,7 @@
         ],
         "summary": "Search products by name",
         "tags": [
-          "Seller"
+          "Sellers"
         ]
       }
     },
@@ -803,7 +829,7 @@
             "in": "path",
             "description": "Customer ID",
             "schema": {
-              "example": "69a652005b0209eb227b41aa",
+              "example": "d3e7d37c0df9aef383f3f2a15b0dddfb",
               "type": "string"
             }
           }
@@ -815,11 +841,11 @@
         },
         "summary": "Get all products of a customer",
         "tags": [
-          "User"
+          "Users"
         ]
       }
     },
-    "/api/user/details/{uid}": {
+    "/users/details/{uid}": {
       "get": {
         "operationId": "UserController_getDetails",
         "parameters": [
@@ -829,7 +855,7 @@
             "in": "path",
             "description": "User ID",
             "schema": {
-              "example": "69a652005b0209eb227b41aa",
+              "example": "4f21938f7b925dd621343fc205395145",
               "type": "string"
             }
           }
@@ -841,7 +867,7 @@
         },
         "summary": "Get user profile details",
         "tags": [
-          "User"
+          "Users"
         ]
       }
     },
@@ -1033,7 +1059,9 @@
         "tags": [
           "Order Items"
         ]
-      },
+      }
+    },
+    "/order-items/update/{id}": {
       "patch": {
         "operationId": "OrderItemsController_updateOrderItem",
         "parameters": [
@@ -1060,6 +1088,39 @@
         "responses": {
           "200": {
             "description": "Order item updated successfully"
+          },
+          "404": {
+            "description": "Order item not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update an existing order item",
+        "tags": [
+          "order-items"
+        ]
+      }
+    },
+    "/order-items/delete/{id}": {
+      "patch": {
+        "operationId": "OrderItemsController_deleteOrderItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Order item identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order item deleted successfully"
           },
           "404": {
             "description": "Order item not found"
@@ -1144,7 +1205,7 @@
         ],
         "summary": "Retrieve payments with pagination",
         "tags": [
-          "Payments"
+          "payments"
         ]
       },
       "post": {
@@ -1172,7 +1233,7 @@
         ],
         "summary": "Create a new payment",
         "tags": [
-          "Payments"
+          "payments"
         ]
       }
     },
@@ -1202,7 +1263,7 @@
         ],
         "summary": "Search payments by type",
         "tags": [
-          "Payments"
+          "payments"
         ]
       }
     },
@@ -1232,7 +1293,7 @@
         ],
         "summary": "Get total value of payments by type",
         "tags": [
-          "Payments"
+          "payments"
         ]
       }
     },
@@ -1265,7 +1326,7 @@
         ],
         "summary": "Retrieve a single payment by ID",
         "tags": [
-          "Payments"
+          "payments"
         ]
       },
       "patch": {
@@ -1296,7 +1357,7 @@
         ],
         "summary": "Update an existing payment",
         "tags": [
-          "Payments"
+          "payments"
         ]
       }
     },
@@ -1329,7 +1390,7 @@
         ],
         "summary": "Soft delete a payment",
         "tags": [
-          "Payments"
+          "payments"
         ]
       }
     }

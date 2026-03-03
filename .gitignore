@@ -3,12 +3,8 @@
 /node_modules
 /build
 
-<<<<<<< HEAD
-=======
-
+swagger.json
 .env
-
->>>>>>> 9cdf79e4e734ab5984714871da760c95dd88473b
 # Logs
 logs
 *.log

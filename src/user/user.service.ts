@@ -60,9 +60,10 @@ export class UserService {
 
         async getDetails(uid: string) {
             const data = await this.UserModel.findOne({
-                _id: uid,
+                user_id: uid,
                 is_deleted: false,
             }).select('-_id username email role city state zip_code');
+            console.log(data)
             return data;
         }
     }
