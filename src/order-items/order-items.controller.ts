@@ -3,10 +3,10 @@ import mongoose from 'mongoose';
 import { OrderItemsService } from './order-items.service';
 import { CreateOrderItemDto } from './dto/create.order-item.dto';
 import { UpdateOrderItemDto } from './dto/update.order-item.dto';
-import { RolesGuard } from 'src/auth/role.guard';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
-import { Role } from 'src/auth/role.enum';
-import { Roles } from 'src/auth/role.decorator';
+import { RolesGuard } from './../utility/guards/role.guard';
+import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
+import { Role } from 'src/utility/enum/role.enum';
+import { Roles } from 'src/utility/decorators/role.decorator';
 
 @Controller('order-items')
 export class OrderItemsController {

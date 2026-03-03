@@ -1,13 +1,12 @@
 import { Controller, Get, Param, Post, Body, Patch, Query, NotFoundException, ParseIntPipe, UseGuards } from '@nestjs/common';
-
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create.order.dto';
 import { UpdateOrderDto } from './dto/update.order.dto';
 import mongoose from 'mongoose';
-import { RolesGuard } from 'src/auth/role.guard';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
-import { Roles } from 'src/auth/role.decorator';
-import { Role } from 'src/auth/role.enum';
+import { RolesGuard } from './../utility/guards/role.guard';
+import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
+import { Roles } from 'src/utility/decorators/role.decorator';
+import { Role } from 'src/utility/enum/role.enum';
 
 
 

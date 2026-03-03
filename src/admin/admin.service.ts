@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { user } from './../schema/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateSellerDto } from './admin.dto';
+import { CreateSellerDto } from './dto/admin.dto';
 import { MailService } from 'src/mail/mail.service';
+import * as bcrypt from 'bcrypt';
+import { BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class AdminService {
@@ -21,6 +23,7 @@ export class AdminService {
             {
                 $project: {
                     _id: 0,
+                    // seller_id: { $toString: "$_id" },
                     seller_id: "$user_id",
                     seller_name: "$username",
                     seller_email: "$email",
@@ -34,7 +37,7 @@ export class AdminService {
     }
 
     async deleteSeller(sid: string) {
-        const data = await this.UserModel.findOneAndUpdate({ user_id: sid, is_deleted: false }, { $set: { is_deleted: true } });
+        const data = await this.UserModel.findOneAndUpdate({ _id: sid, is_deleted: false }, { $set: { is_deleted: true } });
         if (!data) {
             return "no matched data";
         }
@@ -59,7 +62,8 @@ export class AdminService {
             {
                 $project: {
                     _id: 0,
-                    customer_id: "$user_id",
+                    //customer_id: { $toString: "$_id" },
+                    customer_id:"$user_id",
                     customer_name: "$username",
                     customer_email: "$email",
                     customer_city: "$city",
@@ -72,8 +76,14 @@ export class AdminService {
     }
 
     async addSeller(seller: CreateSellerDto) {
-        //const result= {user_id: seller.user_id, username:seller.username,email:seller.email, 
-        // zip_code:seller.zip_code, city:seller.city, state: seller.state,role:"seller", is_deleted:false};
+        const email = seller.email.toLowerCase().trim();
+        const emailExists = await this.UserModel.findOne({ email, is_deleted: false,});
+        if (emailExists) {
+            throw new BadRequestException('Email already exists');
+        }
+        const pass = await bcrypt.hash(seller.password, 10);
+        const password = seller.password;
+        seller.password = pass;
         const result = { ...seller, role: "seller", is_deleted: false };
         const data = await this.UserModel.create(result);
         if (!data) {
@@ -83,7 +93,7 @@ export class AdminService {
         await this.mailService.sendSellerCredentials(
             data.email,
             data.username,
-            data.password,
+            password,
         );
         return "successfuly added";
     }
@@ -130,6 +140,7 @@ export class AdminService {
                     _id: "$role",
                     users: {
                         $push: {
+                            //user_id: { $toString: "$_id" },
                             user_id: "$user_id",
                             email: "$email",
                             username: "$username",

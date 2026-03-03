@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> 9cdf79e4e734ab5984714871da760c95dd88473b
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
 @Schema({ collection: "payments"})

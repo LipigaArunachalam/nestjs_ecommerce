@@ -1,0 +1,103 @@
+// import {IsString, IsNumber ,IsNotEmpty, IsBoolean} from "class-validator";
+
+// import { PartialType} from '@nestjs/mapped-types';
+
+// export class CreateSellerDto{
+//     @IsNotEmpty()
+//     @IsString()
+//     seller_id : string;
+
+//     @IsNumber()
+//     seller_zip_code_prefix: number;
+
+//     @IsString()
+//     seller_city: string;
+
+//     @IsString()
+//     seller_state: string;
+
+// }
+
+// export class CreateProductDto{
+//     @IsNotEmpty()
+//     @IsString()
+//     product_id : string;
+
+//     @IsString()
+//     product_category_name : string;
+
+//     @IsNumber()
+//     product_photos_qty : number;
+
+//     @IsNumber()
+//     product_weight_g : number;
+
+//     @IsNumber()
+//     product_length_cm : number;
+
+//     @IsNumber()
+//     product_height_cm : number;
+
+//     @IsNumber()
+//     product_width_cm : number;
+
+// }
+
+// export class UpdateProductDto extends PartialType(CreateProductDto){}
+
+import { IsString, IsNumber, IsNotEmpty } from "class-validator";
+// import { PartialType } from "@nestjs/mapped-types";
+import { ApiProperty } from "@nestjs/swagger";
+import { PartialType } from "@nestjs/swagger";
+
+export class CreateSellerDto {
+  @ApiProperty({ example: "SELL123" })
+  @IsNotEmpty()
+  @IsString()
+  seller_id: string;
+
+  @ApiProperty({ example: 560001 })
+  @IsNumber()
+  seller_zip_code_prefix: number;
+
+  @ApiProperty({ example: "bangalore" })
+  @IsString()
+  seller_city: string;
+
+  @ApiProperty({ example: "KA" })
+  @IsString()
+  seller_state: string;
+}
+
+export class CreateProductDto {
+  @ApiProperty({ example: "PROD123" })
+  @IsNotEmpty()
+  @IsString()
+  product_id: string;
+
+  @ApiProperty({ example: "electronics" })
+  @IsString()
+  product_category_name: string;
+
+  @ApiProperty({ example: 5 })
+  @IsNumber()
+  product_photos_qty: number;
+
+  @ApiProperty({ example: 500 })
+  @IsNumber()
+  product_weight_g: number;
+
+  @ApiProperty({ example: 20 })
+  @IsNumber()
+  product_length_cm: number;
+
+  @ApiProperty({ example: 10 })
+  @IsNumber()
+  product_height_cm: number;
+
+  @ApiProperty({ example: 15 })
+  @IsNumber()
+  product_width_cm: number;
+}
+
+export class UpdateProductDto extends PartialType(CreateProductDto) {}

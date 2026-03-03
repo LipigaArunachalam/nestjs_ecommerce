@@ -13,8 +13,11 @@ export class user extends Document {
   @Prop({ isRequired: true, unique: true })
   email: string;
 
-  @Prop({ isRequired: true })
+  @Prop({ isRequired: true,default:user })
   role: string;
+
+  @Prop()
+  user_id: string;
 
   @Prop({ default: null })
   refresh_token?: string;
@@ -24,9 +27,6 @@ export class user extends Document {
 
   @Prop({ default: false, select: false })
   is_deleted: boolean;
-
-  @Prop({ default: true })
-  is_active: boolean;
 
   @Prop({ isRequired: true })
   city: string;
