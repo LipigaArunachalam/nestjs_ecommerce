@@ -1,28 +1,35 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import  cookieParser from 'cookie-parser';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-
+import cookieParser from 'cookie-parser';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { writeFileSync } from 'fs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(cookieParser()); 
+  app.use(cookieParser());
   app.useGlobalPipes(
-  new ValidationPipe({
-    whitelist: true,
-    transform: true,
-    transformOptions: {
-      enableImplicitConversion: true,},
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
+
   const config = new DocumentBuilder()
-    .setTitle('E-commerce API')
-    .setDescription('API documentation for the E-commerce application')
+    .setTitle('Ecommerce API')
+    .setDescription('API documentation')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+
+  writeFileSync('./swagger.json', JSON.stringify(document, null, 2));
+
+  SwaggerModule.setup('api', app, document);
 
   app.setGlobalPrefix('api');
   await app.listen(process.env.PORT ?? 3000);

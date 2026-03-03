@@ -1,4 +1,3 @@
-
 import { Module} from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { OrdersModule } from './orders/orders.module';
@@ -11,30 +10,24 @@ import { MailModule } from './mail/mail.module';
 import { AdminModule } from './admin/admin.module';
 import { SellerModule } from './seller/seller.module';
 import { ProductModule } from './product/product.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { UserModule } from './user/user.module';
+
+
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRootAsync({
-
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         uri: configService.get<string>('MONGODB'),
       }),
     }),
-    AuthModule,
-    OrdersModule,
-    OrderItemModule,
-    PaymentModule,
-    ProductModule, 
-    SellerModule,  AdminModule,
-    AuthModule, 
-    MailModule
-  ],
-  controllers: [],
-  providers: [],
+   ProductModule, SellerModule, ConfigModule, AdminModule,AuthModule, MailModule, UserModule,OrderItemModule,PaymentModule],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class AppModule  {
- 
-}
+export class AppModule {}
 

@@ -9,7 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from '../utility/strategy/jwt.strategy';
 import { MailModule } from 'src/mail/mail.module';
-import { RolesGuard } from '../utility/guards/role.guard';
+import { RolesGuard } from './../utility/guards/role.guard';
 import { JwtAuthGuard } from '../utility/guards/auth.guard';
 @Module({
   imports: [
