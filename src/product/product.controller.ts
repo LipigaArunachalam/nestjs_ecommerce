@@ -3,10 +3,10 @@ import { ProductService } from './product.service';
 import {Product} from './../schema/product.schema';
 import { CreateProductDto } from './product.dto';
 import { UpdateProductDto } from './updproduct.dto';
-import { Role } from 'src/auth/role.enum';
-import { RolesGuard } from 'src/auth/role.guard';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
-import { Roles } from 'src/auth/role.decorator';
+import { Role } from 'src/utility/enum/role.enum';
+import { RolesGuard } from 'src/utility/guards/role.guard';
+import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
+import { Roles } from 'src/utility/decorators/role.decorator';
 
 @Controller('product')
 @UseGuards(JwtAuthGuard, RolesGuard)

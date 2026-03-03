@@ -7,10 +7,10 @@ import { user, UserSchema } from 'src/schema/user.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from '../utility/strategy/jwt.strategy';
 import { MailModule } from 'src/mail/mail.module';
-import { RolesGuard } from './role.guard';
-import { JwtAuthGuard } from './auth.guard';
+import { RolesGuard } from '../utility/guards/role.guard';
+import { JwtAuthGuard } from '../utility/guards/auth.guard';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: user.name, schema: UserSchema }]),

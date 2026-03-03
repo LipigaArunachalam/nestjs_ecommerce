@@ -15,11 +15,22 @@ export class OrderItemsService {
 
     async getOrderItemByPage(page: number, limit: number) {
         const skip = (page -1 ) * limit;
-        const orderItems = await this.orderItemModel.find(
-            {is_deleted: false}
-        ).skip(skip)
-        .limit(limit)
-        const totalOrderItems = await this.orderItemModel.countDocuments({is_deleted: false})
+        const orderItems = await this.orderItemModel.aggregate([
+            {
+                $match: {is_deleted: false}
+            },
+            {
+                $facet: {
+                    data: [
+                        { $skip: skip },
+                        { $limit: limit }
+                    ],
+                    total: [
+                        { $count: "count" }
+                    ]
+                }
+            }])
+            const totalOrderItems = orderItems[0]?.total[0]?.count || 0;
         return {
             page,
             limit,

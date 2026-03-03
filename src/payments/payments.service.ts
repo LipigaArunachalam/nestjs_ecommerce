@@ -11,12 +11,22 @@ export class PaymentsService {
     constructor(@InjectModel(Payment.name) private paymentModel: Model<Payment> ) {}
     async getPaymentByPage(page: number, limit: number) {
         const skip = (page - 1) * limit;
-        const payments = await this.paymentModel.find(
-            {is_deleted: false}
-        )
-        .skip(skip)
-        .limit(limit)
-        const totalPayments = await this.paymentModel.countDocuments({is_deleted: false});
+        const payments = await this.paymentModel.aggregate([
+            {
+                $match: {is_deleted: false}
+            },
+            {
+                $facet: {
+                    data: [
+                        { $skip: skip },
+                        { $limit: limit }
+                    ],
+                    total: [
+                        { $count: "count" }
+                    ]
+                }
+            }])
+        const totalPayments = payments[0]?.total[0]?.count || 0;
         return {
             page,
             limit,

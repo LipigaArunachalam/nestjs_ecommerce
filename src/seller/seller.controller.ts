@@ -3,8 +3,7 @@ import { SellerService } from './seller.service';
 import{ Product } from 'src/schema/product.schema';
 import{ CreateProductDto, UpdateProductDto } from './seller.dto';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
-
+import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
 
 @Controller('seller')
 @UseGuards(JwtAuthGuard)

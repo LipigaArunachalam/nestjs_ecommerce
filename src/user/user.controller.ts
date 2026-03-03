@@ -1,9 +1,9 @@
 import { Controller, Param, Body, Get, ValidationPipe,Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
-import { Roles } from 'src/auth/role.decorator';
-import { RolesGuard } from 'src/auth/role.guard';
-import { Role } from 'src/auth/role.enum';
+import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
+import { Roles } from 'src/utility/decorators/role.decorator';
+import { RolesGuard } from 'src/utility/guards/role.guard';
+import { Role } from 'src/utility/enum/role.enum';
 
 @Controller('user')
 @UseGuards(JwtAuthGuard, RolesGuard)
