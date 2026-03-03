@@ -6,7 +6,6 @@ import { CreateSellerDto } from './dto/admin.dto';
 import { MailService } from 'src/mail/mail.service';
 import * as bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
-
 @Injectable()
 export class AdminService {
     constructor(@InjectModel(user.name) private UserModel: Model<user>, private mailService: MailService) { }

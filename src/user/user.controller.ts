@@ -1,10 +1,17 @@
-import { Controller, Param, Body, Get, ValidationPipe, Post, } from '@nestjs/common';
+
+import { Controller, Param, Body, Get, ValidationPipe,Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
+import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
+import { Roles } from 'src/utility/decorators/role.decorator';
+import { RolesGuard } from 'src/utility/guards/role.guard';
+import { Role } from 'src/utility/enum/role.enum';
 import { ApiTags, ApiOperation, ApiParam, ApiResponse, } from '@nestjs/swagger';
 
 
 @ApiTags('User')
 @Controller('user')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Customer) 
 export class UserController {
     constructor(private userService: UserService) { }
 

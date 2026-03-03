@@ -3,11 +3,13 @@ import { ProductService } from './product.service';
 import { Product } from './../schema/product.schema';
 import { CreateProductDto, UpdateProductDto } from './dto/product.dto';
 import {ApiTags,ApiOperation,ApiQuery,ApiParam,ApiResponse,ApiBearerAuth,} from '@nestjs/swagger';
-// import { UseGuards } from '@nestjs/common';
-// import { AuthGuard } from '@nestjs/passport';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Product')
 @Controller('product')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Admin, Role.Seller)
 export class ProductController {
   constructor(private productService: ProductService) {}
 

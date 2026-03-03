@@ -9,6 +9,9 @@ import { ApiTags, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiBearerAuth, 
 
 
 
+
+
+@Controller('admin')
 @ApiTags("Admin")
 @Controller("admin")
 @UseGuards(JwtAuthGuard, RolesGuard)

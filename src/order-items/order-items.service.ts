@@ -15,11 +15,22 @@ export class OrderItemsService {
 
     async getOrderItemByPage(page: number, limit: number) {
         const skip = (page -1 ) * limit;
-        const orderItems = await this.orderItemModel.find(
-            {is_deleted: false}
-        ).skip(skip)
-        .limit(limit)
-        const totalOrderItems = await this.orderItemModel.countDocuments({is_deleted: false})
+        const orderItems = await this.orderItemModel.aggregate([
+            {
+                $match: {is_deleted: false}
+            },
+            {
+                $facet: {
+                    data: [
+                        { $skip: skip },
+                        { $limit: limit }
+                    ],
+                    total: [
+                        { $count: "count" }
+                    ]
+                }
+            }])
+            const totalOrderItems = orderItems[0]?.total[0]?.count || 0;
         return {
             page,
             limit,
@@ -58,7 +69,7 @@ export class OrderItemsService {
 
     async createOrderItem(createOrderItemDto: CreateOrderItemDto) {
         const newUser = await new this.orderItemModel(createOrderItemDto);
-        return newUser.save();
+        return {message: "Order item created successfully", data: await newUser.save()};
     }
 
     async updateOrderItem(id: string, updateOrderItemDto: UpdateOrderItemDto ) {
@@ -68,7 +79,7 @@ export class OrderItemsService {
             {returnDocument: 'after'}
         )
         if(!updatedOrderItem) throw new NotFoundException("order item not found")
-        return updatedOrderItem;
+        return {message: "Order item updated successfully", data: updatedOrderItem};
     }
 
     async deleteOrderItem(id: string) {
@@ -78,6 +89,6 @@ export class OrderItemsService {
             {returnDocument: 'after'}
         )
         if(!deletedOrderItem) throw new NotFoundException("order item not found");
-        return deletedOrderItem;
+        return {message: "Order item deleted successfully", data: deletedOrderItem};
     }
 }

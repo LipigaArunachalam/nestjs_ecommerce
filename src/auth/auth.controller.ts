@@ -1,8 +1,10 @@
+
 import { Controller, Post, ValidationPipe, Body, Res } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { CreateUserDto, VerifyUserDto, LogoutDto, RefreshTokenDto, ForgotPasswordDto, ResetPasswordDto } from "./dto/auth.dto";
 import type { Response } from "express";
 import { ApiTags, ApiOperation, ApiBody, ApiResponse, } from "@nestjs/swagger";
+
 
 @ApiTags("Auth")
 @Controller("auth")
@@ -102,8 +104,8 @@ export class AuthController {
         res.cookie("access_token", tokens, {
             httpOnly: true,
             secure: false,
-            sameSite: "lax",
-            maxAge: 3 * 60 * 1000,
+            sameSite: 'lax',
+            maxAge: 15 * 60 * 1000,
         });
 
         return { message: "Tokens refreshed successfully" };

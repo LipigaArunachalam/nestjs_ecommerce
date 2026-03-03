@@ -28,7 +28,7 @@ import { JwtAuthGuard } from '../utility/guards/auth.guard';
       },
     }),MailModule
   ],
-  providers: [AuthService, JwtService,JwtStrategy, RolesGuard, JwtAuthGuard],
+  providers: [AuthService, JwtService, JwtStrategy, RolesGuard, JwtAuthGuard],
   controllers: [AuthController],
   exports: [AuthService, JwtModule, RolesGuard, JwtAuthGuard],
 })
