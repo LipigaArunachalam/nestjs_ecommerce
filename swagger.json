@@ -15,7 +15,7 @@
         ]
       }
     },
-    "/products/all-product": {
+    "/products": {
       "get": {
         "operationId": "ProductController_getAllProduct",
         "parameters": [],
@@ -28,9 +28,7 @@
         "tags": [
           "Products"
         ]
-      }
-    },
-    "/products/add-product": {
+      },
       "post": {
         "operationId": "ProductController_createProduct",
         "parameters": [],
@@ -53,45 +51,7 @@
         "tags": [
           "Products"
         ]
-      }
-    },
-    "/products/del-product": {
-      "patch": {
-        "operationId": "ProductController_deleteProduct",
-        "parameters": [
-          {
-            "name": "product_id",
-            "required": false,
-            "in": "query",
-            "description": "Product ID",
-            "schema": {
-              "example": "84e1b9c6ba2ed178bd217097b41f1251",
-              "type": "string"
-            }
-          },
-          {
-            "name": "product_category_name",
-            "required": false,
-            "in": "query",
-            "description": "Product category name",
-            "schema": {
-              "example": "electronics",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Product deleted successfully"
-          }
-        },
-        "summary": "Soft delete a product",
-        "tags": [
-          "Products"
-        ]
-      }
-    },
-    "/products/upd": {
+      },
       "patch": {
         "operationId": "ProductController_updateProduct",
         "parameters": [
@@ -122,6 +82,42 @@
           }
         },
         "summary": "Update product details",
+        "tags": [
+          "Products"
+        ]
+      }
+    },
+    "/products/delete": {
+      "patch": {
+        "operationId": "ProductController_deleteProduct",
+        "parameters": [
+          {
+            "name": "product_id",
+            "required": false,
+            "in": "query",
+            "description": "Product ID",
+            "schema": {
+              "example": "84e1b9c6ba2ed178bd217097b41f1251",
+              "type": "string"
+            }
+          },
+          {
+            "name": "product_category_name",
+            "required": false,
+            "in": "query",
+            "description": "Product category name",
+            "schema": {
+              "example": "electronics",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product deleted successfully"
+          }
+        },
+        "summary": "Soft delete a product",
         "tags": [
           "Products"
         ]

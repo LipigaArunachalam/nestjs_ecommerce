@@ -15,7 +15,7 @@ export class UserController {
     constructor(private userService: UserService) { }
 
 
-    @Get('all-product/:uid')
+    @Get(':uid/products')
     @ApiOperation({ summary: 'Get all products of a customer' })
     @ApiParam({
         name: 'uid',
@@ -31,7 +31,7 @@ export class UserController {
     }
 
 
-    @Get('details/:uid')
+    @Get(':uid')
     @ApiOperation({ summary: 'Get user profile details' })
     @ApiParam({
         name: 'uid',
