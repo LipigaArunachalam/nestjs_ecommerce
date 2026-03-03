@@ -17,7 +17,7 @@ export class ProductController {
   constructor(private productService: ProductService) {}
 
 
-  @Get('all-product')
+  @Get()
   @ApiOperation({ summary: 'Get all products' })
   @ApiResponse({
     status: 200,
@@ -30,7 +30,7 @@ export class ProductController {
   }
 
 
-  @Post('add-product')
+  @Post()
   @ApiOperation({ summary: 'Create a new product' })
   @ApiResponse({
     status: 201,
@@ -43,7 +43,7 @@ export class ProductController {
   }
 
 
-  @Patch('del-product')
+  @Patch('delete')
   @ApiOperation({ summary: 'Soft delete a product' })
   @ApiQuery({
     name: 'product_id',
@@ -71,7 +71,7 @@ export class ProductController {
   }
 
  
-  @Patch('upd')
+  @Patch()
   @ApiOperation({ summary: 'Update product details' })
   @ApiQuery({
     name: 'product_id',
