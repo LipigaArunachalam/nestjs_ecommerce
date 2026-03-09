@@ -1,4 +1,4 @@
-import { Controller, Param, Body, Get, ValidationPipe,Post, UseGuards } from '@nestjs/common';
+import { Controller, Param, Body, Get, ValidationPipe,Post, UseGuards, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
 import { Roles } from 'src/utility/decorators/role.decorator';
@@ -31,7 +31,7 @@ export class UserController {
     }
 
 
-    @Get(':uid')
+    @Get()
     @ApiOperation({ summary: 'Get user profile details' })
     @ApiParam({
         name: 'uid',
@@ -42,7 +42,10 @@ export class UserController {
         status: 200,
         description: 'User details fetched successfully',
     })
-    getDetails(@Param('uid') uid: string) {
-        return this.userService.getDetails(uid);
+    // getDetails(@Param('uid') uid: string) {
+    //     return this.userService.getDetails(uid);
+    // }
+    getDetails(@Req() req){
+        return this.userService.getDetails(req.user.email);
     }
 }

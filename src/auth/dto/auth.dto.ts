@@ -45,9 +45,7 @@ export class VerifyUserDto {
     @IsString()
     password: string;
 
-    @ApiProperty({ example: "lipiga", required: false })
-    @IsString()
-    username?: string;
+
 }
 
 export class LogoutDto {

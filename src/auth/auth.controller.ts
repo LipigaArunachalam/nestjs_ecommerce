@@ -30,7 +30,7 @@ export class AuthController {
             httpOnly: true,
             secure: false,
             sameSite: "lax",
-            maxAge: 3 * 60 * 1000,
+            maxAge: 24 * 60 * 60 * 1000,
         });
 
         return {
@@ -58,7 +58,7 @@ export class AuthController {
             httpOnly: true,
             secure: false,
             sameSite: "lax",
-            maxAge: 3 * 60 * 1000,
+            maxAge: 24 * 60 * 60 * 1000,
         });
 
         return {
@@ -105,7 +105,7 @@ export class AuthController {
             httpOnly: true,
             secure: false,
             sameSite: 'lax',
-            maxAge: 15 * 60 * 1000,
+            maxAge: 24 * 60 * 60 * 1000,
         });
 
         return { message: "Tokens refreshed successfully" };

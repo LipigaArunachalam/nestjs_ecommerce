@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Param, Body, ValidationPipe, Query, Post, UseGuards, } from "@nestjs/common";
+import { Controller, Get, Patch, Param, Body, ValidationPipe, Query, Post, UseGuards,Req } from "@nestjs/common";
 import { SellerService } from "./seller.service";
 import { Product } from "src/schema/product.schema";
 import { CreateProductDto, UpdateProductDto } from "./dto/seller.dto";
@@ -13,20 +13,26 @@ import { ApiTags, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiBearerAuth, 
 export class SellerController {
     constructor(private sellerService: SellerService) { }
 
+    @Get()
+        @ApiOperation({ summary: 'Get user profile details' })
+        @ApiResponse({
+            status: 200,
+            description: 'seller details fetched successfully',
+        })
 
-    @Get(":sid/products")
+        getDetails(@Req() req){
+            return this.sellerService.getDetails(req.user.email);
+        }
+
+
+    @Get("products")
     @ApiOperation({ summary: "Get all products of a seller" })
-    @ApiParam({
-        name: "sid",
-        example: "fc4751cfe3b279c419615b9b00c1abb4",
-        description: "Seller ID",
-    })
     @ApiResponse({
         status: 200,
         description: "Seller products fetched successfully",
     })
-    getAllProduct(@Param("sid") sid: string): Promise<Product[]> {
-        return this.sellerService.getAllProduct(sid);
+    getAllProduct(@Req() res): Promise<Product[]> {
+        return this.sellerService.getAllProduct(res.user.user_id);
     }
 
 

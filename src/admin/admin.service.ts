@@ -6,6 +6,9 @@ import { CreateSellerDto } from './dto/admin.dto';
 import { MailService } from 'src/mail/mail.service';
 import * as bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
+import * as crypto from 'crypto';
+
+
 @Injectable()
 export class AdminService {
     constructor(@InjectModel(user.name) private UserModel: Model<user>, private mailService: MailService) { }
@@ -83,7 +86,8 @@ export class AdminService {
         const pass = await bcrypt.hash(seller.password, 10);
         const password = seller.password;
         seller.password = pass;
-        const result = { ...seller, role: "seller", is_deleted: false };
+        const userId = crypto.randomBytes(16).toString('hex');
+        const result = { ...seller, role: "seller", is_deleted: false,user_id:userId };
         const data = await this.UserModel.create(result);
         if (!data) {
             return "failed to add";
