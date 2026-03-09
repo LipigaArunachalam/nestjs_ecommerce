@@ -21,8 +21,8 @@ export class AuthService {
 
     async signUp(signupDto: CreateUserDto) {
         const { username, email, password } = signupDto;
-        const emaill = email.toLowerCase().trim();
-        const emailExists = await this.userModel.findOne({email:emaill,is_deleted: false,});
+        //const emaill = email.toLowerCase().trim();
+        const emailExists = await this.userModel.findOne({email,is_deleted: false,});
         if (emailExists) {
             throw new BadRequestException('Email already exists');
         }
@@ -31,7 +31,7 @@ export class AuthService {
         const user = await this.userModel.create({ ...signupDto, password: hashedPassword, role: "customer",user_id:userId});
         await user.save();
        // await this.userModel.findOneAndUpdate({ _id: user._id }, { $set: { user_id: user._id.toString() } });
-        const { accessToken, refreshToken } = await this.getTokens(user.role, user.email);
+        const { accessToken, refreshToken } = await this.getTokens(user.role, user.email,user.user_id);
         const expires = new Date(Date.now() + 15 * 60 * 1000);
         await this.userModel.findByIdAndUpdate(user._id.toString(), {
             refresh_token: refreshToken,
@@ -51,7 +51,7 @@ export class AuthService {
         if (!passwordMatch)
             throw new UnauthorizedException('invalid email or password');
 
-        const { accessToken, refreshToken } = await this.getTokens(user.role, user.email);
+        const { accessToken, refreshToken } = await this.getTokens(user.role, user.email, user.user_id);
         const expires = new Date(Date.now() + 15 * 60 * 1000);
         await this.userModel.findByIdAndUpdate(user._id, { refresh_token: refreshToken, refresh_expires: expires });
         return { accessToken, refreshToken };
@@ -77,21 +77,21 @@ export class AuthService {
             await this.userModel.findByIdAndUpdate(user._id, { refresh_token: null, refresh_expires: null });
             throw new UnauthorizedException('Access denied');
         }
-        const tokens = await this.jwtService.signAsync( { role: user.role, email: user.email },
-                { secret: this.configService.get('JWT_SECRET'), expiresIn: '15m' },);
+        const tokens = await this.jwtService.signAsync( { role: user.role, email: user.email, user_id:user.user_id },
+                { secret: this.configService.get('JWT_SECRET'), expiresIn: '1d' },);
         //await this.userModel.findByIdAndUpdate(user._id, { refresh_token: refreshToken });
 
         return tokens;
     }
 
-    async getTokens(role: string, email: string) {
+    async getTokens(role: string, email: string, user_id:string) {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(
-                { role, email },
-                { secret: this.configService.get('JWT_SECRET'), expiresIn: '15m' },
+                { role, email ,user_id},
+                { secret: this.configService.get('JWT_SECRET'), expiresIn: '1d' },
             ),
             this.jwtService.signAsync(
-                { role, email },
+                { role, email ,user_id},
                 { secret: this.configService.get('REFRESH_TOKEN'), expiresIn: '7d' },
             ),
         ]);
@@ -111,7 +111,7 @@ export class AuthService {
             passResetToken: hashedToken,
             passResetExpires: expires,
         });
-        const resetLink = `http://localhost:3000/reset-password?token=${resetToken}&email=${email}`;
+        const resetLink = `http://localhost:5173/reset-password?token=${resetToken}&email=${email}`;
         await this.mailService.sendPasswordReset(email, resetLink);
         return { message: 'If the email exists, reset link sent', token: resetToken };
     }

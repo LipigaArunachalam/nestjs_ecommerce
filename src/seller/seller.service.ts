@@ -3,11 +3,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import{ CreateProductDto, UpdateProductDto } from './dto/seller.dto';
 import {Product} from './../schema/product.schema';
-
+import {user} from './../schema/user.schema'
+  
 @Injectable()
 export class SellerService {
 
-    constructor(@InjectModel(Product.name) private ProductModel: Model<Product>) {}
+    constructor(@InjectModel(Product.name) private ProductModel: Model<Product>,@InjectModel(user.name) private UserModel: Model<user>) {}
     async getAllProduct(sid:string){
        const data = await this.ProductModel.find({is_deleted:false, seller_id:sid});
        return data;
@@ -43,4 +44,13 @@ export class SellerService {
       const data = await this.ProductModel.findOneAndUpdate({product_id:pid,seller_id:sid}, upd, {returnDocument:"after"})
       return "success";
     }
+
+    async getDetails(email: string) {
+            const data = await this.UserModel.findOne({
+                email,
+                is_deleted: false,
+            }).select('-_id username email role city state zip_code');
+            console.log(data)
+            return data;
+        }
 }

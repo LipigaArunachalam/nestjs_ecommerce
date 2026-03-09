@@ -149,21 +149,30 @@
         ]
       }
     },
-    "/sellers/{sid}/products": {
+    "/sellers": {
       "get": {
-        "operationId": "SellerController_getAllProduct",
-        "parameters": [
+        "operationId": "SellerController_getDetails",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "seller details fetched successfully"
+          }
+        },
+        "security": [
           {
-            "name": "sid",
-            "required": true,
-            "in": "path",
-            "description": "Seller ID",
-            "schema": {
-              "example": "fc4751cfe3b279c419615b9b00c1abb4",
-              "type": "string"
-            }
+            "bearer": []
           }
         ],
+        "summary": "Get user profile details",
+        "tags": [
+          "Sellers"
+        ]
+      }
+    },
+    "/sellers/products": {
+      "get": {
+        "operationId": "SellerController_getAllProduct",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Seller products fetched successfully"
@@ -178,7 +187,9 @@
         "tags": [
           "Sellers"
         ]
-      },
+      }
+    },
+    "/sellers/{sid}/products": {
       "post": {
         "operationId": "SellerController_createProduct",
         "parameters": [
@@ -653,7 +664,7 @@
         ]
       }
     },
-    "/users/all-product/{uid}": {
+    "/users/{uid}/products": {
       "get": {
         "operationId": "UserController_getAllProduct",
         "parameters": [
@@ -679,7 +690,7 @@
         ]
       }
     },
-    "/users/details/{uid}": {
+    "/users": {
       "get": {
         "operationId": "UserController_getDetails",
         "parameters": [
@@ -689,8 +700,7 @@
             "in": "path",
             "description": "User ID",
             "schema": {
-              "example": "4f21938f7b925dd621343fc205395145",
-              "type": "string"
+              "example": "4f21938f7b925dd621343fc205395145"
             }
           }
         ],
@@ -1372,10 +1382,6 @@
             "example": "lipigava.22it@kongu.edu"
           },
           "password": {
-            "type": "string",
-            "example": "lipiga"
-          },
-          "username": {
             "type": "string",
             "example": "lipiga"
           }
