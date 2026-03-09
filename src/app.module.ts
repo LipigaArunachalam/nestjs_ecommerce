@@ -25,7 +25,7 @@ import { UserModule } from './user/user.module';
         uri: configService.get<string>('MONGODB'),
       }),
     }),
-   ProductModule, SellerModule, ConfigModule, AdminModule,AuthModule, MailModule, UserModule,OrderItemModule,PaymentModule],
+   ProductModule, SellerModule, ConfigModule, AdminModule, OrdersModule, AuthModule, MailModule, UserModule,OrderItemModule,PaymentModule],
   controllers: [AppController],
   providers: [AppService],
 })
