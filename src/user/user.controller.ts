@@ -33,11 +33,6 @@ export class UserController {
 
     @Get()
     @ApiOperation({ summary: 'Get user profile details' })
-    @ApiParam({
-        name: 'uid',
-        example: '4f21938f7b925dd621343fc205395145',
-        description: 'User ID',
-    })
     @ApiResponse({
         status: 200,
         description: 'User details fetched successfully',
@@ -46,6 +41,6 @@ export class UserController {
     //     return this.userService.getDetails(uid);
     // }
     getDetails(@Req() req){
-        return this.userService.getDetails(req.user.email);
+        return this.userService.getDetails(req.user.user_id);
     }
 }

@@ -24,9 +24,9 @@ export class CreateSellerDto {
 
 export class CreateProductDto {
   @ApiProperty({ example: "PROD123" })
-  @IsNotEmpty()
-  @IsString()
-  product_id: string;
+  // @IsNotEmpty()
+  // @IsString()
+  // product_id: string;
 
   @ApiProperty({ example: "electronics" })
   @IsString()
