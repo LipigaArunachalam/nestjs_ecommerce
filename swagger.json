@@ -189,6 +189,26 @@
         ]
       }
     },
+    "/sellers/status": {
+      "get": {
+        "operationId": "SellerController_productStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Seller products fetched successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get all products status",
+        "tags": [
+          "Sellers"
+        ]
+      }
+    },
     "/sellers/{sid}/products": {
       "post": {
         "operationId": "SellerController_createProduct",
@@ -230,7 +250,7 @@
         ]
       }
     },
-    "/sellers/{sid}/products/delete": {
+    "/sellers/{sid}/products/{pid}/delete": {
       "patch": {
         "operationId": "SellerController_deleteProduct",
         "parameters": [
@@ -859,17 +879,7 @@
     "/users": {
       "get": {
         "operationId": "UserController_getDetails",
-        "parameters": [
-          {
-            "name": "uid",
-            "required": true,
-            "in": "path",
-            "description": "User ID",
-            "schema": {
-              "example": "4f21938f7b925dd621343fc205395145"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "User details fetched successfully"
@@ -1403,6 +1413,253 @@
           "payments"
         ]
       }
+    },
+    "/orders": {
+      "get": {
+        "operationId": "OrdersController_getOrderByPage",
+        "parameters": [
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated orders returned"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retrieve orders with pagination",
+        "tags": [
+          "orders"
+        ]
+      },
+      "post": {
+        "operationId": "OrdersController_createOrder",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new order",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/orders/order-status/{order_status}": {
+      "get": {
+        "operationId": "OrdersController_getOrderRevenueByStatus",
+        "parameters": [
+          {
+            "name": "order_status",
+            "required": true,
+            "in": "path",
+            "description": "Status to filter orders",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Revenue calculated"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get order revenue filtered by status",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "operationId": "OrdersController_getOrdersById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Order identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order returned"
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retrieve a single order by ID",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/orders/update/{id}": {
+      "patch": {
+        "operationId": "OrdersController_updateOrder",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Order identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order updated successfully"
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update an existing order",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/orders/delete/{id}": {
+      "patch": {
+        "operationId": "OrdersController_deleteOrder",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Order identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order deleted successfully"
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Soft delete an order",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/orders/{oid}/{status}": {
+      "patch": {
+        "operationId": "OrdersController_updateStatus",
+        "parameters": [
+          {
+            "name": "oid",
+            "required": true,
+            "in": "path",
+            "description": "product ID",
+            "schema": {
+              "example": "47770eb9100c2d0c44946d9cf07ec65d",
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": true,
+            "in": "path",
+            "description": "product status",
+            "schema": {
+              "example": "Delivered",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status updated successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update product status",
+        "tags": [
+          "orders"
+        ]
+      }
     }
   },
   "info": {
@@ -1425,13 +1682,9 @@
       "CreateProductDto": {
         "type": "object",
         "properties": {
-          "product_id": {
-            "type": "string",
-            "example": "PROD123"
-          },
           "product_category_name": {
             "type": "string",
-            "example": "electronics"
+            "example": "PROD123"
           },
           "product_photos_qty": {
             "type": "number",
@@ -1455,7 +1708,6 @@
           }
         },
         "required": [
-          "product_id",
           "product_category_name",
           "product_photos_qty",
           "product_weight_g",
@@ -1467,13 +1719,9 @@
       "UpdateProductDto": {
         "type": "object",
         "properties": {
-          "product_id": {
-            "type": "string",
-            "example": "PROD123"
-          },
           "product_category_name": {
             "type": "string",
-            "example": "electronics"
+            "example": "PROD123"
           },
           "product_photos_qty": {
             "type": "number",
@@ -1800,6 +2048,65 @@
           "payment_installments",
           "payment_value"
         ]
+      },
+      "CreateOrderDto": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "description": "Unique order identifier",
+            "example": "ORD123456"
+          },
+          "customer_id": {
+            "type": "string",
+            "description": "Customer identifier",
+            "example": "CUS987654"
+          },
+          "order_status": {
+            "type": "string",
+            "description": "Status of the order",
+            "example": "delivered"
+          },
+          "order_purchase_timestamp": {
+            "type": "string",
+            "description": "Timestamp when purchase was made",
+            "example": "2025-01-01T10:00:00Z"
+          },
+          "order_approved_at": {
+            "type": "string",
+            "description": "Timestamp when order was approved",
+            "example": "2025-01-02T12:00:00Z"
+          },
+          "order_delivered_carrier_date": {
+            "type": "string",
+            "description": "Carrier delivery date",
+            "example": "2025-01-05T15:00:00Z"
+          },
+          "order_delivered_customer_date": {
+            "type": "string",
+            "description": "Customer delivery date",
+            "example": "2025-01-06T18:00:00Z"
+          },
+          "order_estimated_delivery_date": {
+            "type": "string",
+            "description": "Estimated delivery date",
+            "example": "2025-01-07T20:00:00Z"
+          }
+        },
+        "required": [
+          "order_id",
+          "customer_id",
+          "order_status",
+          "order_purchase_timestamp",
+          "order_approved_at",
+          "order_delivered_carrier_date",
+          "order_delivered_customer_date",
+          "order_estimated_delivery_date"
+        ]
+      },
+      "UpdateOrderDto": {
+        "type": "object",
+        "properties": {}
       }
     }
   }

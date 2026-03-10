@@ -58,11 +58,11 @@ export class UserService {
         return data;
     }
 
-        async getDetails(email: string) {
+        async getDetails(user_id: string) {
             const data = await this.UserModel.findOne({
-                email,
+                user_id,
                 is_deleted: false,
-            }).select('-_id username email role city state zip_code');
+            });
             console.log(data)
             return data;
         }

@@ -4,11 +4,15 @@ import { Product } from "src/schema/product.schema";
 import { CreateProductDto, UpdateProductDto } from "./dto/seller.dto";
 import { JwtAuthGuard } from "src/utility/guards/auth.guard";
 import { ApiTags, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiBearerAuth, ApiBody, } from "@nestjs/swagger";
+import { RolesGuard } from "src/utility/guards/role.guard";
+import { Role } from "src/utility/enum/role.enum";
+import { Roles } from "src/utility/decorators/role.decorator";
 
 @ApiTags("Sellers")
 @ApiBearerAuth()
 @Controller("sellers")
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard,RolesGuard)
+@Roles(Role.Seller)
 
 export class SellerController {
     constructor(private sellerService: SellerService) { }
@@ -36,6 +40,16 @@ export class SellerController {
     }
 
 
+    @Get("status")
+    @ApiOperation({ summary: "Get all products status" })
+    @ApiResponse({
+        status: 200,
+        description: "Seller products fetched successfully",
+    })
+    productStatus(@Req() res): Promise<Product[]> {
+        return this.sellerService.productStatus(res.user.user_id);
+    }
+
 
 
     @Post(":sid/products")
@@ -53,7 +67,7 @@ export class SellerController {
     createProduct(
         @Body(ValidationPipe) product: CreateProductDto,
         @Param("sid") sid: string,
-    ): Promise<string> {
+    ): Promise<{message:string}> {
         return this.sellerService.createProduct(product, sid);
     }
 
@@ -61,7 +75,7 @@ export class SellerController {
 
 
 
-    @Patch(":sid/products/delete")
+    @Patch(":sid/products/:pid/delete")
     @ApiOperation({ summary: "Soft delete seller product" })
     @ApiParam({
         name: "sid",
@@ -79,10 +93,11 @@ export class SellerController {
     })
     deleteProduct(
         @Param("sid") sid: string,
-        @Query("pid") pid?: string,
+        @Param("pid") pid?: string,
         @Query('product_name') pname?:string,
-    ): Promise<string> {
+    ): Promise<any> {
         return this.sellerService.deleteProduct(sid, pid,pname);
+        
     }
 
 
@@ -109,7 +124,7 @@ export class SellerController {
         @Param("sid") sid: string,
         @Param("pid") pid: string,
         @Body(ValidationPipe) upd: UpdateProductDto,
-    ): Promise<string> {
+    ): Promise<any> {
         return this.sellerService.updateProduct(sid, pid,upd);
     }
 
