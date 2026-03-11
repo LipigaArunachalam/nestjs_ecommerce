@@ -35,8 +35,8 @@ export class SellerController {
         status: 200,
         description: "Seller products fetched successfully",
     })
-    getAllProduct(@Req() res): Promise<Product[]> {
-        return this.sellerService.getAllProduct(res.user.user_id);
+    getAllProduct(@Req() req): Promise<Product[]> {
+        return this.sellerService.getAllProduct(req.user.user_id);
     }
 
 

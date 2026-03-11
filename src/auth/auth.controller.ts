@@ -1,9 +1,10 @@
 
-import { Controller, Post, ValidationPipe, Body, Res } from "@nestjs/common";
+import { Controller, Post, ValidationPipe, Body, Res,Req,UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { CreateUserDto, VerifyUserDto, LogoutDto, RefreshTokenDto, ForgotPasswordDto, ResetPasswordDto } from "./dto/auth.dto";
 import type { Response } from "express";
 import { ApiTags, ApiOperation, ApiBody, ApiResponse, } from "@nestjs/swagger";
+import { JwtAuthGuard } from "src/utility/guards/auth.guard";
 
 
 @ApiTags("Auth")
@@ -69,7 +70,7 @@ export class AuthController {
     }
 
 
-   @Post("logout")
+    @Post("logout")
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: "Logout user" })
     @ApiBody({ type: LogoutDto })

@@ -61,7 +61,7 @@ export class AuthService {
     }};
     }
 
-  async logout(userId: string) {
+    async logout(userId: string) {
         await this.userModel.findOneAndUpdate({user_id:userId,is_deleted:false}, {$set:{
             refresh_token: null, refresh_expires: null,}
         });
