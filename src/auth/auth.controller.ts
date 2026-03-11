@@ -1,9 +1,10 @@
 
-import { Controller, Post, ValidationPipe, Body, Res } from "@nestjs/common";
+import { Controller, Post, ValidationPipe, Body, Res,Req,UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { CreateUserDto, VerifyUserDto, LogoutDto, RefreshTokenDto, ForgotPasswordDto, ResetPasswordDto } from "./dto/auth.dto";
 import type { Response } from "express";
 import { ApiTags, ApiOperation, ApiBody, ApiResponse, } from "@nestjs/swagger";
+import { JwtAuthGuard } from "src/utility/guards/auth.guard";
 
 
 @ApiTags("Auth")
@@ -70,17 +71,15 @@ export class AuthController {
 
 
     @Post("logout")
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: "Logout user" })
     @ApiBody({ type: LogoutDto })
     @ApiResponse({
         status: 200,
         description: "User logged out successfully",
     })
-    async logout(
-        @Body(ValidationPipe) body: LogoutDto,
-        @Res({ passthrough: true }) res: Response,
-    ) {
-        await this.authService.logout(body.userId);
+    async logout(  @Req() req: any, @Res({ passthrough: true }) res: any) {
+        await this.authService.logout(req.user.user_id);
         res.clearCookie("access_token");
         return { message: "User logged out successfully" };
     }

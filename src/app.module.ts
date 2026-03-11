@@ -25,11 +25,7 @@ import { OrdersModule } from './orders/orders.module';
         uri: configService.get<string>('MONGODB'),
       }),
     }),
-<<<<<<< HEAD
    ProductModule, SellerModule, ConfigModule, AdminModule,AuthModule, MailModule, UserModule,OrderItemModule,PaymentModule,OrdersModule],
-=======
-   ProductModule, SellerModule, ConfigModule, AdminModule, OrdersModule, AuthModule, MailModule, UserModule,OrderItemModule,PaymentModule],
->>>>>>> 1e995a4745e1a66de515386d36c243fa514f94e7
   controllers: [AppController],
   providers: [AppService],
 })
