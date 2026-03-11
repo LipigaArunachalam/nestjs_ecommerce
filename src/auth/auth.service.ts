@@ -61,11 +61,12 @@ export class AuthService {
     }};
     }
 
-    async logout(userId: string) {
-        await this.userModel.findByIdAndUpdate({userId,is_deleted:false}, {
-            refreshToken: null, refresh_expires: null,
+  async logout(userId: string) {
+        await this.userModel.findOneAndUpdate({user_id:userId,is_deleted:false}, {$set:{
+            refresh_token: null, refresh_expires: null,}
         });
     }
+
 
     async refreshTokens(email: string, refreshToken: string) {
         console.log(email, refreshToken);
