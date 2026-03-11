@@ -1,19 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { user } from './../schema/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateSellerDto } from './dto/admin.dto';
 import { MailService } from 'src/mail/mail.service';
 import * as bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
-import * as crypto from 'crypto';
-
-
 @Injectable()
 export class AdminService {
     constructor(@InjectModel(user.name) private UserModel: Model<user>, private mailService: MailService) { }
 
-    async getAllSeller() {
+    async getAdmin(email: string) {
+        const admin = await this.UserModel.findOne({
+                email,
+                is_deleted: false,
+            }).select('-_id username email role city state zip_code');
+            return admin;
+        
+    }
+
+    async getAllSeller(limit?: number, offset?: number) {
         //const data = await this.UserModel.find({is_deleted : false, role : "seller"});
         const data = await this.UserModel.aggregate([
             {
@@ -23,8 +29,14 @@ export class AdminService {
                 }
             },
             {
+                $skip: Number(offset),
+            },
+            {
+                $limit: Number(limit),
+            },
+            {
                 $project: {
-                    _id: 0,
+                    id:"$_id",
                     // seller_id: { $toString: "$_id" },
                     seller_id: "$user_id",
                     seller_name: "$username",
@@ -39,11 +51,12 @@ export class AdminService {
     }
 
     async deleteSeller(sid: string) {
-        const data = await this.UserModel.findOneAndUpdate({ _id: sid, is_deleted: false }, { $set: { is_deleted: true } });
+        const objectId = new Types.ObjectId(sid);
+        const data = await this.UserModel.findOneAndUpdate({ _id: objectId, is_deleted: false }, { $set: { is_deleted: true } });
         if (!data) {
-            return "no matched data";
+            throw new NotFoundException('Seller not found or already deleted');
         }
-        return "success";
+        return {message:"success"};
     }
 
     async getAllCustomer(limit?: number, offset?: number) {
@@ -86,19 +99,17 @@ export class AdminService {
         const pass = await bcrypt.hash(seller.password, 10);
         const password = seller.password;
         seller.password = pass;
-        const userId = crypto.randomBytes(16).toString('hex');
-        const result = { ...seller, role: "seller", is_deleted: false,user_id:userId };
+        const result = { ...seller, role: "seller", is_deleted: false };
         const data = await this.UserModel.create(result);
         if (!data) {
-            return "failed to add";
+            throw new HttpException('cannot add Data', HttpStatus.BAD_REQUEST) ;
         }
-        console.log(data);
         await this.mailService.sendSellerCredentials(
             data.email,
             data.username,
             password,
         );
-        return "successfuly added";
+        return {message:"successfuly added"};
     }
 
 
@@ -130,13 +141,19 @@ export class AdminService {
         return data;
     }
 
-    async searchUser(city: string) {
+    async searchUser(city: string, limit: number, offset: number) {
         const data = await this.UserModel.aggregate([
             {
                 $match: {
                     is_deleted: false,
                     $text: { $search: city }
                 }
+            },
+            {
+                $skip: Number(offset),
+            },
+            {
+                $limit: Number(limit),
             },
             {
                 $group: {
@@ -152,10 +169,8 @@ export class AdminService {
                     },
                     count: { $sum: 1 },
                 }
-            },
-            {
-                $limit: 100,
             }
+            
         ]);
         return data;
     }

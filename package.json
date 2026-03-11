@@ -60,8 +60,6 @@
 
     "@nestjs/swagger": "^11.2.6",
 
-    "@thallesp/nestjs-better-auth": "^2.4.0",
-
     "bcrypt": "^6.0.0",
 
     "class-transformer": "^0.5.1",
