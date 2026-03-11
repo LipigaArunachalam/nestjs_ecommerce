@@ -106,7 +106,6 @@ export class AdminController {
                @Query("limit", ParseIntPipe) limit: number,
                @Query("offset", ParseIntPipe) offset: number,
             ): Promise<any[]> {
-        console.log(city);
         return this.adminService.searchUser(city, limit, offset );
     }
 

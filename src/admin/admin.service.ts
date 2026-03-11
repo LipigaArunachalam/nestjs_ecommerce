@@ -15,7 +15,6 @@ export class AdminService {
                 email,
                 is_deleted: false,
             }).select('-_id username email role city state zip_code');
-            console.log(admin)
             return admin;
         
     }
@@ -54,7 +53,6 @@ export class AdminService {
     async deleteSeller(sid: string) {
         const objectId = new Types.ObjectId(sid);
         const data = await this.UserModel.findOneAndUpdate({ _id: objectId, is_deleted: false }, { $set: { is_deleted: true } });
-        console.log(sid);
         if (!data) {
             throw new NotFoundException('Seller not found or already deleted');
         }
