@@ -69,18 +69,16 @@ export class AuthController {
     }
 
 
-    @Post("logout")
+   @Post("logout")
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: "Logout user" })
     @ApiBody({ type: LogoutDto })
     @ApiResponse({
         status: 200,
         description: "User logged out successfully",
     })
-    async logout(
-        @Body(ValidationPipe) body: LogoutDto,
-        @Res({ passthrough: true }) res: Response,
-    ) {
-        await this.authService.logout(body.userId);
+    async logout(  @Req() req: any, @Res({ passthrough: true }) res: any) {
+        await this.authService.logout(req.user.user_id);
         res.clearCookie("access_token");
         return { message: "User logged out successfully" };
     }
