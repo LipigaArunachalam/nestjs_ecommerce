@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Patch, Query, NotFoundException, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Patch, Query, NotFoundException, ParseIntPipe, UseGuards,ValidationPipe } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create.order.dto';
 import { UpdateOrderDto } from './dto/update.order.dto';
@@ -7,15 +7,16 @@ import { RolesGuard } from './../utility/guards/role.guard';
 import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
 import { Roles } from 'src/utility/decorators/role.decorator';
 import { Role } from 'src/utility/enum/role.enum';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-
+import {ApiTags,ApiOperation,ApiQuery,ApiParam,ApiResponse,ApiBearerAuth,ApiBody} from '@nestjs/swagger';
+import { UpdateProductDto } from 'src/seller/dto/seller.dto';
+import { SellerService } from 'src/seller/seller.service';
 
 
 @ApiTags('Orders')
 @ApiBearerAuth()
 @Controller('orders')
 export class OrdersController {
-    constructor( private orderService: OrdersService) {}
+    constructor( private orderService: OrdersService,private sellerService:SellerService) {}
     // @Get()
     // getOrders() {
     //     return this.orderService.getOrder()
@@ -80,6 +81,25 @@ export class OrdersController {
         return this.orderService.deleteOrder(id);
     }
 
+    @Patch(":oid/:status")
+        @ApiOperation({ summary: "Update product status" })
+        @ApiParam({
+            name: "oid",
+            example: "47770eb9100c2d0c44946d9cf07ec65d",
+            description: "product ID",
+        })
+        @ApiParam({
+            name: "status",
+            example: "Delivered",
+            description: "product status",
+        })
+        @ApiResponse({
+            status: 200,
+            description: "status updated successfully",
+        })
+        updateStatus( @Param("oid") oid: string, @Param("status") status : string ): Promise<any> {
+            return this.orderService.updateStatus(oid,status);
+        }
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Patch(':id')

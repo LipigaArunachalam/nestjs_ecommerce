@@ -103,4 +103,12 @@ export class OrdersService {
         return deletedUser;
     }
 
+    async updateStatus(oid :string,status:string){
+        const res = await this.orderModel.findOneAndUpdate({order_id:oid},{order_status:status},{returnDocument:'after'});
+        if(!res){
+            return {message:"cant update"}
+        }
+        return {message:"updated  sucessfully"}
+    }
+
 }
