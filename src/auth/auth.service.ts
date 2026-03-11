@@ -54,7 +54,11 @@ export class AuthService {
         const { accessToken, refreshToken } = await this.getTokens(user.role, user.email, user.user_id);
         const expires = new Date(Date.now() + 15 * 60 * 1000);
         await this.userModel.findByIdAndUpdate(user._id, { refresh_token: refreshToken, refresh_expires: expires });
-        return { accessToken, refreshToken };
+        return { accessToken, refreshToken, user:{
+            email: user.email,
+            role: user.role,
+            user_id: user.user_id
+        } };
     }
 
     async logout(userId: string) {

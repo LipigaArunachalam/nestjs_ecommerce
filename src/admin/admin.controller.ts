@@ -1,4 +1,4 @@
-import { Controller, Body, Get, Param, Query, Patch, Post, UseGuards, ParseIntPipe } from "@nestjs/common";
+import { Controller, Body, Get, Req, Param, Query, Patch, Post, UseGuards, ParseIntPipe } from "@nestjs/common";
 import { AdminService } from "./admin.service";
 import { CreateSellerDto } from "./dto/admin.dto";
 import { JwtAuthGuard } from "src/utility/guards/auth.guard";
@@ -21,8 +21,11 @@ export class AdminController {
         status: 200,
         description: "List of sellers fetched successfully",
     })
-    getAllSeller(): Promise<any[]> {
-        return this.adminService.getAllSeller();
+    getAllSeller(
+        @Query("limit", ParseIntPipe) limit: number,
+        @Query("offset", ParseIntPipe) offset: number,
+    ): Promise<any[]> {
+        return this.adminService.getAllSeller(limit, offset);
     }
 
 
@@ -37,7 +40,7 @@ export class AdminController {
         status: 200,
         description: "Seller deleted successfully",
     })
-    deleteSeller(@Param("id") sid: string): Promise<string> {
+    deleteSeller(@Param("id") sid: string): Promise<{message:string}> {
         return this.adminService.deleteSeller(sid);
     }
 
@@ -48,7 +51,7 @@ export class AdminController {
         status: 201,
         description: "Seller created successfully",
     })
-    addSeller(@Body() seller: CreateSellerDto): Promise<string> {
+    addSeller(@Body() seller: CreateSellerDto): Promise<{message: string}> {
         return this.adminService.addSeller(seller);
     }
 
@@ -88,8 +91,7 @@ export class AdminController {
         return this.adminService.getCount();
     }
 
-
-    @Get("customers")
+    @Get("customers/city")
     @ApiOperation({ summary: "Search users by city" })
     @ApiQuery({
         name: "city",
@@ -100,7 +102,27 @@ export class AdminController {
         status: 200,
         description: "Users fetched successfully",
     })
-    searchUser(@Query("city") city: string): Promise<any[]> {
-        return this.adminService.searchUser(city);
+    searchUser(@Query("city") city: string,
+               @Query("limit", ParseIntPipe) limit: number,
+               @Query("offset", ParseIntPipe) offset: number,
+            ): Promise<any[]> {
+        console.log(city);
+        return this.adminService.searchUser(city, limit, offset );
     }
+
+    @Get()
+    @ApiOperation({ summary: "Get admin details by id" })
+    @ApiParam({
+        name: "id",
+        example: "69943c3ea47648ff8b80b112",
+        description: "Admin ID",
+    })
+    @ApiResponse({
+        status: 200,
+        description: "Users fetched successfully",
+    })
+    getAdmin(@Req() req ){
+        return this.adminService.getAdmin(req.user.email);
+    }
+
 }

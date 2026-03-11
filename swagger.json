@@ -15,7 +15,7 @@
         ]
       }
     },
-    "/products": {
+    "/api/products": {
       "get": {
         "operationId": "ProductController_getAllProduct",
         "parameters": [],
@@ -149,7 +149,7 @@
         ]
       }
     },
-    "/sellers": {
+    "/api/sellers": {
       "get": {
         "operationId": "SellerController_getDetails",
         "parameters": [],
@@ -169,7 +169,7 @@
         ]
       }
     },
-    "/sellers/products": {
+    "/api/sellers/products": {
       "get": {
         "operationId": "SellerController_getAllProduct",
         "parameters": [],
@@ -189,7 +189,7 @@
         ]
       }
     },
-    "/sellers/{sid}/products": {
+    "/api/sellers/{sid}/products": {
       "post": {
         "operationId": "SellerController_createProduct",
         "parameters": [
@@ -230,7 +230,7 @@
         ]
       }
     },
-    "/sellers/{sid}/products/delete": {
+    "/api/sellers/{sid}/products/delete": {
       "patch": {
         "operationId": "SellerController_deleteProduct",
         "parameters": [
@@ -279,7 +279,7 @@
         ]
       }
     },
-    "/sellers/{sid}/products/{pid}": {
+    "/api/sellers/{sid}/products/{pid}": {
       "patch": {
         "operationId": "SellerController_updateProduct",
         "parameters": [
@@ -330,7 +330,7 @@
         ]
       }
     },
-    "/sellers/{sid}/prodcts/{name}": {
+    "/api/sellers/{sid}/prodcts/{name}": {
       "get": {
         "operationId": "SellerController_getSearch",
         "parameters": [
@@ -374,7 +374,24 @@
     "/api/admin/sellers": {
       "get": {
         "operationId": "AdminController_getAllSeller",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of sellers fetched successfully"
@@ -437,25 +454,35 @@
     },
     "/api/admin/customers": {
       "get": {
-        "operationId": "AdminController_searchUser",
+        "operationId": "AdminController_gellAllCustomer",
         "parameters": [
           {
-            "name": "city",
+            "name": "limit",
             "required": true,
             "in": "query",
-            "description": "City name",
+            "description": "Number of records to fetch",
             "schema": {
-              "example": "sao paulo",
-              "type": "string"
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "description": "Number of records to skip",
+            "schema": {
+              "example": 0,
+              "type": "number"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Users fetched successfully"
+            "description": "Customers fetched successfully"
           }
         },
-        "summary": "Search users by city",
+        "summary": "Get all customers with pagination",
         "tags": [
           "Admin"
         ]
@@ -471,6 +498,73 @@
           }
         },
         "summary": "Get user count grouped by city",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin/customers/city": {
+      "get": {
+        "operationId": "AdminController_searchUser",
+        "parameters": [
+          {
+            "name": "city",
+            "required": true,
+            "in": "query",
+            "description": "City name",
+            "schema": {
+              "example": "sao paulo",
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users fetched successfully"
+          }
+        },
+        "summary": "Search users by city",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin": {
+      "get": {
+        "operationId": "AdminController_getAdmin",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Admin ID",
+            "schema": {
+              "example": "69943c3ea47648ff8b80b112"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users fetched successfully"
+          }
+        },
+        "summary": "Get admin details by id",
         "tags": [
           "Admin"
         ]
@@ -830,7 +924,7 @@
         ]
       }
     },
-    "/users/{uid}/products": {
+    "/api/users/{uid}/products": {
       "get": {
         "operationId": "UserController_getAllProduct",
         "parameters": [
@@ -856,7 +950,7 @@
         ]
       }
     },
-    "/users": {
+    "/api/users": {
       "get": {
         "operationId": "UserController_getDetails",
         "parameters": [
@@ -1069,9 +1163,7 @@
         "tags": [
           "Order Items"
         ]
-      }
-    },
-    "/order-items/update/{id}": {
+      },
       "patch": {
         "operationId": "OrderItemsController_updateOrderItem",
         "parameters": [
@@ -1098,39 +1190,6 @@
         "responses": {
           "200": {
             "description": "Order item updated successfully"
-          },
-          "404": {
-            "description": "Order item not found"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Update an existing order item",
-        "tags": [
-          "order-items"
-        ]
-      }
-    },
-    "/order-items/delete/{id}": {
-      "patch": {
-        "operationId": "OrderItemsController_deleteOrderItem",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "Order item identifier",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Order item deleted successfully"
           },
           "404": {
             "description": "Order item not found"
@@ -1215,7 +1274,7 @@
         ],
         "summary": "Retrieve payments with pagination",
         "tags": [
-          "payments"
+          "Payments"
         ]
       },
       "post": {
@@ -1243,7 +1302,7 @@
         ],
         "summary": "Create a new payment",
         "tags": [
-          "payments"
+          "Payments"
         ]
       }
     },
@@ -1273,7 +1332,7 @@
         ],
         "summary": "Search payments by type",
         "tags": [
-          "payments"
+          "Payments"
         ]
       }
     },
@@ -1303,7 +1362,7 @@
         ],
         "summary": "Get total value of payments by type",
         "tags": [
-          "payments"
+          "Payments"
         ]
       }
     },
@@ -1336,7 +1395,7 @@
         ],
         "summary": "Retrieve a single payment by ID",
         "tags": [
-          "payments"
+          "Payments"
         ]
       },
       "patch": {
@@ -1367,7 +1426,7 @@
         ],
         "summary": "Update an existing payment",
         "tags": [
-          "payments"
+          "Payments"
         ]
       }
     },
@@ -1400,7 +1459,7 @@
         ],
         "summary": "Soft delete a payment",
         "tags": [
-          "payments"
+          "Payments"
         ]
       }
     }
