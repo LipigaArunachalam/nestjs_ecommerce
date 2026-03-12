@@ -52,8 +52,9 @@ export class AuthController {
         @Body(ValidationPipe) loginDto: VerifyUserDto,
         @Res({ passthrough: true }) res: Response,
     ) {
-        const { accessToken, refreshToken,user } =
+        const { accessToken, refreshToken, user } =
             await this.authService.login(loginDto);
+        
 
         res.cookie("access_token", accessToken, {
             httpOnly: true,
