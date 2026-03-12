@@ -24,7 +24,8 @@ export class AuthService {
         //const emaill = email.toLowerCase().trim();
         const emailExists = await this.userModel.findOne({email,is_deleted: false,});
         if (emailExists) {
-            throw new BadRequestException('Email already exists');
+            // return {message:"email already exists"};
+            throw new BadRequestException('Email already exists'); 
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const userId = crypto.randomBytes(16).toString('hex');

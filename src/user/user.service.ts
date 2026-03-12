@@ -8,7 +8,7 @@ import * as crypto from 'crypto';
 @Injectable()
 export class UserService {
     constructor(@InjectModel(Order.name) private OrderModel: Model<Order>, @InjectModel(user.name) private UserModel: Model<user>) { }
-    async getAllProduct(uid: string) {
+    async getAllProduct(uid: string, limit: number, offset: number) {
         const data = await this.OrderModel.aggregate([
             {
                 $match: {
@@ -47,23 +47,32 @@ export class UserService {
                     product_id: '$cust_orders.product_id',
                     seller_id: '$cust_orders.seller_id',
                     price: '$cust_orders.price',
-                    status: '$cust_orders.order_status',
+                    status: '$order_status',
                     payment_type: '$cust_pay.payment_type',
                     Installation: '$cust_pay.payment_installments',
-                    freight_value: '$cust_pay.freight_value'
+                    freight_value: '$cust_pay.freight_value',
                 }
             },
-
+            {
+                $skip: offset ? Number(offset) : 0
+            },
+            {
+                $limit: limit ? Number(limit) : 10
+            }
         ])
         return data;
     }
 
-        async getDetails(user_id: string) {
-            const data = await this.UserModel.findOne({
-                user_id,
-                is_deleted: false,
-            });
-            console.log(data)
-            return data;
-        }
+    async getDetails(user_id: string) {
+        const data = await this.UserModel.findOne({
+            user_id,
+            is_deleted: false,
+        });
+        console.log(data)
+        return data;
     }
+
+    async getProducts() {
+
+    }
+}

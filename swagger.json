@@ -172,7 +172,26 @@
     "/api/sellers/products": {
       "get": {
         "operationId": "SellerController_getAllProduct",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Seller products fetched successfully"
@@ -189,8 +208,6 @@
         ]
       }
     },
-<<<<<<< HEAD
-=======
     "/api/sellers/status": {
       "get": {
         "operationId": "SellerController_productStatus",
@@ -211,7 +228,26 @@
         ]
       }
     },
->>>>>>> 6d5ef2ca54b748c567ea5087ac4d9df3cc132035
+    "/api/sellers/dashboard": {
+      "get": {
+        "operationId": "SellerController_sellerDashboard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Seller dashboard loaded"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "seller dashboard",
+        "tags": [
+          "Sellers"
+        ]
+      }
+    },
     "/api/sellers/{sid}/products": {
       "post": {
         "operationId": "SellerController_createProduct",
@@ -253,11 +289,7 @@
         ]
       }
     },
-<<<<<<< HEAD
-    "/api/sellers/{sid}/products/delete": {
-=======
     "/api/sellers/{sid}/products/{pid}/delete": {
->>>>>>> 6d5ef2ca54b748c567ea5087ac4d9df3cc132035
       "patch": {
         "operationId": "SellerController_deleteProduct",
         "parameters": [
@@ -401,24 +433,7 @@
     "/api/admin/sellers": {
       "get": {
         "operationId": "AdminController_getAllSeller",
-        "parameters": [
-          {
-            "name": "limit",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "offset",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "List of sellers fetched successfully"
@@ -481,35 +496,25 @@
     },
     "/api/admin/customers": {
       "get": {
-        "operationId": "AdminController_gellAllCustomer",
+        "operationId": "AdminController_searchUser",
         "parameters": [
           {
-            "name": "limit",
+            "name": "city",
             "required": true,
             "in": "query",
-            "description": "Number of records to fetch",
+            "description": "City name",
             "schema": {
-              "example": 10,
-              "type": "number"
-            }
-          },
-          {
-            "name": "offset",
-            "required": true,
-            "in": "query",
-            "description": "Number of records to skip",
-            "schema": {
-              "example": 0,
-              "type": "number"
+              "example": "sao paulo",
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Customers fetched successfully"
+            "description": "Users fetched successfully"
           }
         },
-        "summary": "Get all customers with pagination",
+        "summary": "Search users by city",
         "tags": [
           "Admin"
         ]
@@ -530,20 +535,6 @@
         ]
       }
     },
-<<<<<<< HEAD
-    "/api/admin/customers/city": {
-      "get": {
-        "operationId": "AdminController_searchUser",
-        "parameters": [
-          {
-            "name": "city",
-            "required": true,
-            "in": "query",
-            "description": "City name",
-            "schema": {
-              "example": "sao paulo",
-              "type": "string"
-=======
     "/api/auth/signup": {
       "post": {
         "operationId": "AuthController_signUp",
@@ -707,6 +698,24 @@
               "example": "d3e7d37c0df9aef383f3f2a15b0dddfb",
               "type": "string"
             }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "number"
+            }
           }
         ],
         "responses": {
@@ -735,6 +744,21 @@
         ]
       }
     },
+    "/api/users/products": {
+      "get": {
+        "operationId": "UserController_getProducts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All products displayed"
+          }
+        },
+        "summary": "Display all the products",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/api/order-items": {
       "get": {
         "operationId": "OrderItemsController_getOrderItem",
@@ -746,25 +770,13 @@
             "description": "Page number",
             "schema": {
               "type": "number"
->>>>>>> 6d5ef2ca54b748c567ea5087ac4d9df3cc132035
             }
           },
           {
             "name": "limit",
             "required": true,
             "in": "query",
-<<<<<<< HEAD
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "offset",
-            "required": true,
-            "in": "query",
-=======
             "description": "Items per page",
->>>>>>> 6d5ef2ca54b748c567ea5087ac4d9df3cc132035
             "schema": {
               "type": "number"
             }
@@ -772,20 +784,6 @@
         ],
         "responses": {
           "200": {
-<<<<<<< HEAD
-            "description": "Users fetched successfully"
-          }
-        },
-        "summary": "Search users by city",
-        "tags": [
-          "Admin"
-        ]
-      }
-    },
-    "/api/admin": {
-      "get": {
-        "operationId": "AdminController_getAdmin",
-=======
             "description": "Paginated list of order items returned"
           }
         },
@@ -921,34 +919,19 @@
     "/api/order-items/{id}": {
       "get": {
         "operationId": "OrderItemsController_getOrderItemById",
->>>>>>> 6d5ef2ca54b748c567ea5087ac4d9df3cc132035
         "parameters": [
           {
             "name": "id",
             "required": true,
             "in": "path",
-<<<<<<< HEAD
-            "description": "Admin ID",
-            "schema": {
-              "example": "69943c3ea47648ff8b80b112"
-=======
             "description": "Order item identifier",
             "schema": {
               "type": "string"
->>>>>>> 6d5ef2ca54b748c567ea5087ac4d9df3cc132035
             }
           }
         ],
         "responses": {
           "200": {
-<<<<<<< HEAD
-            "description": "Users fetched successfully"
-          }
-        },
-        "summary": "Get admin details by id",
-        "tags": [
-          "Admin"
-=======
             "description": "Order item returned"
           },
           "404": {
@@ -1261,7 +1244,6 @@
         "summary": "Soft delete a payment",
         "tags": [
           "Payments"
->>>>>>> 6d5ef2ca54b748c567ea5087ac4d9df3cc132035
         ]
       }
     },
@@ -1469,400 +1451,7 @@
         ]
       }
     },
-<<<<<<< HEAD
-    "/api/auth/signup": {
-      "post": {
-        "operationId": "AuthController_signUp",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUserDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "User registered successfully"
-          }
-        },
-        "summary": "Register a new user",
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/api/auth/login": {
-      "post": {
-        "operationId": "AuthController_signin",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VerifyUserDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "User logged in successfully"
-          }
-        },
-        "summary": "User login",
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/api/auth/logout": {
-      "post": {
-        "operationId": "AuthController_logout",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LogoutDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "User logged out successfully"
-          }
-        },
-        "summary": "Logout user",
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/api/auth/refresh": {
-      "post": {
-        "operationId": "AuthController_refresh",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RefreshTokenDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Tokens refreshed successfully"
-          }
-        },
-        "summary": "Refresh access token",
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/api/auth/forgot-password": {
-      "post": {
-        "operationId": "AuthController_forgot",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ForgotPasswordDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Password reset link sent"
-          }
-        },
-        "summary": "Send forgot password email",
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/api/auth/reset-password": {
-      "post": {
-        "operationId": "AuthController_reset",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ResetPasswordDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Password reset successfully"
-          }
-        },
-        "summary": "Reset user password",
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/api/users/{uid}/products": {
-      "get": {
-        "operationId": "UserController_getAllProduct",
-        "parameters": [
-          {
-            "name": "uid",
-            "required": true,
-            "in": "path",
-            "description": "Customer ID",
-            "schema": {
-              "example": "d3e7d37c0df9aef383f3f2a15b0dddfb",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Customer products fetched successfully"
-          }
-        },
-        "summary": "Get all products of a customer",
-        "tags": [
-          "Users"
-        ]
-      }
-    },
-    "/api/users": {
-      "get": {
-        "operationId": "UserController_getDetails",
-        "parameters": [
-          {
-            "name": "uid",
-            "required": true,
-            "in": "path",
-            "description": "User ID",
-            "schema": {
-              "example": "4f21938f7b925dd621343fc205395145"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "User details fetched successfully"
-          }
-        },
-        "summary": "Get user profile details",
-        "tags": [
-          "Users"
-        ]
-      }
-    },
-    "/api/order-items": {
-      "get": {
-        "operationId": "OrderItemsController_getOrderItem",
-        "parameters": [
-          {
-            "name": "page",
-            "required": true,
-            "in": "query",
-            "description": "Page number",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "limit",
-            "required": true,
-            "in": "query",
-            "description": "Items per page",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Paginated list of order items returned"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Retrieve order items with pagination",
-        "tags": [
-          "Order Items"
-        ]
-      },
-      "post": {
-        "operationId": "OrderItemsController_createOrderItem",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrderItemDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Order item created successfully"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Create a new order item",
-        "tags": [
-          "Order Items"
-        ]
-      }
-    },
-    "/api/order-items/seller-cost/{seller_id}": {
-      "get": {
-        "operationId": "OrderItemsController_getTotalPriceBySellerId",
-        "parameters": [
-          {
-            "name": "seller_id",
-            "required": true,
-            "in": "path",
-            "description": "Seller identifier",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Total price calculated"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Get total price of order items by seller ID",
-        "tags": [
-          "Order Items"
-        ]
-      }
-    },
-    "/api/order-items/product-cost/{product_id}": {
-      "get": {
-        "operationId": "OrderItemsController_getTotalPriceByProductId",
-        "parameters": [
-          {
-            "name": "product_id",
-            "required": true,
-            "in": "path",
-            "description": "Product identifier",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Total price calculated"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Get total price of order items by product ID",
-        "tags": [
-          "Order Items"
-        ]
-      }
-    },
-    "/api/order-items/expense-by-seller/{seller_id}": {
-      "get": {
-        "operationId": "OrderItemsController_getExpenseBySellerId",
-        "parameters": [
-          {
-            "name": "seller_id",
-            "required": true,
-            "in": "path",
-            "description": "Seller identifier",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Total expense calculated"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Get total freight expense by seller ID",
-        "tags": [
-          "Order Items"
-        ]
-      }
-    },
-    "/api/order-items/{id}": {
-      "get": {
-        "operationId": "OrderItemsController_getOrderItemById",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "Order item identifier",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Order item returned"
-          },
-          "404": {
-            "description": "Order item not found"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Get a single order item by its ID",
-        "tags": [
-          "Order Items"
-        ]
-      },
-=======
     "/api/orders/{oid}/{status}": {
->>>>>>> 6d5ef2ca54b748c567ea5087ac4d9df3cc132035
       "patch": {
         "operationId": "OrdersController_updateStatus",
         "parameters": [
@@ -1875,149 +1464,9 @@
               "example": "47770eb9100c2d0c44946d9cf07ec65d",
               "type": "string"
             }
-<<<<<<< HEAD
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateOrderItemDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Order item updated successfully"
-          },
-          "404": {
-            "description": "Order item not found"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Update an existing order item",
-        "tags": [
-          "Order Items"
-        ]
-      }
-    },
-    "/api/order-items/delete/{id}": {
-      "patch": {
-        "operationId": "OrderItemsController_deleteOrderItem",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "Order item identifier",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Order item deleted successfully"
-          },
-          "404": {
-            "description": "Order item not found"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Soft delete an order item",
-        "tags": [
-          "Order Items"
-        ]
-      }
-    },
-    "/api/payments": {
-      "get": {
-        "operationId": "PaymentsController_getPaymentByPage",
-        "parameters": [
-          {
-            "name": "page",
-            "required": true,
-            "in": "query",
-            "description": "Page number",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "limit",
-            "required": true,
-            "in": "query",
-            "description": "Items per page",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Paginated payments returned"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Retrieve payments with pagination",
-        "tags": [
-          "Payments"
-        ]
-      },
-      "post": {
-        "operationId": "PaymentsController_createPayment",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreatePaymentDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Payment created successfully"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Create a new payment",
-        "tags": [
-          "Payments"
-        ]
-      }
-    },
-    "/api/payments/search/{payment_type}": {
-      "get": {
-        "operationId": "PaymentsController_searchByType",
-        "parameters": [
-          {
-            "name": "payment_type",
-=======
           },
           {
             "name": "status",
->>>>>>> 6d5ef2ca54b748c567ea5087ac4d9df3cc132035
             "required": true,
             "in": "path",
             "description": "product status",
@@ -2039,138 +1488,7 @@
         ],
         "summary": "Update product status",
         "tags": [
-<<<<<<< HEAD
-          "Payments"
-        ]
-      }
-    },
-    "/api/payments/total/{payment_type}": {
-      "get": {
-        "operationId": "PaymentsController_getTotalPaymentByType",
-        "parameters": [
-          {
-            "name": "payment_type",
-            "required": true,
-            "in": "path",
-            "description": "Payment type to aggregate",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Total payment calculated"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Get total value of payments by type",
-        "tags": [
-          "Payments"
-        ]
-      }
-    },
-    "/api/payments/{id}": {
-      "get": {
-        "operationId": "PaymentsController_getPaymentById",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "Payment identifier",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Payment returned"
-          },
-          "404": {
-            "description": "Payment not found"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Retrieve a single payment by ID",
-        "tags": [
-          "Payments"
-        ]
-      },
-      "patch": {
-        "operationId": "PaymentsController_updatePayment",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "Payment identifier",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Payment updated successfully"
-          },
-          "404": {
-            "description": "Payment not found"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Update an existing payment",
-        "tags": [
-          "Payments"
-        ]
-      }
-    },
-    "/api/payments/delete/{id}": {
-      "patch": {
-        "operationId": "PaymentsController_DeletePayment",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "Payment identifier",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Payment deleted successfully"
-          },
-          "404": {
-            "description": "Payment not found"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Soft delete a payment",
-        "tags": [
-          "Payments"
-=======
           "Orders"
->>>>>>> 6d5ef2ca54b748c567ea5087ac4d9df3cc132035
         ]
       }
     }
@@ -2218,6 +1536,10 @@
           "product_width_cm": {
             "type": "number",
             "example": 15
+          },
+          "product_image_url": {
+            "type": "string",
+            "example": "https://res.cloudinary.com/dyrw2esoq/image/upload/v1773276662/wyz3btmwssffx3vuzj5o.png"
           }
         },
         "required": [
@@ -2226,7 +1548,8 @@
           "product_weight_g",
           "product_length_cm",
           "product_height_cm",
-          "product_width_cm"
+          "product_width_cm",
+          "product_image_url"
         ]
       },
       "UpdateProductDto": {
@@ -2255,6 +1578,10 @@
           "product_width_cm": {
             "type": "number",
             "example": 15
+          },
+          "product_image_url": {
+            "type": "string",
+            "example": "https://res.cloudinary.com/dyrw2esoq/image/upload/v1773276662/wyz3btmwssffx3vuzj5o.png"
           }
         }
       },
