@@ -51,6 +51,11 @@ export class CreateProductDto {
   @ApiProperty({ example: 15 })
   @IsNumber()
   product_width_cm: number;
+ 
+  @ApiProperty({ example: "https://res.cloudinary.com/dyrw2esoq/image/upload/v1773276662/wyz3btmwssffx3vuzj5o.png" })
+  @IsString()
+  product_image_url:string;
+
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}

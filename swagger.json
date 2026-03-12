@@ -172,7 +172,26 @@
     "/api/sellers/products": {
       "get": {
         "operationId": "SellerController_getAllProduct",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Seller products fetched successfully"
@@ -204,6 +223,26 @@
           }
         ],
         "summary": "Get all products status",
+        "tags": [
+          "Sellers"
+        ]
+      }
+    },
+    "/api/sellers/dashboard": {
+      "get": {
+        "operationId": "SellerController_sellerDashboard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Seller dashboard loaded"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "seller dashboard",
         "tags": [
           "Sellers"
         ]
@@ -659,6 +698,24 @@
               "example": "d3e7d37c0df9aef383f3f2a15b0dddfb",
               "type": "string"
             }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "number"
+            }
           }
         ],
         "responses": {
@@ -682,6 +739,21 @@
           }
         },
         "summary": "Get user profile details",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/products": {
+      "get": {
+        "operationId": "UserController_getProducts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All products displayed"
+          }
+        },
+        "summary": "Display all the products",
         "tags": [
           "Users"
         ]
@@ -1464,6 +1536,10 @@
           "product_width_cm": {
             "type": "number",
             "example": 15
+          },
+          "product_image_url": {
+            "type": "string",
+            "example": "https://res.cloudinary.com/dyrw2esoq/image/upload/v1773276662/wyz3btmwssffx3vuzj5o.png"
           }
         },
         "required": [
@@ -1472,7 +1548,8 @@
           "product_weight_g",
           "product_length_cm",
           "product_height_cm",
-          "product_width_cm"
+          "product_width_cm",
+          "product_image_url"
         ]
       },
       "UpdateProductDto": {
@@ -1501,6 +1578,10 @@
           "product_width_cm": {
             "type": "number",
             "example": 15
+          },
+          "product_image_url": {
+            "type": "string",
+            "example": "https://res.cloudinary.com/dyrw2esoq/image/upload/v1773276662/wyz3btmwssffx3vuzj5o.png"
           }
         }
       },

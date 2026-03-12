@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Param, Body, ValidationPipe, Query, Post, UseGuards,Req } from "@nestjs/common";
+import { Controller, Get, Patch, Param, Body, ValidationPipe, Query, Post, UseGuards,Req, ParseIntPipe } from "@nestjs/common";
 import { SellerService } from "./seller.service";
 import { Product } from "src/schema/product.schema";
 import { CreateProductDto, UpdateProductDto } from "./dto/seller.dto";
@@ -23,7 +23,7 @@ export class SellerController {
             status: 200,
             description: 'seller details fetched successfully',
         })
-
+       
         getDetails(@Req() req){
             return this.sellerService.getDetails(req.user.email);
         }
@@ -35,8 +35,10 @@ export class SellerController {
         status: 200,
         description: "Seller products fetched successfully",
     })
-    getAllProduct(@Req() req): Promise<Product[]> {
-        return this.sellerService.getAllProduct(req.user.user_id);
+     @ApiQuery({ name: 'limit', type: Number, required: true, description: 'Items per page' })
+     @ApiQuery({ name: 'offset', type: Number, required: true, description: 'Items per page' })
+    getAllProduct(@Req() req,@Query('limit',ParseIntPipe) limit:number, @Query('offset',ParseIntPipe) offset:number): Promise<any> {
+        return this.sellerService.getAllProduct(req.user.user_id,limit,offset);
     }
 
 
@@ -48,6 +50,17 @@ export class SellerController {
     })
     productStatus(@Req() res): Promise<Product[]> {
         return this.sellerService.productStatus(res.user.user_id);
+    }
+
+
+    @Get("dashboard")
+    @ApiOperation({ summary: "seller dashboard" })
+    @ApiResponse({
+        status: 200,
+        description: "Seller dashboard loaded",
+    })
+    sellerDashboard(@Req() res): Promise<any> {
+        return this.sellerService.sellerDashboard(res.user.user_id);
     }
 
 
@@ -68,10 +81,9 @@ export class SellerController {
         @Body(ValidationPipe) product: CreateProductDto,
         @Param("sid") sid: string,
     ): Promise<{message:string}> {
+        console.log(product)
         return this.sellerService.createProduct(product, sid);
     }
-
-
 
 
 

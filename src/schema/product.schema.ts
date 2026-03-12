@@ -14,7 +14,7 @@ export class Product extends Document {
   product_category_name: string;
 
   @Prop()
-  product_photos_qty: number;
+  product_qty: number;
 
   @Prop()
   product_weight_g: number;
@@ -30,6 +30,9 @@ export class Product extends Document {
 
   @Prop({default:false, select : false})
   is_deleted : boolean;
+
+  @Prop()
+  product_image_url:string;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

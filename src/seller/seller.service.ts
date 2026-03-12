@@ -8,6 +8,7 @@ import * as crypto from 'crypto';
 import { Order } from 'src/schema/orders.schema';
 import { OrderItem } from 'src/schema/order-items.schema';
 
+
 @Injectable()
 export class SellerService {
 
@@ -15,9 +16,22 @@ export class SellerService {
     @InjectModel(OrderItem.name) private OrderItemModel: Model<OrderItem>,
     @InjectModel(Product.name) private ProductModel: Model<Product>,
     @InjectModel(user.name) private UserModel: Model<user>) { }
-  async getAllProduct(sid: string) {
-    const data = await this.ProductModel.find({ is_deleted: false, seller_id: sid });
-    return data;
+  async getAllProduct(sid: string,limit?:number, offset?: number) {
+    const data = await this.ProductModel.aggregate([
+            {
+                $match: {
+                    is_deleted: false,
+                    seller_id:sid,
+                }
+            },
+            {
+                $skip: offset? Number(offset): 0,
+            },
+            {
+                $limit: limit? Number(limit) : 10,
+            }
+        ]);
+        return data;
   }
 
   async createProduct(product: CreateProductDto, sid: string) {
@@ -96,19 +110,75 @@ export class SellerService {
       {
         $project: {
           _id: 0,
-        order_status: '$cust_orders.order_status',
-        estimated_delivery_date: '$cust_orders.order_estimated_delivery_date',
-        payment_type: '$cust_pay.payment_type',
-        Installation: '$cust_pay.payment_installments',
-        price: 1, 
-        freight_value: 1,
-        product_id: 1,
-        seller_id: 1,
-        order_id: 1
+          order_status: '$cust_orders.order_status',
+          estimated_delivery_date: '$cust_orders.order_estimated_delivery_date',
+          payment_type: '$cust_pay.payment_type',
+          Installation: '$cust_pay.payment_installments',
+          price: 1,
+          freight_value: 1,
+          product_id: 1,
+          seller_id: 1,
+          order_id: 1
         }
       },
 
     ])
     return data;
+  }
+
+  async sellerDashboard(sid: string) {
+
+    const totalProducts = await this.ProductModel.countDocuments({
+      seller_id: sid,
+      is_deleted: false
+    });
+
+    const orderStats = await this.OrderItemModel.aggregate([
+      {
+        $match: {
+          seller_id: sid,
+          is_deleted: false
+        }
+      },
+      {
+        $lookup: {
+          from: "orders",
+          localField: "order_id",
+          foreignField: "order_id",
+          as: "order"
+        }
+      },
+      {
+        $unwind: "$order"
+      },
+      {
+        $group: {
+          _id: "$order.order_status",
+          count: { $sum: 1 },
+          revenue: {
+            $sum: { $add: ["$price", "$freight_value"] }
+          }
+        }
+      }
+    ]);
+
+    let statusCounts = {};
+    let totalRevenue = 0;
+    console.log(orderStats);
+
+    orderStats.forEach(stat => {
+      let status = stat._id?.trim().toLowerCase();
+      statusCounts[status] = stat.count;
+
+      if (stat._id === "delivered") {
+        totalRevenue += stat.revenue;
+      }
+    });
+
+    return {
+      totalProducts,
+      statusCounts,
+      totalRevenue
+    };
   }
 }
