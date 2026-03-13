@@ -167,6 +167,7 @@ export class SellerService {
 
     let statusCounts = {};
     let totalRevenue = 0;
+    let totalLoss = 0;
     console.log(orderStats);
 
     orderStats.forEach(stat => {
@@ -176,12 +177,16 @@ export class SellerService {
       if (stat._id === "delivered") {
         totalRevenue += stat.revenue;
       }
+      if (stat._id === "cancelled") {
+        totalLoss += stat.revenue;
+      }
     });
 
     return {
       totalProducts,
       statusCounts,
-      totalRevenue
+      totalRevenue,
+      totalLoss
     };
   }
 }
