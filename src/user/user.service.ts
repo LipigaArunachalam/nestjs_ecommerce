@@ -3,11 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Order } from './../schema/orders.schema';
 import { user } from './../schema/user.schema';
+import { Product } from 'src/schema/product.schema';
 import * as crypto from 'crypto';
 
 @Injectable()
 export class UserService {
-    constructor(@InjectModel(Order.name) private OrderModel: Model<Order>, @InjectModel(user.name) private UserModel: Model<user>) { }
+    constructor(@InjectModel(Order.name) private OrderModel: Model<Order>, @InjectModel(user.name) private UserModel: Model<user>,
+     @InjectModel(Product.name) private ProductModel : Model<Product>) { }
     async getAllProduct(uid: string, limit: number, offset: number) {
         const data = await this.OrderModel.aggregate([
             {
@@ -72,7 +74,21 @@ export class UserService {
         return data;
     }
 
-    async getProducts() {
-
+    async getProducts(limit?:number,offset?:number) {
+      const data = await this.ProductModel.aggregate([
+        {
+            $match:{
+                is_deleted:false,
+                product_qty: {$gt:0},
+            }
+        },
+        {
+           $skip: offset ? Number(offset) : 0,
+        },
+        {
+            $limit : limit? Number(limit) : 0,
+        }
+      ]);
+      return data;
     }
 }

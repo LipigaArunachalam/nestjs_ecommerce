@@ -34,7 +34,7 @@ export class CreateProductDto {
 
   @ApiProperty({ example: 5 })
   @IsNumber()
-  product_photos_qty: number;
+  product_qty: number;
 
   @ApiProperty({ example: 500 })
   @IsNumber()

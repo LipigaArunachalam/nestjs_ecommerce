@@ -33,6 +33,7 @@ export class UserController {
     }
 
 
+
     @Get()
     @ApiOperation({ summary: 'Get user profile details' })
     @ApiResponse({
@@ -43,6 +44,7 @@ export class UserController {
         return this.userService.getDetails(req.user.user_id);
     }
 
+
     
     @Get("/products")
     @ApiOperation({ summary: 'Display all the products' })
@@ -50,7 +52,7 @@ export class UserController {
         status: 200,
         description: 'All products displayed',
     })
-    getProducts(){
-        return this.userService.getProducts();
+    getProducts(@Query('limit', ParseIntPipe) limit : number, @Query('offset', ParseIntPipe) offset : number){
+        return this.userService.getProducts(limit, offset);
     }
 }
