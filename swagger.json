@@ -433,7 +433,24 @@
     "/api/admin/sellers": {
       "get": {
         "operationId": "AdminController_getAllSeller",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of sellers fetched successfully"
@@ -496,25 +513,35 @@
     },
     "/api/admin/customers": {
       "get": {
-        "operationId": "AdminController_searchUser",
+        "operationId": "AdminController_gellAllCustomer",
         "parameters": [
           {
-            "name": "city",
+            "name": "limit",
             "required": true,
             "in": "query",
-            "description": "City name",
+            "description": "Number of records to fetch",
             "schema": {
-              "example": "sao paulo",
-              "type": "string"
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "description": "Number of records to skip",
+            "schema": {
+              "example": 0,
+              "type": "number"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Users fetched successfully"
+            "description": "Customers fetched successfully"
           }
         },
-        "summary": "Search users by city",
+        "summary": "Get all customers with pagination",
         "tags": [
           "Admin"
         ]
@@ -530,6 +557,73 @@
           }
         },
         "summary": "Get user count grouped by city",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin/customers/city": {
+      "get": {
+        "operationId": "AdminController_searchUser",
+        "parameters": [
+          {
+            "name": "city",
+            "required": true,
+            "in": "query",
+            "description": "City name",
+            "schema": {
+              "example": "sao paulo",
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users fetched successfully"
+          }
+        },
+        "summary": "Search users by city",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/admin": {
+      "get": {
+        "operationId": "AdminController_getAdmin",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Admin ID",
+            "schema": {
+              "example": "69943c3ea47648ff8b80b112"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users fetched successfully"
+          }
+        },
+        "summary": "Get admin details by id",
         "tags": [
           "Admin"
         ]
