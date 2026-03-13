@@ -5,22 +5,22 @@ import { Order } from './../schema/orders.schema';
 import { user } from './../schema/user.schema';
 import { Product } from 'src/schema/product.schema';
 import * as crypto from 'crypto';
+import { OrderItem } from 'src/schema/order-items.schema';
 
 @Injectable()
 export class UserService {
     constructor(@InjectModel(Order.name) private OrderModel: Model<Order>, @InjectModel(user.name) private UserModel: Model<user>,
-     @InjectModel(Product.name) private ProductModel : Model<Product>) { }
-    async getAllProduct(uid: string, limit: number, offset: number) {
-        const data = await this.OrderModel.aggregate([
+        @InjectModel(Product.name) private ProductModel: Model<Product>, @InjectModel(OrderItem.name) private OrderItemModel: Model<OrderItem>) { }
+    async getAllProduct(uid: string, limit?: number, offset?: number) {
+        const data = await this.OrderItemModel.aggregate([
             {
                 $match: {
                     is_deleted: false,
-                    customer_id: uid
                 }
             },
             {
                 $lookup: {
-                    from: 'order-items',
+                    from: 'orders',
                     localField: 'order_id',
                     foreignField: 'order_id',
                     as: 'cust_orders'
@@ -31,6 +31,11 @@ export class UserService {
 
             },
             {
+                $match: {
+                    "cust_orders.customer_id": uid
+                }
+            },
+            {
                 $lookup: {
                     from: 'payments',
                     localField: 'order_id',
@@ -39,20 +44,33 @@ export class UserService {
                 }
             },
             {
-                $unwind: '$cust_pay'
-
+                $unwind: '$cust_pay',
+            },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: 'product_id',
+                    foreignField: 'product_id',
+                    as: 'product_details'
+                }
+            },
+            {
+                $unwind: '$cust_pay',
             },
             {
                 $project: {
                     _id: 0,
-                    shipping_limit_date: '$cust_orders.shipping_limit_date',
-                    product_id: '$cust_orders.product_id',
-                    seller_id: '$cust_orders.seller_id',
-                    price: '$cust_orders.price',
-                    status: '$order_status',
+                    order_id: '$order_id',
+                    product_price: '$price',
+                    freight_value: '$freight_value',
+                    total_price: '$cust_pay.payment_value',
+                    status: '$cust_orders.order_status',
                     payment_type: '$cust_pay.payment_type',
                     Installation: '$cust_pay.payment_installments',
-                    freight_value: '$cust_pay.freight_value',
+                    estimated_delivery: '$cust_orders.order_estimated_delivery_date',
+                    order_at: '$cust_orders.order_purchase_timestamp',
+                    product_name: '$product_details.product_category_name',
+                    product_img: '$product_details.product_image_url',
                 }
             },
             {
@@ -74,21 +92,21 @@ export class UserService {
         return data;
     }
 
-    async getProducts(limit?:number,offset?:number) {
-      const data = await this.ProductModel.aggregate([
-        {
-            $match:{
-                is_deleted:false,
-                product_qty: {$gt:0},
+    async getProducts(limit?: number, offset?: number) {
+        const data = await this.ProductModel.aggregate([
+            {
+                $match: {
+                    is_deleted: false,
+                    product_qty: { $gt: 0 },
+                }
+            },
+            {
+                $skip: offset ? Number(offset) : 0,
+            },
+            {
+                $limit: limit ? Number(limit) : 0,
             }
-        },
-        {
-           $skip: offset ? Number(offset) : 0,
-        },
-        {
-            $limit : limit? Number(limit) : 0,
-        }
-      ]);
-      return data;
+        ]);
+        return data;
     }
 }

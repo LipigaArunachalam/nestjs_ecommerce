@@ -27,8 +27,8 @@ export class UserController {
         description: 'Customer products fetched successfully',
     })
     @ApiQuery({ name: 'limit', required: true, type: Number, description: 'Page number' })
-    @ApiQuery({ name: 'offset', required: true, type: Number, description: 'Page number' })
-    getAllProduct(@Param('uid') uid: string,@Query('limit',ParseIntPipe) limit:number,@Query('offset',ParseIntPipe) offset:number) {
+    @ApiQuery({ name: 'page', required: true, type: Number, description: 'Page number' })
+    getAllProduct(@Param('uid') uid: string,@Query('limit',ParseIntPipe) limit:number,@Query('page',ParseIntPipe) offset:number) {
         return this.userService.getAllProduct(uid, limit,offset);
     }
 
@@ -52,7 +52,7 @@ export class UserController {
         status: 200,
         description: 'All products displayed',
     })
-    getProducts(@Query('limit', ParseIntPipe) limit : number, @Query('offset', ParseIntPipe) offset : number){
+    getProducts(@Query('limit', ParseIntPipe) limit : number, @Query('page', ParseIntPipe) offset : number){
         return this.userService.getProducts(limit, offset);
     }
 }
