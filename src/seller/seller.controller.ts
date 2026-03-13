@@ -37,8 +37,8 @@ export class SellerController {
     })
      @ApiQuery({ name: 'limit', type: Number, required: true, description: 'Items per page' })
      @ApiQuery({ name: 'offset', type: Number, required: true, description: 'Items per page' })
-    getAllProduct(@Req() req,@Query('limit',ParseIntPipe) limit:number, @Query('offset',ParseIntPipe) offset:number): Promise<any> {
-        return this.sellerService.getAllProduct(req.user.user_id,limit,offset);
+    getAllProduct(@Req() req,@Query('limit',ParseIntPipe) limit:number, @Query('page',ParseIntPipe) page:number): Promise<any> {
+        return this.sellerService.getAllProduct(req.user.user_id,limit,page);
     }
 
 

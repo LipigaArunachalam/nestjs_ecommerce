@@ -16,7 +16,8 @@ export class SellerService {
     @InjectModel(OrderItem.name) private OrderItemModel: Model<OrderItem>,
     @InjectModel(Product.name) private ProductModel: Model<Product>,
     @InjectModel(user.name) private UserModel: Model<user>) { }
-  async getAllProduct(sid: string,limit?:number, offset?: number) {
+  async getAllProduct(sid: string,limit?:number, page?: number) {
+    const offset = (Number(page) - 1) * Number(limit);
     const data = await this.ProductModel.aggregate([
             {
                 $match: {
@@ -31,7 +32,9 @@ export class SellerService {
                 $limit: limit? Number(limit) : 10,
             }
         ]);
+        console.log(data);
         return data;
+        
   }
 
   async createProduct(product: CreateProductDto, sid: string) {

@@ -183,6 +183,14 @@
             }
           },
           {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
             "name": "offset",
             "required": true,
             "in": "query",
@@ -747,7 +755,24 @@
     "/api/users/products": {
       "get": {
         "operationId": "UserController_getProducts",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "All products displayed"
@@ -1517,7 +1542,7 @@
             "type": "string",
             "example": "PROD123"
           },
-          "product_photos_qty": {
+          "product_qty": {
             "type": "number",
             "example": 5
           },
@@ -1544,7 +1569,7 @@
         },
         "required": [
           "product_category_name",
-          "product_photos_qty",
+          "product_qty",
           "product_weight_g",
           "product_length_cm",
           "product_height_cm",
@@ -1559,7 +1584,7 @@
             "type": "string",
             "example": "PROD123"
           },
-          "product_photos_qty": {
+          "product_qty": {
             "type": "number",
             "example": 5
           },
