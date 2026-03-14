@@ -7,14 +7,15 @@ import { Order, orderSchema } from 'src/schema/orders.schema';
 import { Product, ProductSchema } from 'src/schema/product.schema';
 import { OrderItem, orderItemSchema } from 'src/schema/order-items.schema';
 import { Payment, paymentSchema } from 'src/schema/payments.schema';
-
+import {  Cart, CartSchema } from 'src/schema/carts.schema'
 @Module({
   imports : [MongooseModule.forFeature([
     {name : user.name , schema : UserSchema},
     {name : Order.name , schema : orderSchema},
     {name : Product.name, schema : ProductSchema},
     {name : OrderItem.name, schema : orderItemSchema},
-    {name : Payment.name, schema : paymentSchema}
+    {name : Payment.name, schema : paymentSchema},
+    {name:Cart.name, schema: CartSchema}
   ])],
   controllers: [UserController],
   providers: [UserService]

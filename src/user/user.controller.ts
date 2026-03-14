@@ -58,6 +58,7 @@ export class UserController {
     @Post('buy')
     buyProduct(@Body() buyProductDto: BuyProductDto){
         return this.userService.buyProduct(buyProductDto);
+    }
     @Post(":uid/add-to-cart/:pid")
     @ApiOperation({ summary: 'Products added to cart' })
     @ApiResponse({
