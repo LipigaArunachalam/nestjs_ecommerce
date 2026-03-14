@@ -10,13 +10,13 @@ export class Order {
     order_status: string; 
     @Prop({required: true})
     order_purchase_timestamp: string; 
-    @Prop({required: true})
+    @Prop({default: null})
     order_approved_at: string; 
-    @Prop({required: true})
+    @Prop({default: null})
     order_delivered_carrier_date: string; 
-    @Prop({required: true})
+    @Prop({default: null})
     order_delivered_customer_date: string; 
-    @Prop({required: true})
+    @Prop({default: null})
     order_estimated_delivery_date: string; 
     @Prop({default: false})
     is_deleted: boolean;

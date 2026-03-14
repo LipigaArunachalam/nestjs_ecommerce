@@ -5,7 +5,7 @@ import { Roles } from 'src/utility/decorators/role.decorator';
 import { RolesGuard } from 'src/utility/guards/role.guard';
 import { Role } from 'src/utility/enum/role.enum';
 import { ApiTags, ApiOperation, ApiParam, ApiResponse,ApiQuery } from '@nestjs/swagger';
-
+import { BuyProductDto } from './dto/buyProduct.Dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -54,5 +54,10 @@ export class UserController {
     })
     getProducts(@Query('limit', ParseIntPipe) limit : number, @Query('page', ParseIntPipe) offset : number){
         return this.userService.getProducts(limit, offset);
+    }
+
+    @Post('buy')
+    buyProduct(@Body() buyProductDto: BuyProductDto){
+        return this.userService.buyProduct(buyProductDto);
     }
 }

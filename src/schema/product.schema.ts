@@ -33,6 +33,9 @@ export class Product extends Document {
 
   @Prop()
   product_image_url:string;
+
+  @Prop()
+  price: number;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

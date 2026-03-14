@@ -878,6 +878,30 @@
         ]
       }
     },
+    "/api/users/buy": {
+      "post": {
+        "operationId": "UserController_buyProduct",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BuyProductDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/api/order-items": {
       "get": {
         "operationId": "OrderItemsController_getOrderItem",
@@ -1659,6 +1683,10 @@
           "product_image_url": {
             "type": "string",
             "example": "https://res.cloudinary.com/dyrw2esoq/image/upload/v1773276662/wyz3btmwssffx3vuzj5o.png"
+          },
+          "price": {
+            "type": "number",
+            "example": 100
           }
         },
         "required": [
@@ -1668,7 +1696,8 @@
           "product_length_cm",
           "product_height_cm",
           "product_width_cm",
-          "product_image_url"
+          "product_image_url",
+          "price"
         ]
       },
       "UpdateProductDto": {
@@ -1701,6 +1730,10 @@
           "product_image_url": {
             "type": "string",
             "example": "https://res.cloudinary.com/dyrw2esoq/image/upload/v1773276662/wyz3btmwssffx3vuzj5o.png"
+          },
+          "price": {
+            "type": "number",
+            "example": 100
           }
         }
       },
@@ -1858,6 +1891,10 @@
           "token",
           "newPassword"
         ]
+      },
+      "BuyProductDto": {
+        "type": "object",
+        "properties": {}
       },
       "CreateOrderItemDto": {
         "type": "object",

@@ -1,3 +1,4 @@
+import { BuyProductDto } from './dto/buyProduct.Dto';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -6,11 +7,17 @@ import { user } from './../schema/user.schema';
 import { Product } from 'src/schema/product.schema';
 import * as crypto from 'crypto';
 import { OrderItem } from 'src/schema/order-items.schema';
-
+import { Payment } from 'src/schema/payments.schema';
+import { NotFoundException, BadRequestException } from '@nestjs/common';
+import dayjs from 'dayjs';
 @Injectable()
 export class UserService {
-    constructor(@InjectModel(Order.name) private OrderModel: Model<Order>, @InjectModel(user.name) private UserModel: Model<user>,
-        @InjectModel(Product.name) private ProductModel: Model<Product>, @InjectModel(OrderItem.name) private OrderItemModel: Model<OrderItem>) { }
+    constructor(@InjectModel(Order.name) private OrderModel: Model<Order>, 
+                @InjectModel(user.name) private UserModel: Model<user>,
+                @InjectModel(Product.name) private ProductModel: Model<Product>, 
+                @InjectModel(OrderItem.name) private OrderItemModel: Model<OrderItem>,
+                @InjectModel(Payment.name) private PaymentModel: Model<Payment>
+            ) { }
     async getAllProduct(uid: string, limit?: number, offset?: number) {
         const data = await this.OrderItemModel.aggregate([
             {
@@ -108,5 +115,61 @@ export class UserService {
             }
         ]);
         return data;
+    }
+    async buyProduct(buyProductDto: BuyProductDto){
+
+        const { product_id, quantity, customer_id, payment_type, payment_installments } = buyProductDto;
+        console.log(buyProductDto);
+        const product = await this.ProductModel.findOne({ product_id });
+
+        if (!product) {
+        throw new NotFoundException('Product not found');
+        }
+
+        if (product.product_qty < quantity) {
+        throw new BadRequestException('Insufficient stock');
+        }
+
+        const order = await this.OrderModel.create({
+        order_id: String(crypto.randomBytes(16).toString('hex')),
+        customer_id,
+        order_status: "created",
+        order_purchase_timestamp: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        is_deleted: false
+        });
+
+        const orderItem = await this.OrderItemModel.create({
+        order_id: order.order_id,
+        order_item_id: 1,
+        product_id,
+        seller_id: product.seller_id,
+        price: product.price,
+        freight_value: 10,
+        shipping_limit_date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        is_deleted: false
+        });
+
+        const paymentValue = product.price * quantity;
+
+        const payment = await this.PaymentModel.create({
+        order_id: order.order_id,
+        payment_sequential: 1,
+        payment_type,
+        payment_installments,
+        payment_value: paymentValue,
+        is_deleted: false
+        });
+
+        await this.ProductModel.updateOne(
+        { product_id },
+        { $inc: { product_qty: -quantity } }
+        );
+
+        return {
+        message: "Order placed successfully",
+        order,
+        orderItem,
+        payment
+        };
     }
 }

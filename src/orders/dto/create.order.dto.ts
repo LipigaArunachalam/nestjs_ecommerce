@@ -20,18 +20,18 @@ export class CreateOrderDto {
 
         @ApiProperty({ description: 'Timestamp when order was approved', example: '2025-01-02T12:00:00Z' })
         @IsString()
-        order_approved_at: string; 
+        order_approved_at ?: string; 
 
         @ApiProperty({ description: 'Carrier delivery date', example: '2025-01-05T15:00:00Z' })
         @IsString()
-        order_delivered_carrier_date: string; 
+        order_delivered_carrier_date ?: string; 
 
         @ApiProperty({ description: 'Customer delivery date', example: '2025-01-06T18:00:00Z' })
         @IsString()
-        order_delivered_customer_date: string; 
+        order_delivered_customer_date ?: string; 
 
         @ApiProperty({ description: 'Estimated delivery date', example: '2025-01-07T20:00:00Z' })
         @IsString()
-        order_estimated_delivery_date: string; 
+        order_estimated_delivery_date ?: string; 
        
 }
