@@ -44,7 +44,6 @@ export class UserController {
         return this.userService.getDetails(req.user.user_id);
     }
 
-
     
     @Get("/products")
     @ApiOperation({ summary: 'Display all the products' })
@@ -59,5 +58,34 @@ export class UserController {
     @Post('buy')
     buyProduct(@Body() buyProductDto: BuyProductDto){
         return this.userService.buyProduct(buyProductDto);
+    @Post(":uid/add-to-cart/:pid")
+    @ApiOperation({ summary: 'Products added to cart' })
+    @ApiResponse({
+        status: 200,
+        description: 'Product added to cart',
+    })
+    @ApiParam({
+        name: 'uid',
+        example: 'd3e7d37c0df9aef383f3f2a15b0dddfb',
+        description: 'Customer ID',
+    })
+    @ApiParam({
+        name: 'pid',
+        example: '7bb6f29c2be57716194f96496660c7c2',
+        description: 'Product ID',
+    })
+    addToCart(@Param("uid") uid : string, @Param("pid") pid : string){
+       return this.userService.addToCart(uid, pid);
+    }
+
+
+    @Get("/cart")
+    @ApiOperation({ summary: 'fetching cart items' })
+    @ApiResponse({
+        status: 200,
+        description: 'User cartitems fetched successfully',
+    })
+    cart(@Req() req){
+        return this.userService.cart(req.user.user_id);
     }
 }

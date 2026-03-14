@@ -7,6 +7,8 @@ import { user } from './../schema/user.schema';
 import { Product } from 'src/schema/product.schema';
 import * as crypto from 'crypto';
 import { OrderItem } from 'src/schema/order-items.schema';
+import { Cart, CartSchema } from 'src/schema/carts.schema'
+
 import { Payment } from 'src/schema/payments.schema';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import dayjs from 'dayjs';
@@ -18,6 +20,7 @@ export class UserService {
                 @InjectModel(OrderItem.name) private OrderItemModel: Model<OrderItem>,
                 @InjectModel(Payment.name) private PaymentModel: Model<Payment>
             ) { }
+
     async getAllProduct(uid: string, limit?: number, offset?: number) {
         const data = await this.OrderItemModel.aggregate([
             {
@@ -171,5 +174,41 @@ export class UserService {
         orderItem,
         payment
         };
+
+
+    async addToCart(uid: string, pid: string) {
+        const res = await this.CartModel.insertOne({ product_id: pid, user_id: uid });
+        return res;
+    }
+
+    async cart(uid: string) {
+        const data = await this.CartModel.aggregate([
+            {
+                $match: {
+                    is_deleted: false,
+                    user_id: uid,
+                }
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "product_id",
+                    foreignField: "product_id",
+                    as: "cart"
+                }
+            },
+            {
+                $project:{
+                    product_category_name:'$cart.product_category_name',
+                    product_image_url:'$cart.product_image_url',
+                    price:'$cart.price',
+                    product_weight_g:'$cart.product_weight_g',
+                    product_height_cm:'$cart.product_height_cm',
+                    product_width_cm:'$cart.product_width_cm',
+                    product_qty:'$cart.product_qty'
+                }
+            }
+        ]);
+        return data;
     }
 }

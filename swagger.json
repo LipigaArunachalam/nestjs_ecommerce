@@ -897,6 +897,52 @@
             "description": ""
           }
         },
+    "/api/users/{uid}/add-to-cart/{pid}": {
+      "post": {
+        "operationId": "UserController_addToCart",
+        "parameters": [
+          {
+            "name": "uid",
+            "required": true,
+            "in": "path",
+            "description": "Customer ID",
+            "schema": {
+              "example": "d3e7d37c0df9aef383f3f2a15b0dddfb",
+              "type": "string"
+            }
+          },
+          {
+            "name": "pid",
+            "required": true,
+            "in": "path",
+            "description": "Product ID",
+            "schema": {
+              "example": "7bb6f29c2be57716194f96496660c7c2",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product added to cart"
+          }
+        },
+        "summary": "Products added to cart",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/cart": {
+      "get": {
+        "operationId": "UserController_cart",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User cartitems fetched successfully"
+          }
+        },
+        "summary": "fetching cart items",
         "tags": [
           "Users"
         ]
