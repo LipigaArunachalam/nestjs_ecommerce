@@ -18,7 +18,8 @@ export class UserService {
                 @InjectModel(user.name) private UserModel: Model<user>,
                 @InjectModel(Product.name) private ProductModel: Model<Product>, 
                 @InjectModel(OrderItem.name) private OrderItemModel: Model<OrderItem>,
-                @InjectModel(Payment.name) private PaymentModel: Model<Payment>
+                @InjectModel(Payment.name) private PaymentModel: Model<Payment>,
+                @InjectModel(Cart.name) private CartModel: Model<Cart>
             ) { }
 
     async getAllProduct(uid: string, limit?: number, offset?: number) {
@@ -174,7 +175,7 @@ export class UserService {
         orderItem,
         payment
         };
-
+    }
 
     async addToCart(uid: string, pid: string) {
         const res = await this.CartModel.insertOne({ product_id: pid, user_id: uid });
