@@ -120,6 +120,7 @@ export class UserService {
         ]);
         return data;
     }
+    
     async buyProduct(buyProductDto: BuyProductDto){
 
         const { product_id, quantity, customer_id, payment_type, payment_installments } = buyProductDto;

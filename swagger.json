@@ -897,6 +897,11 @@
             "description": ""
           }
         },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/api/users/{uid}/add-to-cart/{pid}": {
       "post": {
         "operationId": "UserController_addToCart",
