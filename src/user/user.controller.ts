@@ -1,4 +1,4 @@
-import { Controller, Param, Body, Get, ValidationPipe,Post, UseGuards, Req,Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Param, Body, Get, ValidationPipe,Post, Patch, UseGuards, Req,Query, ParseIntPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
 import { Roles } from 'src/utility/decorators/role.decorator';
@@ -55,7 +55,7 @@ export class UserController {
         return this.userService.getProducts(limit, offset);
     }
 
-    @Post(":uid/add-to-cart/:pid")
+    @Post(":uid/cart/:pid")
     @ApiOperation({ summary: 'Products added to cart' })
     @ApiResponse({
         status: 200,
@@ -85,4 +85,24 @@ export class UserController {
     cart(@Req() req){
         return this.userService.cart(req.user.user_id);
     }
+
+    @Patch(":uid/cart/:pid")
+    @ApiOperation({ summary: 'Removing product from cart' })
+    @ApiResponse({
+        status: 200,
+        description: 'Product removed from cart',
+    })
+    @ApiParam({
+        name: 'uid',
+        example: 'd3e7d37c0df9aef383f3f2a15b0dddfb',
+        description: 'Customer ID',
+    })
+    @ApiParam({
+        name: 'pid',
+        example: '7bb6f29c2be57716194f96496660c7c2',
+        description: 'Product ID',
+    })
+    remove(@Param("uid") uid : string, @Param("pid") pid :string){
+        return this.userService.remove(uid,pid);
+        }
 }

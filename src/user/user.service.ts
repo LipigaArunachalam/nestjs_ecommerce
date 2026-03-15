@@ -138,6 +138,7 @@ export class UserService {
             },
             {
                 $project:{
+                    product_id:'$cart.product_id',
                     product_category_name:'$cart.product_category_name',
                     product_image_url:'$cart.product_image_url',
                     price:'$cart.price',
@@ -148,6 +149,11 @@ export class UserService {
                 }
             }
         ]);
+        return data;
+    }
+    
+    async remove(uid:string,pid:string){
+        const data = await this.CartModel.findOneAndUpdate({is_deleted:false, product_id:pid, user_id:uid},{$set:{is_deleted:true}},{returnDocument:'after'});
         return data;
     }
 }
