@@ -4,7 +4,7 @@ import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
 import { Roles } from 'src/utility/decorators/role.decorator';
 import { RolesGuard } from 'src/utility/guards/role.guard';
 import { Role } from 'src/utility/enum/role.enum';
-import { ApiTags, ApiOperation, ApiParam, ApiResponse,ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiParam, ApiResponse,ApiQuery, ApiBody } from '@nestjs/swagger';
 import { BuyProductDto } from './dto/buyProduct.Dto';
 
 @ApiTags('Users')
@@ -55,6 +55,18 @@ export class UserController {
         return this.userService.getProducts(limit, offset);
     }
 
+    @Post('buy')
+    @ApiOperation({ summary: "Buy product" })
+    @ApiBody({type: BuyProductDto})
+    @ApiResponse({
+            status: 200,
+            description: "Product bought successfully ",
+    })
+    buyProduct(@Body() buyProductDto: BuyProductDto){
+        return this.userService.buyProduct(buyProductDto);
+    }
+
+    
     @Post(":uid/cart/:pid")
     @ApiOperation({ summary: 'Products added to cart' })
     @ApiResponse({
