@@ -1,5 +1,5 @@
 
-import { Controller, Post, ValidationPipe, Body, Res,Req,UseGuards } from "@nestjs/common";
+import { Controller, Post, ValidationPipe, Body, Res, Req, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { CreateUserDto, VerifyUserDto, LogoutDto, RefreshTokenDto, ForgotPasswordDto, ResetPasswordDto } from "./dto/auth.dto";
 import type { Response } from "express";
@@ -54,7 +54,7 @@ export class AuthController {
     ) {
         const { accessToken, refreshToken, user } =
             await this.authService.login(loginDto);
-        
+
 
         res.cookie("access_token", accessToken, {
             httpOnly: true,
@@ -79,9 +79,15 @@ export class AuthController {
         status: 200,
         description: "User logged out successfully",
     })
-    async logout(  @Req() req: any, @Res({ passthrough: true }) res: any) {
+    async logout(@Req() req: any, @Res({ passthrough: true }) res: any) {
         await this.authService.logout(req.user.user_id);
-        res.clearCookie("access_token");
+        // res.clearCookie("access_token");
+        res.clearCookie("access_token", {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            path: "/",  
+        });
         return { message: "User logged out successfully" };
     }
 
