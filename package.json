@@ -70,6 +70,8 @@
 
     "cookie-parser": "^1.4.7",
 
+    "dayjs": "^1.11.20",
+
     "mapped-types": "^0.0.1",
 
     "mongoose": "^9.2.3",

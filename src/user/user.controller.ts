@@ -5,7 +5,7 @@ import { Roles } from 'src/utility/decorators/role.decorator';
 import { RolesGuard } from 'src/utility/guards/role.guard';
 import { Role } from 'src/utility/enum/role.enum';
 import { ApiTags, ApiOperation, ApiParam, ApiResponse,ApiQuery } from '@nestjs/swagger';
-
+import { BuyProductDto } from './dto/buyProduct.Dto';
 
 @ApiTags('Users')
 @Controller('users')
