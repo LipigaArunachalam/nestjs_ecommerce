@@ -878,31 +878,7 @@
         ]
       }
     },
-    "/api/users/buy": {
-      "post": {
-        "operationId": "UserController_buyProduct",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BuyProductDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Users"
-        ]
-      }
-    },
-    "/api/users/{uid}/add-to-cart/{pid}": {
+    "/api/users/{uid}/cart/{pid}": {
       "post": {
         "operationId": "UserController_addToCart",
         "parameters": [
@@ -933,6 +909,40 @@
           }
         },
         "summary": "Products added to cart",
+        "tags": [
+          "Users"
+        ]
+      },
+      "patch": {
+        "operationId": "UserController_remove",
+        "parameters": [
+          {
+            "name": "uid",
+            "required": true,
+            "in": "path",
+            "description": "Customer ID",
+            "schema": {
+              "example": "d3e7d37c0df9aef383f3f2a15b0dddfb",
+              "type": "string"
+            }
+          },
+          {
+            "name": "pid",
+            "required": true,
+            "in": "path",
+            "description": "Product ID",
+            "schema": {
+              "example": "7bb6f29c2be57716194f96496660c7c2",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product removed from cart"
+          }
+        },
+        "summary": "Removing product from cart",
         "tags": [
           "Users"
         ]
@@ -1731,13 +1741,13 @@
             "type": "number",
             "example": 15
           },
+          "price": {
+            "type": "number",
+            "example": 15
+          },
           "product_image_url": {
             "type": "string",
             "example": "https://res.cloudinary.com/dyrw2esoq/image/upload/v1773276662/wyz3btmwssffx3vuzj5o.png"
-          },
-          "price": {
-            "type": "number",
-            "example": 100
           }
         },
         "required": [
@@ -1747,8 +1757,8 @@
           "product_length_cm",
           "product_height_cm",
           "product_width_cm",
-          "product_image_url",
-          "price"
+          "price",
+          "product_image_url"
         ]
       },
       "UpdateProductDto": {
@@ -1778,13 +1788,13 @@
             "type": "number",
             "example": 15
           },
+          "price": {
+            "type": "number",
+            "example": 15
+          },
           "product_image_url": {
             "type": "string",
             "example": "https://res.cloudinary.com/dyrw2esoq/image/upload/v1773276662/wyz3btmwssffx3vuzj5o.png"
-          },
-          "price": {
-            "type": "number",
-            "example": 100
           }
         }
       },
@@ -1942,10 +1952,6 @@
           "token",
           "newPassword"
         ]
-      },
-      "BuyProductDto": {
-        "type": "object",
-        "properties": {}
       },
       "CreateOrderItemDto": {
         "type": "object",
