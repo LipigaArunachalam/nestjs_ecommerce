@@ -60,9 +60,6 @@ export class CreateProductDto {
   @IsString()
   product_image_url:string;
 
-  @ApiProperty({ example : 100})
-  @IsNumber()
-  price: number;
 
 }
 

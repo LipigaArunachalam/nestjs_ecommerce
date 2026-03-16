@@ -878,6 +878,31 @@
         ]
       }
     },
+    "/api/users/buy": {
+      "post": {
+        "operationId": "UserController_buyProduct",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BuyProductDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product bought successfully "
+          }
+        },
+        "summary": "Buy product",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/api/users/{uid}/cart/{pid}": {
       "post": {
         "operationId": "UserController_addToCart",
@@ -1952,6 +1977,10 @@
           "token",
           "newPassword"
         ]
+      },
+      "BuyProductDto": {
+        "type": "object",
+        "properties": {}
       },
       "CreateOrderItemDto": {
         "type": "object",
