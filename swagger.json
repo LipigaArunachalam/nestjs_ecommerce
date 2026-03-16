@@ -878,6 +878,31 @@
         ]
       }
     },
+    "/api/users/buy": {
+      "post": {
+        "operationId": "UserController_buyProduct",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BuyProductDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product bought successfully "
+          }
+        },
+        "summary": "Buy product",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/api/users/{uid}/cart/{pid}": {
       "post": {
         "operationId": "UserController_addToCart",
@@ -958,6 +983,61 @@
           }
         },
         "summary": "fetching cart items",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/dashboard": {
+      "get": {
+        "operationId": "UserController_userDashboard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Customer dashboard loaded"
+          }
+        },
+        "summary": "Customer dashboard",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/catalog/{prod}": {
+      "get": {
+        "operationId": "UserController_searchProduct",
+        "parameters": [
+          {
+            "name": "prod",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Products loaded"
+          }
+        },
+        "summary": "Catalog for user",
         "tags": [
           "Users"
         ]
@@ -1952,6 +2032,10 @@
           "token",
           "newPassword"
         ]
+      },
+      "BuyProductDto": {
+        "type": "object",
+        "properties": {}
       },
       "CreateOrderItemDto": {
         "type": "object",
