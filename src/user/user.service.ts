@@ -140,6 +140,7 @@ export class UserService {
         customer_id,
         order_status: "created",
         order_purchase_timestamp: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        order_estimated_delivery_date: dayjs().add(7, 'day').format('YYYY-MM-DD HH:mm:ss'),
         is_deleted: false
         });
 
