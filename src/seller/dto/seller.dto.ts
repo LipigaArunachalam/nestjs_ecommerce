@@ -60,7 +60,6 @@ export class CreateProductDto {
   @IsString()
   product_image_url:string;
 
-
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
