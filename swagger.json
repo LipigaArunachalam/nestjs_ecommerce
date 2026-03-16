@@ -1043,6 +1043,63 @@
         ]
       }
     },
+    "/api/users/all-category": {
+      "get": {
+        "operationId": "UserController_getAllCategory",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "categories loaded"
+          }
+        },
+        "summary": "Get all categories",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/category/{name}": {
+      "get": {
+        "operationId": "UserController_getCategory",
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "path",
+            "description": "Product category",
+            "schema": {
+              "example": "furniture",
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Products loaded"
+          }
+        },
+        "summary": "Cataegory for user",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/api/order-items": {
       "get": {
         "operationId": "OrderItemsController_getOrderItem",

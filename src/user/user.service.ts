@@ -321,4 +321,32 @@ export class UserService {
         ]);
         return data;
     }
+
+
+    async  getCategory(category: string, limit: number, page: number){
+        const skip = (page - 1)* limit;
+        const data = await this.ProductModel.aggregate([
+            {
+                $match: {
+                    is_deleted: false,
+                    product_category_name: category,
+                }
+            },
+            {
+                $skip: skip,
+            },
+            {
+                $limit: Number(limit),
+            }
+        ]);
+        return data;
+    }
+
+    async getAllCategory(){
+        const categories = await this.ProductModel.distinct("product_category_name", {
+            is_deleted: false,
+        });
+
+        return categories.sort();
+    }
 }
