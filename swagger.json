@@ -988,6 +988,42 @@
         ]
       }
     },
+    "/api/users/{uid}/cart/{pid}/update": {
+      "patch": {
+        "operationId": "UserController_updateCart",
+        "parameters": [
+          {
+            "name": "uid",
+            "required": true,
+            "in": "path",
+            "description": "Customer ID",
+            "schema": {
+              "example": "d3e7d37c0df9aef383f3f2a15b0dddfb",
+              "type": "string"
+            }
+          },
+          {
+            "name": "pid",
+            "required": true,
+            "in": "path",
+            "description": "Product ID",
+            "schema": {
+              "example": "7bb6f29c2be57716194f96496660c7c2",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quantity increased"
+          }
+        },
+        "summary": "Updating the quantity value",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/api/users/dashboard": {
       "get": {
         "operationId": "UserController_userDashboard",

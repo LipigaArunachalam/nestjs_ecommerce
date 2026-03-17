@@ -127,6 +127,27 @@ export class UserController {
     }
 
 
+    @Patch(":uid/cart/:pid/update")
+    @ApiOperation({ summary: 'Updating the quantity value' })
+    @ApiResponse({
+        status: 200,
+        description: 'Quantity increased',
+    })
+    @ApiParam({
+        name: 'uid',
+        example: 'd3e7d37c0df9aef383f3f2a15b0dddfb',
+        description: 'Customer ID',
+    })
+    @ApiParam({
+        name: 'pid',
+        example: '7bb6f29c2be57716194f96496660c7c2',
+        description: 'Product ID',
+    })
+    updateCart(@Param("uid") uid: string, @Param("pid") pid :string, @Body("qty") qty: number): Promise<{message: string}> {
+        console.log(uid,pid,qty)
+        return this.userService.updateCart(uid,pid, qty);
+    }
+
 
     @Get("dashboard")
     @ApiOperation({ summary: "Customer dashboard" })

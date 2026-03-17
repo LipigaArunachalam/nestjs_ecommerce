@@ -139,12 +139,12 @@ export class UserService {
         }
 
         const order = await this.OrderModel.create({
-        order_id: String(crypto.randomBytes(16).toString('hex')),
-        customer_id,
-        order_status: "created",
-        order_purchase_timestamp: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-        order_estimated_delivery_date: dayjs().add(7, 'day').format('YYYY-MM-DD HH:mm:ss'),
-        is_deleted: false
+            order_id: String(crypto.randomBytes(16).toString('hex')),
+            customer_id,
+            order_status: "created",
+            order_purchase_timestamp: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+            order_estimated_delivery_date: dayjs().add(7, 'day').format('YYYY-MM-DD HH:mm:ss'),
+            is_deleted: false
         });
 
         const orderItem = await this.OrderItemModel.create({
@@ -183,7 +183,7 @@ export class UserService {
     }
 
     async addToCart(uid: string, pid: string) {
-        const res = await this.CartModel.insertOne({ product_id: pid, user_id: uid });
+        const res = await this.CartModel.insertOne({ product_id: pid, user_id: uid});
         return res;
     }
 
@@ -212,7 +212,8 @@ export class UserService {
                     product_weight_g: '$cart.product_weight_g',
                     product_height_cm: '$cart.product_height_cm',
                     product_width_cm: '$cart.product_width_cm',
-                    product_qty: '$cart.product_qty'
+                    product_qty: '$cart.product_qty',
+                    quantity:'$quantity',
                 }
             }
         ]);
@@ -312,7 +313,11 @@ export class UserService {
             {
                 $match: {
                     is_deleted: false,
-                    $text: { $search: prod }
+                    //  $text: { $search: prod }
+                    $or: [
+                        { product_name: { $regex: prod, $options: "i" } },
+                        { product_category_name: { $regex: prod, $options: "i" } }
+                    ]
                 }
             },
             {
@@ -376,10 +381,10 @@ export class UserService {
             { new: true }
         );
     }
-}
 
-    async  getCategory(category: string, limit: number, page: number){
-        const skip = (page - 1)* limit;
+
+    async getCategory(category: string, limit: number, page: number) {
+        const skip = (page - 1) * limit;
         const data = await this.ProductModel.aggregate([
             {
                 $match: {
@@ -397,11 +402,25 @@ export class UserService {
         return data;
     }
 
-    async getAllCategory(){
+    async getAllCategory() {
         const categories = await this.ProductModel.distinct("product_category_name", {
             is_deleted: false,
         });
 
         return categories.sort();
+    }
+
+    async updateCart(uid: string, pid: string, qty: number) {
+        if (qty <= 0) {
+            await this.CartModel.deleteOne({ user_id: uid, product_id: pid });
+            return { message: "Item removed" };
+        }
+
+        await this.CartModel.updateOne(
+            { user_id: uid, product_id: pid },
+            { $set: { quantity: qty } }
+        );
+
+        return { message: "Cart updated" };
     }
 }
