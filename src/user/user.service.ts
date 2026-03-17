@@ -376,7 +376,7 @@ export class UserService {
             { new: true }
         );
     }
-}
+
 
     async  getCategory(category: string, limit: number, page: number){
         const skip = (page - 1)* limit;
