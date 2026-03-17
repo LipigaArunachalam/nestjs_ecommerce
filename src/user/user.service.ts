@@ -11,6 +11,10 @@ import { Cart, CartSchema } from 'src/schema/carts.schema'
 import { Payment } from 'src/schema/payments.schema';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import dayjs from 'dayjs';
+import { ConflictException, InternalServerErrorException } from '@nestjs/common';
+
+
+
 @Injectable()
 export class UserService {
     constructor(@InjectModel(Order.name) private OrderModel: Model<Order>,
@@ -308,7 +312,7 @@ export class UserService {
             {
                 $match: {
                     is_deleted: false,
-                    $text: { $search:prod }
+                    $text: { $search: prod }
                 }
             },
             {
@@ -317,11 +321,62 @@ export class UserService {
             {
                 $limit: Number(limit),
             },
-            
+
         ]);
         return data;
     }
 
+    async updateUser(uid: string, body: any) {
+        // console.log(body)
+        try {
+            const user = await this.UserModel.findOneAndUpdate({ user_id: uid }, { $set: { ...body.data } }, { new: true });
+            if (!user) {
+                throw new NotFoundException("User not found");
+            }
+
+            return user;
+
+        } catch (error) {
+
+            if (error.code === 11000) {
+                throw new ConflictException("Email already exists");
+            }
+
+            throw new InternalServerErrorException("Failed to update profile");
+        }
+    }
+
+    async addAddress(uid: string, data: any) {
+        return await this.UserModel.findOneAndUpdate(
+            { user_id: uid },
+            { $push: { addresses: data } },
+            { new: true }
+        );
+    }
+
+    async deleteAddress(uid: string, data: any) {
+        return await this.UserModel.findOneAndUpdate(
+            { user_id: uid },
+            { $pull: { addresses: { _id: data._id } } },
+            { new: true }
+        );
+    }
+
+    async updateAddress(uid: string, addressId: string, data: any) {
+        return await this.UserModel.findOneAndUpdate(
+            {
+                user_id: uid,
+                "addresses._id": addressId
+            },
+            {
+                $set: {
+                    "addresses.$": data
+                }
+            },
+            { new: true }
+        );
+    }
+}
 
     async  getCategory(category: string, limit: number, page: number){
         const skip = (page - 1)* limit;

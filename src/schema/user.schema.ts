@@ -1,10 +1,26 @@
-
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+
+@Schema()
+class Address {
+  @Prop()
+  address_line: string;
+
+  @Prop()
+  city: string;
+
+  @Prop()
+  state: string;
+
+  @Prop()
+  zip_code: string;
+}
+
+const AddressSchema = SchemaFactory.createForClass(Address);
 
 @Schema()
 export class user extends Document {
-  @Prop({ isRequired: true, unique: true })
+   @Prop({ isRequired: true, unique: true })
   username: string;
 
   @Prop({ isRequired: true })
@@ -42,6 +58,9 @@ export class user extends Document {
 
   @Prop({ default: null })
   passResetExpires?: Date;
+
+  @Prop({ type: [AddressSchema], default: [] })
+  addresses: Address[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(user);

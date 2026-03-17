@@ -1,4 +1,4 @@
-import { Controller, Param, Body, Get, ValidationPipe, Post, Patch, UseGuards, Req, Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Param, Body, Get, ValidationPipe, Post, Patch, UseGuards, Req, Query, ParseIntPipe, ConflictException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from 'src/utility/guards/auth.guard';
 import { Roles } from 'src/utility/decorators/role.decorator';
@@ -138,14 +138,43 @@ export class UserController {
         return this.userService.userDashboard(res.user.user_id);
     }
 
-     @Get("catalog/:prod")
-    @ApiOperation({ summary: "Catalog for user" })
+    @Get("catalog/:prod")
+    @ApiOperation({ summary: "Search products" })
     @ApiResponse({
         status: 200,
         description: "Products loaded",
     })
-    searchProduct(@Param("prod") prod : string, @Query("limit") limit:number, @Query("page") offset:number): Promise<any> {
-        return this.userService.searchProduct( prod, limit, offset);
+    searchProduct(@Param("prod") prod: string, @Query("limit") limit: number, @Query("page") offset: number): Promise<any> {
+        return this.userService.searchProduct(prod, limit, offset);
+    }
+
+    @Patch(":uid/edit")
+    @ApiOperation({ summary: "Update customer profile" })
+    @ApiResponse({
+        status: 200,
+        description: "Profile updated successfully",
+    })
+    async updateUser(@Param("uid") uid: string, @Body() data: any) {
+        try {
+            return this.userService.updateUser(uid, data);
+        } catch (error) {
+            console.error(error.code)
+            if (error.code === 11000) {
+                throw new ConflictException('Duplicate value found');
+            }
+            throw error;
+        }
+
+    }
+
+    @Patch("address/add/:uid")
+    async addAddress(@Param("uid") uid: string, @Body() body: any) {
+        return this.userService.addAddress(uid,body.data);
+    }
+
+    @Patch("address/delete/:uid")
+    async deleteAddress(@Param("uid") uid: string, @Body() body: any) {
+        return this.userService.deleteAddress(uid, body.data);
     }
 
     @Get("all-category")

@@ -1037,7 +1037,77 @@
             "description": "Products loaded"
           }
         },
-        "summary": "Catalog for user",
+        "summary": "Search products",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{uid}/edit": {
+      "patch": {
+        "operationId": "UserController_updateUser",
+        "parameters": [
+          {
+            "name": "uid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile updated successfully"
+          }
+        },
+        "summary": "Update customer profile",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/address/add/{uid}": {
+      "patch": {
+        "operationId": "UserController_addAddress",
+        "parameters": [
+          {
+            "name": "uid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/address/delete/{uid}": {
+      "patch": {
+        "operationId": "UserController_deleteAddress",
+        "parameters": [
+          {
+            "name": "uid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
         "tags": [
           "Users"
         ]
