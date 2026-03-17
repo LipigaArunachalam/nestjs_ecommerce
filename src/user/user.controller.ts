@@ -177,4 +177,33 @@ export class UserController {
         return this.userService.deleteAddress(uid, body.data);
     }
 
+    @Get("all-category")
+    @ApiOperation({ summary: "Get all categories"})
+    @ApiResponse({
+        status: 200,
+        description: "categories loaded",
+    })
+    getAllCategory(){
+        return this.userService.getAllCategory();
+    }
+
+    @Get("category/:name")
+    @ApiOperation({ summary: "Cataegory for user" })
+    @ApiParam({
+        name: 'name',
+        example: 'furniture',
+        description: "Product category"
+    })
+    @ApiResponse({
+        status: 200,
+        description: "Products loaded",
+    })
+    getCategory(@Param('name') category: string,
+                @Query('limit') limit: number,
+                @Query('page') page: number){
+        return this.userService.getCategory( category, limit, page);
+    }
+
+    
+
 }
