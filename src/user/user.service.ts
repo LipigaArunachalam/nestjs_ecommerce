@@ -1,4 +1,4 @@
-import { BuyProductDto } from './dto/buyProduct.Dto';
+import { BuyProductDto, BuyAllDto } from './dto/buyProduct.Dto';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -94,7 +94,6 @@ export class UserService {
                 $limit: limit ? Number(limit) : 10
             }
         ])
-        console.log(data);
         return data;
     }
 
@@ -103,7 +102,6 @@ export class UserService {
             user_id,
             is_deleted: false,
         });
-        console.log(data)
         return data;
     }
 
@@ -127,7 +125,6 @@ export class UserService {
     async buyProduct(buyProductDto: BuyProductDto) {
 
         const { product_id, quantity, customer_id, payment_type, payment_installments } = buyProductDto;
-        console.log(buyProductDto);
         const product = await this.ProductModel.findOne({ product_id });
 
         if (!product) {
@@ -183,7 +180,7 @@ export class UserService {
     }
 
     async addToCart(uid: string, pid: string) {
-        const res = await this.CartModel.insertOne({ product_id: pid, user_id: uid});
+        const res = await this.CartModel.insertOne({ product_id: pid, user_id: uid });
         return res;
     }
 
@@ -213,7 +210,7 @@ export class UserService {
                     product_height_cm: '$cart.product_height_cm',
                     product_width_cm: '$cart.product_width_cm',
                     product_qty: '$cart.product_qty',
-                    quantity:'$quantity',
+                    quantity: '$quantity',
                 }
             }
         ]);
@@ -332,7 +329,6 @@ export class UserService {
     }
 
     async updateUser(uid: string, body: any) {
-        // console.log(body)
         try {
             const user = await this.UserModel.findOneAndUpdate({ user_id: uid }, { $set: { ...body.data } }, { new: true });
             if (!user) {
@@ -422,5 +418,84 @@ export class UserService {
         );
 
         return { message: "Cart updated" };
+    }
+
+    async buyAllProducts(dto: BuyAllDto) {
+
+        type OrderItemType = {
+            order_id: string;
+            order_item_id: number;
+            product_id: string;
+            seller_id: string;
+            price: number;
+            freight_value: number;
+            shipping_limit_date: string;
+            is_deleted: boolean;
+        };
+        const { customer_id, payment_type, payment_installments, items } = dto;
+
+        const order_id = crypto.randomBytes(16).toString('hex');
+
+        const order = await this.OrderModel.create({
+            order_id,
+            customer_id,
+            order_status: "created",
+            order_purchase_timestamp: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+            order_estimated_delivery_date: dayjs().add(7, 'day').format('YYYY-MM-DD HH:mm:ss'),
+            is_deleted: false
+        });
+
+        let totalPayment = 0;
+        const orderItems :OrderItemType[]= [];
+
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+
+            const product = await this.ProductModel.findOne({ product_id: item.product_id });
+
+            if (!product) {
+                throw new NotFoundException(`Product ${item.product_id} not found`);
+            }
+
+            if (product.product_qty < item.quantity) {
+                throw new BadRequestException(`Insufficient stock for ${item.product_id}`);
+            }
+
+            totalPayment += product.price * item.quantity;
+
+            orderItems.push({
+                order_id,
+                order_item_id: i + 1,
+                product_id: item.product_id,
+                seller_id: product.seller_id,
+                price: product.price,
+                freight_value: 10,
+                shipping_limit_date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+                is_deleted: false
+            });
+
+            await this.ProductModel.updateOne(
+                { product_id: item.product_id },
+                { $inc: { product_qty: -item.quantity } }
+            );
+        }
+
+        await this.OrderItemModel.insertMany(orderItems);
+
+        const payment = await this.PaymentModel.create({
+            order_id,
+            payment_sequential: 1,
+            payment_type,
+            payment_installments,
+            payment_value: totalPayment,
+            is_deleted: false
+        });
+
+        return {
+            message: "Bulk order placed successfully",
+            order,
+            orderItems,
+            payment
+        };
     }
 }
