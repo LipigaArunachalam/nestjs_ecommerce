@@ -1206,6 +1206,31 @@
         ]
       }
     },
+    "/api/users/bulk-buy": {
+      "post": {
+        "operationId": "UserController_buyAllProducts",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BuyAllDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product bought successfully "
+          }
+        },
+        "summary": "Buy product",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/api/order-items": {
       "get": {
         "operationId": "OrderItemsController_getOrderItem",
@@ -1960,9 +1985,13 @@
       "CreateProductDto": {
         "type": "object",
         "properties": {
-          "product_category_name": {
+          "product_name": {
             "type": "string",
             "example": "PROD123"
+          },
+          "product_category_name": {
+            "type": "string",
+            "example": "electronics"
           },
           "product_qty": {
             "type": "number",
@@ -1994,6 +2023,7 @@
           }
         },
         "required": [
+          "product_name",
           "product_category_name",
           "product_qty",
           "product_weight_g",
@@ -2007,9 +2037,13 @@
       "UpdateProductDto": {
         "type": "object",
         "properties": {
-          "product_category_name": {
+          "product_name": {
             "type": "string",
             "example": "PROD123"
+          },
+          "product_category_name": {
+            "type": "string",
+            "example": "electronics"
           },
           "product_qty": {
             "type": "number",
@@ -2197,6 +2231,10 @@
         ]
       },
       "BuyProductDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "BuyAllDto": {
         "type": "object",
         "properties": {}
       },

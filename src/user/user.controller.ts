@@ -5,17 +5,17 @@ import { Roles } from 'src/utility/decorators/role.decorator';
 import { RolesGuard } from 'src/utility/guards/role.guard';
 import { Role } from 'src/utility/enum/role.enum';
 import { ApiTags, ApiOperation, ApiParam, ApiResponse, ApiQuery, ApiBody } from '@nestjs/swagger';
-import { BuyProductDto } from './dto/buyProduct.Dto';
+import { BuyProductDto, BuyAllDto } from './dto/buyProduct.Dto';
 
 @ApiTags('Users')
 @Controller('users')
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.Customer)
 export class UserController {
     constructor(private userService: UserService) { }
 
 
     @Get(':uid/products')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Customer)
     @ApiOperation({ summary: 'Get all products of a customer' })
     @ApiParam({
         name: 'uid',
@@ -30,7 +30,6 @@ export class UserController {
     @ApiQuery({ name: 'page', required: true, type: Number, description: 'Page number' })
     getAllProduct(@Param('uid') uid: string, @Query('limit', ParseIntPipe) limit: number, @Query('page', ParseIntPipe) offset: number) {
         try {
-            console.log(uid, offset, limit)
             return this.userService.getAllProduct(uid, limit, offset);
         } catch (err) {
             console.error(err.stack);
@@ -40,6 +39,8 @@ export class UserController {
 
 
     @Get()
+    @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Customer)
     @ApiOperation({ summary: 'Get user profile details' })
     @ApiResponse({
         status: 200,
@@ -63,6 +64,8 @@ export class UserController {
 
 
     @Post('buy')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Customer)
     @ApiOperation({ summary: "Buy product" })
     @ApiBody({ type: BuyProductDto })
     @ApiResponse({
@@ -76,6 +79,8 @@ export class UserController {
 
 
     @Post(":uid/cart/:pid")
+    @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Customer)
     @ApiOperation({ summary: 'Products added to cart' })
     @ApiResponse({
         status: 200,
@@ -97,6 +102,8 @@ export class UserController {
 
 
     @Get("/cart")
+    @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Customer)
     @ApiOperation({ summary: 'fetching cart items' })
     @ApiResponse({
         status: 200,
@@ -107,6 +114,8 @@ export class UserController {
     }
 
     @Patch(":uid/cart/:pid")
+    @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Customer)
     @ApiOperation({ summary: 'Removing product from cart' })
     @ApiResponse({
         status: 200,
@@ -128,6 +137,8 @@ export class UserController {
 
 
     @Patch(":uid/cart/:pid/update")
+    @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Customer)
     @ApiOperation({ summary: 'Updating the quantity value' })
     @ApiResponse({
         status: 200,
@@ -143,13 +154,14 @@ export class UserController {
         example: '7bb6f29c2be57716194f96496660c7c2',
         description: 'Product ID',
     })
-    updateCart(@Param("uid") uid: string, @Param("pid") pid :string, @Body("qty") qty: number): Promise<{message: string}> {
-        console.log(uid,pid,qty)
-        return this.userService.updateCart(uid,pid, qty);
+    updateCart(@Param("uid") uid: string, @Param("pid") pid: string, @Body("qty") qty: number): Promise<{ message: string }> {
+        return this.userService.updateCart(uid, pid, qty);
     }
 
 
     @Get("dashboard")
+    @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Customer)
     @ApiOperation({ summary: "Customer dashboard" })
     @ApiResponse({
         status: 200,
@@ -160,6 +172,7 @@ export class UserController {
     }
 
     @Get("catalog/:prod")
+
     @ApiOperation({ summary: "Search products" })
     @ApiResponse({
         status: 200,
@@ -170,6 +183,8 @@ export class UserController {
     }
 
     @Patch(":uid/edit")
+    @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Customer)
     @ApiOperation({ summary: "Update customer profile" })
     @ApiResponse({
         status: 200,
@@ -189,22 +204,26 @@ export class UserController {
     }
 
     @Patch("address/add/:uid")
+    @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Customer)
     async addAddress(@Param("uid") uid: string, @Body() body: any) {
-        return this.userService.addAddress(uid,body.data);
+        return this.userService.addAddress(uid, body.data);
     }
 
     @Patch("address/delete/:uid")
+    @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.Customer)
     async deleteAddress(@Param("uid") uid: string, @Body() body: any) {
         return this.userService.deleteAddress(uid, body.data);
     }
 
     @Get("all-category")
-    @ApiOperation({ summary: "Get all categories"})
+    @ApiOperation({ summary: "Get all categories" })
     @ApiResponse({
         status: 200,
         description: "categories loaded",
     })
-    getAllCategory(){
+    getAllCategory() {
         return this.userService.getAllCategory();
     }
 
@@ -220,11 +239,21 @@ export class UserController {
         description: "Products loaded",
     })
     getCategory(@Param('name') category: string,
-                @Query('limit') limit: number,
-                @Query('page') page: number){
-        return this.userService.getCategory( category, limit, page);
+        @Query('limit') limit: number,
+        @Query('page') page: number) {
+        return this.userService.getCategory(category, limit, page);
     }
 
-    
+    @Post('bulk-buy')
+    @ApiOperation({ summary: "Buy product" })
+    @ApiBody({ type: BuyAllDto })
+    @ApiResponse({
+        status: 200,
+        description: "Product bought successfully ",
+    })
+    buyAllProducts(@Body() buyProductDto: BuyAllDto) {
+        return this.userService.buyAllProducts(buyProductDto);
+    }
+
 
 }

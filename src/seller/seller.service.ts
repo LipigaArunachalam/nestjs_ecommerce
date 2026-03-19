@@ -32,7 +32,6 @@ export class SellerService {
                 $limit: limit? Number(limit) : 10,
             }
         ]);
-        console.log(data);
         return data;
         
   }
@@ -51,7 +50,6 @@ export class SellerService {
   async deleteProduct(sid: string, pid?: string, pname?: string) {
     if (pid) {
       const data = await this.ProductModel.updateOne({ product_id: pid, seller_id: sid }, { $set: { is_deleted: true } });
-      console.log(data);
       if (data.matchedCount === 0) return "No product found with that ID";
       return "deleted successfully";
 
@@ -74,7 +72,6 @@ export class SellerService {
       email,
       is_deleted: false,
     }).select('-_id username email role city state zip_code');
-    console.log(data)
     return data;
   }
 
@@ -168,7 +165,6 @@ export class SellerService {
     let statusCounts = {};
     let totalRevenue = 0;
     let totalLoss = 0;
-    console.log(orderStats);
 
     orderStats.forEach(stat => {
       let status = stat._id?.trim().toLowerCase();

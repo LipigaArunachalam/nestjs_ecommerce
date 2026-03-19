@@ -81,7 +81,6 @@ export class SellerController {
         @Body(ValidationPipe) product: CreateProductDto,
         @Param("sid") sid: string,
     ): Promise<{message:string}> {
-        console.log(product)
         return this.sellerService.createProduct(product, sid);
     }
 
