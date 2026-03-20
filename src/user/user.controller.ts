@@ -184,7 +184,6 @@ export class UserController {
 
     @Patch(":uid/edit")
     @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.Customer)
     @ApiOperation({ summary: "Update customer profile" })
     @ApiResponse({
         status: 200,

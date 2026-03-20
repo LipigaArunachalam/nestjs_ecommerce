@@ -345,7 +345,7 @@ export class UserService {
 
     async updateUser(uid: string, body: any) {
         try {
-            const user = await this.UserModel.findOneAndUpdate({ user_id: uid }, { $set: { ...body.data } }, { new: true });
+            const user = await this.UserModel.findOneAndUpdate({ user_id: uid }, { $set: { ...body.data } }, { returnDocument: 'after' });
             if (!user) {
                 throw new NotFoundException("User not found");
             }

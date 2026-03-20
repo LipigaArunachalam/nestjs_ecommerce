@@ -50,12 +50,12 @@ export class SellerService {
   async deleteProduct(sid: string, pid?: string, pname?: string) {
     if (pid) {
       const data = await this.ProductModel.updateOne({ product_id: pid, seller_id: sid }, { $set: { is_deleted: true } });
-      if (data.matchedCount === 0) return "No product found with that ID";
-      return "deleted successfully";
+      if (data.matchedCount === 0) return {message: "No product found with that ID"};
+      return {message: "deleted successfully"};
 
     }
     const data = await this.ProductModel.updateMany({ product_category_name: pname }, { $set: { is_deleted: true } });
-    if (data.matchedCount === 0) return "No product found with that ID";
+    if (data.matchedCount === 0) return {message: "No product found with that ID"};
     return { message: "deleted successfully" };
   }
 
