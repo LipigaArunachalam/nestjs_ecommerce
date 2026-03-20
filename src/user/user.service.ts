@@ -12,6 +12,7 @@ import { Payment } from 'src/schema/payments.schema';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import dayjs from 'dayjs';
 import { ConflictException, InternalServerErrorException } from '@nestjs/common';
+import { MailService } from 'src/mail/mail.service';
 
 
 
@@ -22,7 +23,8 @@ export class UserService {
         @InjectModel(Product.name) private ProductModel: Model<Product>,
         @InjectModel(OrderItem.name) private OrderItemModel: Model<OrderItem>,
         @InjectModel(Payment.name) private PaymentModel: Model<Payment>,
-        @InjectModel(Cart.name) private CartModel: Model<Cart>
+        @InjectModel(Cart.name) private CartModel: Model<Cart>,
+        private mailService: MailService,
     ) { }
 
     async getAllProduct(uid: string, limit?: number, offset?: number) {
@@ -122,6 +124,7 @@ export class UserService {
         ]);
         return data;
     }
+
     async buyProduct(buyProductDto: BuyProductDto) {
 
         const { product_id, quantity, customer_id, payment_type, payment_installments } = buyProductDto;
@@ -171,12 +174,24 @@ export class UserService {
             { $inc: { product_qty: -quantity } }
         );
 
-        return {
-            message: "Order placed successfully",
-            order,
-            orderItem,
-            payment
-        };
+        const customer = await this.UserModel.findOne({ user_id: customer_id });
+        if (customer?.email) {
+            this.mailService.sendOrderConfirmation(customer.email, {
+                orderId: order.order_id,
+                totalAmount: paymentValue,
+                items: [{
+                name: product.product_name,
+                quantity: quantity,
+                price: product.price
+            }]
+            }).catch(err => console.error("Mail failed", err));
+            return {
+                message: "Order placed successfully",
+                order,
+                orderItem,
+                payment
+            };
+        }
     }
 
     async addToCart(uid: string, pid: string) {
@@ -378,7 +393,6 @@ export class UserService {
         );
     }
 
-
     async getCategory(category: string, limit: number, page: number) {
         const skip = (page - 1) * limit;
         const data = await this.ProductModel.aggregate([
@@ -446,7 +460,8 @@ export class UserService {
         });
 
         let totalPayment = 0;
-        const orderItems :OrderItemType[]= [];
+        const orderItems: OrderItemType[] = [];
+        const mailItems: any[] = [];
 
         for (let i = 0; i < items.length; i++) {
             const item = items[i];
@@ -462,6 +477,12 @@ export class UserService {
             }
 
             totalPayment += product.price * item.quantity;
+
+            mailItems.push({
+                name: product.product_name,
+                quantity: item.quantity,
+                price: product.price
+            });
 
             orderItems.push({
                 order_id,
@@ -490,6 +511,16 @@ export class UserService {
             payment_value: totalPayment,
             is_deleted: false
         });
+
+        const customer = await this.UserModel.findOne({ user_id:customer_id });
+
+        if (customer?.email) {
+            this.mailService.sendOrderConfirmation(customer.email, {
+                orderId: order_id,
+                totalAmount: totalPayment,
+                items: mailItems
+            }).catch(err => console.error("Email notification failed:", err));
+        }
 
         return {
             message: "Bulk order placed successfully",
