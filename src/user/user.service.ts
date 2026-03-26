@@ -126,8 +126,8 @@ export class UserService {
     }
 
     async buyProduct(buyProductDto: BuyProductDto) {
-
-        const { product_id, quantity, customer_id, payment_type, payment_installments } = buyProductDto;
+        const { product_id, quantity, customer_id, payment_type, payment_installments, address} = buyProductDto;
+        const finalAddress = address ;
         const product = await this.ProductModel.findOne({ product_id });
 
         if (!product) {
@@ -144,7 +144,7 @@ export class UserService {
             order_status: "created",
             order_purchase_timestamp: dayjs().format('YYYY-MM-DD HH:mm:ss'),
             order_estimated_delivery_date: dayjs().add(7, 'day').format('YYYY-MM-DD HH:mm:ss'),
-            is_deleted: false
+            is_deleted: false,
         });
 
         const orderItem = await this.OrderItemModel.create({
@@ -155,6 +155,7 @@ export class UserService {
             price: product.price,
             freight_value: 10,
             shipping_limit_date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+            address: finalAddress,
             is_deleted: false
         });
 
@@ -444,9 +445,11 @@ export class UserService {
             price: number;
             freight_value: number;
             shipping_limit_date: string;
+            address: any;
             is_deleted: boolean;
         };
-        const { customer_id, payment_type, payment_installments, items } = dto;
+        const { customer_id, payment_type, payment_installments, items,address} = dto;
+        const finalAddress = address;
 
         const order_id = crypto.randomBytes(16).toString('hex');
 
@@ -492,6 +495,7 @@ export class UserService {
                 price: product.price,
                 freight_value: 10,
                 shipping_limit_date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+                address: finalAddress,
                 is_deleted: false
             });
 

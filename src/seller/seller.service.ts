@@ -63,7 +63,7 @@ export class SellerService {
     if (!pid) {
       return { message: "nothing to update" };
     }
-    const data = await this.ProductModel.findOneAndUpdate({ product_id: pid, seller_id: sid }, { $set: upd }, { new: true })//{returnDocument:"after"}
+    const data = await this.ProductModel.findOneAndUpdate({ product_id: pid, seller_id: sid }, { $set: upd }, { returnDocument:'after'})//{returnDocument:"after"}
     return { message: "success" };
   }
 
