@@ -184,7 +184,6 @@ export class UserController {
 
     @Patch(":uid/edit")
     @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.Customer)
     @ApiOperation({ summary: "Update customer profile" })
     @ApiResponse({
         status: 200,
@@ -205,14 +204,12 @@ export class UserController {
 
     @Patch("address/add/:uid")
     @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.Customer)
     async addAddress(@Param("uid") uid: string, @Body() body: any) {
         return this.userService.addAddress(uid, body.data);
     }
 
     @Patch("address/delete/:uid")
     @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.Customer)
     async deleteAddress(@Param("uid") uid: string, @Body() body: any) {
         return this.userService.deleteAddress(uid, body.data);
     }

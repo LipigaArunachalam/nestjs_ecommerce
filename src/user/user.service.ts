@@ -346,16 +346,22 @@ export class UserService {
 
     async updateUser(uid: string, body: any) {
         try {
-            const user = await this.UserModel.findOneAndUpdate({ user_id: uid }, { $set: { ...body.data } }, {returnDocument: 'after' });
+            if(body.data.email){
+                const user = await this.UserModel.findOne({ email: body.data.email });
+                if (user) {
+                    throw new ConflictException("Email already exists");
+                }
+            }
+            const user = await this.UserModel.findOneAndUpdate({ user_id: uid }, { $set: { ...body.data } }, { returnDocument: 'after' });
             if (!user) {
                 throw new NotFoundException("User not found");
             }
 
+
             return user;
 
         } catch (error) {
-
-            if (error.code === 11000) {
+            if (error.status === 409) {
                 throw new ConflictException("Email already exists");
             }
 
@@ -367,7 +373,7 @@ export class UserService {
         return await this.UserModel.findOneAndUpdate(
             { user_id: uid },
             { $push: { addresses: data } },
-            { returnDocument: 'after' }
+            { returnDocument: 'after'  }
         );
     }
 
@@ -375,7 +381,7 @@ export class UserService {
         return await this.UserModel.findOneAndUpdate(
             { user_id: uid },
             { $pull: { addresses: { _id: data._id } } },
-            { returnDocument: 'after' }
+            { returnDocument: 'after'  }
         );
     }
 
@@ -390,7 +396,7 @@ export class UserService {
                     "addresses.$": data
                 }
             },
-            { returnDocument: 'after'}
+            { returnDocument: 'after'  }
         );
     }
 
