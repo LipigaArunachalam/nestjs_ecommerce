@@ -1,6 +1,18 @@
 import { Type } from 'class-transformer'
 import { IsString, IsNumber ,IsArray, ValidateNested} from "class-validator";
 
+
+export class AddressDto {
+  @IsString()
+  address_line: string;
+  @IsString()
+  city: string;
+  @IsString()
+  state: string;
+  @IsString()
+  zip_code: string;
+}
+
 export class BuyProductDto {
 
   @IsString()
@@ -17,6 +29,10 @@ export class BuyProductDto {
 
   @IsNumber()
   payment_installments: number;
+
+  @ValidateNested()
+  @Type(() => AddressDto)
+  address?: AddressDto;
 }
 
 export class ItemDto {
@@ -41,4 +57,9 @@ export class BuyAllDto {
   @ValidateNested({ each: true })
   @Type(() => ItemDto)
   items: ItemDto[];
+
+  @ValidateNested()
+  @Type(() => AddressDto)
+  address?: AddressDto;
 }
+
