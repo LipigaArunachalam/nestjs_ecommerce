@@ -366,7 +366,7 @@ export class UserService {
         return await this.UserModel.findOneAndUpdate(
             { user_id: uid },
             { $push: { addresses: data } },
-            { new: true }
+            { returnDocument: 'after'  }
         );
     }
 
@@ -374,7 +374,7 @@ export class UserService {
         return await this.UserModel.findOneAndUpdate(
             { user_id: uid },
             { $pull: { addresses: { _id: data._id } } },
-            { new: true }
+            { returnDocument: 'after'  }
         );
     }
 
@@ -389,7 +389,7 @@ export class UserService {
                     "addresses.$": data
                 }
             },
-            { new: true }
+            { returnDocument: 'after'  }
         );
     }
 
